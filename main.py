@@ -1,7 +1,9 @@
+import ast
 import logging
 import os
 import uuid
 
+import redis
 import tornado.escape
 import tornado.ioloop
 import tornado.options
@@ -9,6 +11,7 @@ import tornado.web
 import tornado.websocket
 
 logging.basicConfig(level=logging.DEBUG)
+storage = redis.StrictRedis(host='localhost', port=6379, db=0, charset="utf-8", decode_responses=True)
 
 
 class Application(tornado.web.Application):
@@ -33,8 +36,11 @@ class MainHandler(tornado.web.RequestHandler):
 # websocket example
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     waiters = set()
-    cache = []
     cache_size = 200
+    cache = storage.get('messages')
+    cache = ast.literal_eval(cache)  # FIX
+    if not cache:
+        cache = []
 
     def open(self):
         logging.info("Opened websocket")
@@ -45,6 +51,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         cls.cache.append(chat)
         if len(cls.cache) > cls.cache_size:
             cls.cache = cls.cache[-cls.cache_size:]
+        storage.set('messages', cls.cache)
 
     @classmethod
     def send_updates(cls, chat):
