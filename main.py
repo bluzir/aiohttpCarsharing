@@ -8,7 +8,7 @@ import tornado.options
 import tornado.web
 import tornado.websocket
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 
 class Application(tornado.web.Application):
@@ -32,16 +32,38 @@ class MainHandler(tornado.web.RequestHandler):
 
 # websocket example
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
+    waiters = set()
     cache = []
+    cache_size = 200
 
     def open(self):
         logging.info("Opened websocket")
+        WebSocketHandler.waiters.add(self)
+
+    @classmethod
+    def update_cache(cls, chat):
+        cls.cache.append(chat)
+        if len(cls.cache) > cls.cache_size:
+            cls.cache = cls.cache[-cls.cache_size:]
+
+    @classmethod
+    def send_updates(cls, chat):
+        logging.info("Sending message to %d waiters", len(cls.waiters))
+        for waiter in cls.waiters:
+            try:
+                waiter.write_message(chat)
+            except:
+                logging.error("Error sending message", exc_info=True)
 
     def on_message(self, message):
+        logging.info("Message: {}".format(message))
         self.write_message(u"You said: " + message)
+        WebSocketHandler.update_cache(message)
+        WebSocketHandler.send_updates(message)
 
     def on_close(self):
         logging.info("Websocket closed")
+        WebSocketHandler.waiters.remove(self)
 
     def check_origin(self, origin):
         return True
