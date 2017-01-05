@@ -1,4 +1,6 @@
+import logging
 import os
+import uuid
 
 import tornado.escape
 import tornado.ioloop
@@ -7,7 +9,6 @@ import tornado.web
 import tornado.websocket
 
 
-# websocket example
 class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
@@ -24,11 +25,21 @@ class Application(tornado.web.Application):
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("index.html")
+        self.render("index.html", messages=WebSocketHandler.cache)
 
 
-class WebSocketHandler(tornado.web.RequestHandler):
-    pass
+# websocket example
+class WebSocketHandler(tornado.websocket.WebSocketHandler):
+    cache = []
+
+    def open(self):
+        print("Websocket opened")
+
+    def on_message(self, message):
+        self.write_message(u"You said: " + message)
+
+    def on_close(self):
+        print("WebSocket closed")
 
 
 def main():
