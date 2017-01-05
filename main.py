@@ -57,9 +57,16 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def on_message(self, message):
         logging.info("Message: {}".format(message))
-        self.write_message(u"You said: " + message)
-        WebSocketHandler.update_cache(message)
-        WebSocketHandler.send_updates(message)
+        parsed = tornado.escape.json_decode(message)
+        chat = {
+            "id": str(uuid.uuid4()),
+            "body": parsed["body"],
+            }
+        chat["html"] = tornado.escape.to_basestring(
+            self.render_string("message.html", message=chat))
+
+        WebSocketHandler.update_cache(chat)
+        WebSocketHandler.send_updates(chat)
 
     def on_close(self):
         logging.info("Websocket closed")
