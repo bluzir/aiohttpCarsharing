@@ -87,3 +87,11 @@ ENV/
 
 # Rope project settings
 .ropeproject
+.idea/TornadoCarsharing.iml
+.idea/dictionaries/
+.idea/encodings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vagrant.xml
+.idea/workspace.xml
+
