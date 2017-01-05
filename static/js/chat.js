@@ -12,7 +12,12 @@ $(document).ready(function() {
             return false;
         }
     });
+
+    $(".remove").on('click', function () {
+        $(this).parent().fadeOut(300);
+    });
     $("#message").select();
+
     updater.start();
 });
 

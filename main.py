@@ -19,6 +19,7 @@ class Application(tornado.web.Application):
         handlers = [
             (r"/", MainHandler),
             (r"/websocket", WebSocketHandler),
+            (r"/regisyer", RegistrationHandler),
         ]
         settings = dict(
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
@@ -31,6 +32,10 @@ class Application(tornado.web.Application):
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index.html", messages=WebSocketHandler.cache)
+
+
+class RegistrationHandler(tornado.web.RequestHandler):
+    pass
 
 
 # websocket example

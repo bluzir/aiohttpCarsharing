@@ -1,1 +1,4 @@
-<li class="message list-group-item" id="m{{ message["id"] }}">{% module linkify(message["body"]) %}</li>
+<li class="message list-group-item" id="m{{ message["id"] }}">
+<span class="remove glyphicon glyphicon-remove" aria-hidden="true"></span>
+{% module linkify(message["body"]) %}
+</li>
