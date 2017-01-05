@@ -8,6 +8,8 @@ import tornado.options
 import tornado.web
 import tornado.websocket
 
+logging.basicConfig(level=logging.INFO)
+
 
 class Application(tornado.web.Application):
     def __init__(self):
@@ -33,13 +35,16 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     cache = []
 
     def open(self):
-        print("Websocket opened")
+        logging.info("Opened websocket")
 
     def on_message(self, message):
         self.write_message(u"You said: " + message)
 
     def on_close(self):
-        print("WebSocket closed")
+        logging.info("Websocket closed")
+
+    def check_origin(self, origin):
+        return True
 
 
 def main():
