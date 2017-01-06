@@ -1,11 +1,13 @@
+import logging
+
 import psycopg2
 
-conn = psycopg2.connect(database='test_db',
-                        user='test_user',
-                        password='qwerty',
-                        host='127.0.0.1',
-                        port='5433')
 
+conn = psycopg2.connect("dbname=test_db user=test_user port=5433")
 cur = conn.cursor()
+cur.execute('SELECT * FROM users;')
+q = cur.fetchone()
 
-print(cur)
+
+
+print(q)
