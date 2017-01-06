@@ -39,7 +39,7 @@ def async_fetch_future(url):
 def fetch_coroutine(url):
     http_client = AsyncHTTPClient()
     response = yield http_client.fetch(url)
-    raise gen.Return(response.body)
+    return response.bod
 
 
 
