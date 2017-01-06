@@ -19,7 +19,7 @@ class Application(tornado.web.Application):
         handlers = [
             (r"/", MainHandler),
             (r"/websocket", WebSocketHandler),
-            (r"/regisyer", RegistrationHandler),
+            (r"/register", RegistrationHandler),
         ]
         settings = dict(
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
