@@ -10,8 +10,12 @@ import tornado.options
 import tornado.web
 import tornado.websocket
 
+from models import Users
+
 logging.basicConfig(level=logging.DEBUG)
 storage = redis.StrictRedis(host='localhost', port=6379, db=0, charset="utf-8", decode_responses=True)
+PORT = 8080
+
 
 
 class Application(tornado.web.Application):
@@ -19,14 +23,16 @@ class Application(tornado.web.Application):
         handlers = [
             (r"/", MainHandler),
             (r"/websocket", WebSocketHandler),
-            (r"/register", RegistrationHandler),
+            (r"/registration", RegistrationHandler),
         ]
         settings = dict(
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
             static_path=os.path.join(os.path.dirname(__file__), "static"),
             xsrf_cookies=True,
+            debug=True,
         )
         super(Application, self).__init__(handlers, **settings)
+
 
 
 class MainHandler(tornado.web.RequestHandler):
@@ -35,7 +41,21 @@ class MainHandler(tornado.web.RequestHandler):
 
 
 class RegistrationHandler(tornado.web.RequestHandler):
-    pass
+
+    def get(self):
+        self.render("registration.html")
+
+    def post(self):
+        login = self.get_argument("login")
+        password = self.get_argument("password")
+
+        if login and password:
+            new_user = Users.create(login=login, password=password)
+            if not new_user: raise tornado.web.HTTPError(404)
+        else:
+            raise tornado.web.HTTPError(401)
+
+        self.redirect("/")
 
 
 # websocket example
@@ -90,9 +110,10 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
 def main():
     app = Application()
-    app.listen(8080)
+    app.listen(PORT)
     tornado.ioloop.IOLoop.current().start()
 
 
 if __name__ == "__main__":
+    logging.info('Running server on port {}'.format(PORT))
     main()
