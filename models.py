@@ -1,9 +1,5 @@
-import asyncio
 import peewee
-import peewee_async
-
-
-database = peewee_async.PostgresqlDatabase('test_db', user='test_user')
+import settings
 
 
 class Users(peewee.Model):
@@ -15,7 +11,7 @@ class Users(peewee.Model):
     )
 
     class Meta:
-        database=database
+        database = settings.DATABASE
 
 
 

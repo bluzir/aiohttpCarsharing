@@ -3,6 +3,7 @@ import logging
 import os
 import uuid
 
+import peewee_async
 import redis
 import tornado.escape
 import tornado.ioloop
@@ -11,6 +12,7 @@ import tornado.web
 import tornado.websocket
 
 from models import Users
+from settings import DATABASE
 
 logging.basicConfig(level=logging.DEBUG)
 storage = redis.StrictRedis(host='localhost', port=6379, db=0, charset="utf-8", decode_responses=True)
@@ -45,17 +47,8 @@ class RegistrationHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("registration.html")
 
-    def post(self):
-        login = self.get_argument("login")
-        password = self.get_argument("password")
 
-        if login and password:
-            new_user = Users.create(login=login, password=password)
-            if not new_user: raise tornado.web.HTTPError(404)
-        else:
-            raise tornado.web.HTTPError(401)
 
-        self.redirect("/")
 
 
 # websocket example
@@ -111,6 +104,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 def main():
     app = Application()
     app.listen(PORT)
+    app.objects = peewee_async.Manager(DATABASE)
     tornado.ioloop.IOLoop.current().start()
 
 
