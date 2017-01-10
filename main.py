@@ -49,8 +49,6 @@ class RegistrationHandler(tornado.web.RequestHandler):
 
 
 
-
-
 # websocket example
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     waiters = set()
