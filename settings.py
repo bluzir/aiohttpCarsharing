@@ -7,4 +7,4 @@ DB_USER = 'test_user'
 DB_PASSWORD = ''
 
 # Database connection
-DATABASE = peewee_async.PostgresqlDatabase('test_db', user='test_user')
+DATABASE = peewee_async.PostgresqlDatabase(DB_NAME, user=DB_USER)
