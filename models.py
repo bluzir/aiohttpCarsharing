@@ -1,9 +1,9 @@
+import hashlib
+
 import peewee
 import peewee_async
 
 import settings
-
-DATABASE = peewee_async.PostgresqlDatabase(settings.DB_NAME, user=settings.DB_USER)
 
 
 class Users(peewee.Model):
@@ -15,8 +15,12 @@ class Users(peewee.Model):
         max_length=30,
     )
 
+    @classmethod
+    def encrypt_password(cls, password):
+        return hashlib.sha256(password).hexdigest()
+
     class Meta:
-        database = DATABASE
+        database = peewee_async.PostgresqlDatabase(settings.DB_NAME, user=settings.DB_USER)
 
 
 

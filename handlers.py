@@ -1,0 +1,32 @@
+import tornado.websocket
+
+from models import Users
+
+
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("index.html")
+
+
+class RegistrationHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("registration.html", just_registered=False, alert=None)
+
+    async def post(self):
+        email = self.get_argument('email', None)
+        password = self.get_argument('password', None)
+
+        if email is None or password is None:
+            self.render('registration.html', alert='Email and password must not be blank.')
+            return
+
+
+        try:
+            await self.application.objects.create(Users,
+                                      email=email,
+                                      password=password)
+
+            self.render('registration.html', alert='Successfully registered')
+        except Exception as e:
+             return self.render('registration.html', alert=str(e))
+

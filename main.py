@@ -3,21 +3,13 @@ import logging
 import os
 
 import peewee_async
-import tornado.escape
-import tornado.ioloop
-import tornado.options
-import tornado.web
-import tornado.websocket
+import tornado
 from tornado.platform.asyncio import AsyncIOMainLoop
 
-from models import Users
-from settings import DB_NAME, DB_USER
+import settings
+from handlers import MainHandler, RegistrationHandler
 
-logging.basicConfig(level=logging.DEBUG)
-
-PORT = 8080
-DATABASE = peewee_async.PostgresqlDatabase(DB_NAME, user=DB_USER)
-DATABASE.set_allow_sync(False)
+logging.basicConfig(level=settings.LEVEL)
 
 
 class Application(tornado.web.Application):
@@ -26,6 +18,7 @@ class Application(tornado.web.Application):
             (r"/", MainHandler),
             (r"/registration", RegistrationHandler),
         ]
+
         settings = dict(
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
             static_path=os.path.join(os.path.dirname(__file__), "static"),
@@ -35,48 +28,27 @@ class Application(tornado.web.Application):
         super(Application, self).__init__(handlers, **settings)
 
 
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.render("index.html")
-
-
-class RegistrationHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.render("registration.html", just_registered=False, alert=None)
-
-    async def post(self):
-        email = self.get_argument('email', None)
-        password = self.get_argument('password', None)
-
-        if email is None or password is None:
-            self.render('registration.html', alert='Email and password must not be blank.')
-            return
-
-
-        try:
-            await self.application.objects.create(Users,
-                                      email=email,
-                                      password=password)
-
-            self.render('registration.html', alert='Successfully registered')
-        except Exception as e:
-             return self.render('registration.html', alert=str(e))
-
-
-
 def main():
+    # Setting up Tornado application on asyncio
     AsyncIOMainLoop().install()
     app = Application()
-    app.listen(PORT)
-    app.objects = peewee_async.Manager(DATABASE)
-    tornado.ioloop.IOLoop.current().start()
+    app.listen(settings.PORT)
+
+    # Setting up Tornado database
+    app.db = peewee_async.PostgresqlDatabase(settings.DB_NAME, user=settings.DB_USER)
+    app.db.set_allow_sync(False)
+    app.objects = peewee_async.Manager(app.db)
+
+
+    # Run loop
+    logging.info('Running server on port {}'.format(settings.PORT))
     loop = asyncio.get_event_loop()
     try:
         loop.run_forever()
     except KeyboardInterrupt:
-        print("server stopped")
+        print(" server stopped")
 
 
 if __name__ == "__main__":
-    logging.info('Running server on port {}'.format(PORT))
+
     main()

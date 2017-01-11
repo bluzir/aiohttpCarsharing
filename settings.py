@@ -1,4 +1,7 @@
-import peewee_async
+# Port settings
+import logging
+
+PORT = 8080
 
 # Debug settings
 DEBUG = True
@@ -9,10 +12,8 @@ DB_USER = 'test_user'
 DB_PASSWORD = ''
 
 
-# Database connection
-def main():
-    DATABASE = peewee_async.PostgresqlDatabase(DB_NAME, user=DB_USER)
-
-
-if __name__ == '__main__':
-    main()
+# Logging settings
+if DEBUG:
+    LEVEL = logging.DEBUG
+else:
+    LEVEL = logging.INFO
