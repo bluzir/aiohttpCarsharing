@@ -7,8 +7,9 @@ DATABASE = peewee_async.PostgresqlDatabase(settings.DB_NAME, user=settings.DB_US
 
 
 class Users(peewee.Model):
-    login = peewee.CharField(
+    email = peewee.CharField(
         max_length=30,
+        unique=True,
     )
     password = peewee.CharField(
         max_length=30,
