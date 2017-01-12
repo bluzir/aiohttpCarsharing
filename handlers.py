@@ -37,6 +37,7 @@ class RegistrationHandler(tornado.web.RequestHandler):
 
 
 class GetUserByIDHandler(tornado.web.RequestHandler):
+    SUPPORTED_METHODS = ("GET",)
     async def get(self, id):
         try:
             user = await self.application.objects.get(Users, id=id)
