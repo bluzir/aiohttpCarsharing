@@ -1,4 +1,8 @@
+import logging
+
 import tornado.websocket
+from pyrestful import mediatypes
+from pyrestful.rest import RestHandler, get
 
 from models import Users
 
@@ -22,11 +26,25 @@ class RegistrationHandler(tornado.web.RequestHandler):
 
 
         try:
-            await self.application.objects.create(Users,
-                                      email=email,
-                                      password=password)
+            await self.application.objects.create(User,
+                                                  email=email,
+                                                  password=password)
 
             self.render('registration.html', alert='Successfully registered')
         except Exception as e:
              return self.render('registration.html', alert=str(e))
 
+
+
+class GetUserByIDHandler(tornado.web.RequestHandler):
+    async def get(self, id):
+        try:
+            user = await self.application.objects.get(Users, id=id)
+            response = {
+                'id': user.id,
+                'email': user.email
+            }
+        except Exception as e:
+            response = '{}'.format(e)
+
+        self.write(response)

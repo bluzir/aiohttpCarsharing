@@ -6,6 +6,12 @@ import peewee_async
 import settings
 
 
+USER_STATUS_CHOICES = (
+    ('0', 'Новый'),
+    ('1', 'Подтвержденный'),
+    ('2', 'Заблокирован'),
+)
+
 class Users(peewee.Model):
     email = peewee.CharField(
         max_length=30,
@@ -14,6 +20,7 @@ class Users(peewee.Model):
     password = peewee.CharField(
         max_length=30,
     )
+
 
     @classmethod
     def encrypt_password(cls, password):

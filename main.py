@@ -7,7 +7,7 @@ import tornado
 from tornado.platform.asyncio import AsyncIOMainLoop
 
 import settings
-from handlers import MainHandler, RegistrationHandler
+from handlers import MainHandler, RegistrationHandler, GetUserByIDHandler
 
 logging.basicConfig(level=settings.LEVEL)
 
@@ -17,6 +17,7 @@ class Application(tornado.web.Application):
         handlers = [
             (r"/", MainHandler),
             (r"/registration", RegistrationHandler),
+            (r"/user/([0-9]+)", GetUserByIDHandler),
         ]
 
         settings = dict(
@@ -50,5 +51,4 @@ def main():
 
 
 if __name__ == "__main__":
-
     main()
