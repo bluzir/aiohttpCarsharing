@@ -1,13 +1,11 @@
 import asyncio
 import logging
-import os
 
 import peewee_async
 import tornado
 from tornado.platform.asyncio import AsyncIOMainLoop
 
 import settings as config
-from handlers import MainHandler, RegistrationHandler, GetUserByIDHandler
 from urls import url_patterns
 
 logging.basicConfig(level=config.LEVEL)
@@ -18,6 +16,7 @@ class Application(tornado.web.Application):
         settings = dict(
             template_path=config.TEMPLATES_ROOT,
             static_path=config.STATIC_ROOT,
+            login_url='/login',
             xsrf_cookies=True,
             debug=config.DEBUG,
         )
