@@ -20,6 +20,8 @@ class Application(tornado.web.Application):
             login_url='/login',
             xsrf_cookies=True,
             debug=config.DEBUG,
+            autoreload=config.AUTORELOAD,
+            serve_traceback=config.TRACEBACK,
         )
         super(Application, self).__init__(url_patterns, **settings)
 

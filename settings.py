@@ -25,5 +25,9 @@ DB_PASSWORD = ''
 # Logging settings
 if DEBUG:
     LEVEL = logging.DEBUG
+    AUTORELOAD = True
+    TRACEBACK = True
 else:
     LEVEL = logging.INFO
+    AUTORELOAD = False
+    TARCEBACK = False
