@@ -8,25 +8,20 @@ from tornado.platform.asyncio import AsyncIOMainLoop
 
 import settings as config
 from handlers import MainHandler, RegistrationHandler, GetUserByIDHandler
+from urls import url_patterns
 
 logging.basicConfig(level=config.LEVEL)
 
 
 class Application(tornado.web.Application):
     def __init__(self):
-        handlers = [
-            (r"/", MainHandler),
-            (r"/registration", RegistrationHandler),
-            (r"/user/([0-9]+)", GetUserByIDHandler),
-        ]
-
         settings = dict(
             template_path=config.TEMPLATES_ROOT,
             static_path=config.STATIC_ROOT,
             xsrf_cookies=True,
             debug=config.DEBUG,
         )
-        super(Application, self).__init__(handlers, **settings)
+        super(Application, self).__init__(url_patterns, **settings)
 
 
 def main():
