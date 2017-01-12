@@ -14,6 +14,7 @@ logging.basicConfig(level=config.LEVEL)
 class Application(tornado.web.Application):
     def __init__(self):
         settings = dict(
+            cookie_secret=config.COOKIE_SECRET,
             template_path=config.TEMPLATES_ROOT,
             static_path=config.STATIC_ROOT,
             login_url='/login',
