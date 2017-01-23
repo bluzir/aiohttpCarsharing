@@ -17,7 +17,7 @@ def main():
     setup_routes(app)
     aiohttp_jinja2.setup(app,
                          loader=jinja2.FileSystemLoader(settings.TEMPLATES_ROOT))
-    app.router.add_static('/', settings.STATIC_ROOT, show_index=True)
+    app.router.add_static('/static', settings.STATIC_ROOT, show_index=True)
     web.run_app(app, host='127.0.0.1', port=settings.PORT)
 
 if __name__ == '__main__':
