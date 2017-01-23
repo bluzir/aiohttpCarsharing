@@ -21,3 +21,7 @@ if DEBUG:
     LEVEL = logging.DEBUG
 else:
     LEVEL = logging.INFO
+
+
+# API Keys
+GMAPS_API_KEY = 'AIzaSyCZwQePt-z3n2lCnK-nApgzIyxXF3hIMrw'
