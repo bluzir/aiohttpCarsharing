@@ -1,15 +1,11 @@
 import requests
 
 
-class WialonException:
-    pass
-
-
-class WialonClient:
-
-    # Default host settings
-    DEFAULT_HOST = 'https://hst-api.wialon.com/{}'
-    API_URL_POSTFIX = 'wialon/ajax.html'
+class WialonException(Exception):
+    """
+    Exception raised when an Wialon Remote API call fails due to a network
+    related error or for a Wialon specific reason.
+    """
 
     # Errors codes
     errors = {
@@ -27,8 +23,25 @@ class WialonClient:
         1003: 'Only one request of given time is allowed at the moment'
     }
 
+    def __init__(self, code, text):
+        self.code = code
+
+        try:
+            self.text = self.errors[code]
+        except Exception as e:
+            self.text = 'Unexpected error'
+
+
+class WialonClient:
+    # Token settings
+    TOKEN = '2fe8024e0ab91aa6c8ed82717b71bddcECDC362358DF7D90986F5173D405CD0D42DE7B38'
+
+    # Default host settings
+    DEFAULT_HOST = 'https://hst-api.wialon.com/{}'
+    API_URL_POSTFIX = 'wialon/ajax.html'
+
     def __init__(self, token=None):
-        self.token = token
+        self.token = self.TOKEN
         self.authenticated = False
 
         if not token:
@@ -89,32 +102,51 @@ class WialonClient:
         if 'error' not in decoded:
             return decoded
         else:
-            error = decoded['error']
-            print(self.errors[error])
-            return False
+            raise WialonException(code=decoded['error'])
 
 
 class Command(WialonClient):
-    def __init__(self, name):
+    def __init__(self, id, name):
+        super(Command, self).__init__()
+        self.id = id
         self.name = name
+        self.link_type = ''
+        self.param = {}
+        self.timeout = 0
 
-    def create(self):
-        pass
+    def modify(self, callmode, command_type=None):
+        modify_params = {
+            'itemId': '',
+            'id': self.id,
+            'callMode': callmode,
+            'n': self.name,
+            'c': command_type,
+            'l': self.link_type,
+            'p': '',
+            'a': '',
+        }
 
-    def update(self):
-        pass
-
-    def delete(self):
-        pass
+        return self.request(
+            method='unit/update_command_definition',
+            params=modify_params,
+        )
 
     def execute(self):
-        pass
+        execute_params = {
+            'itemId': self.id,
+            'commandName': self.name,
+            'linkType': self.link_type,
+            'param': self.param,
+            'timeout': self.timeout
+        }
+
+        return self.request(
+            method='unit/exec_cmd',
+            params=execute_params,
+        )
 
 
-
-client = WialonClient(
-    token='2fe8024e0ab91aa6c8ed82717b71bddcECDC362358DF7D90986F5173D405CD0D42DE7B38'
-)
+client = WialonClient()
 
 if client.login():
     print('Login successful')
