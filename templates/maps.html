@@ -19,50 +19,56 @@
     <div id="map"></div>
 
     <script>
-    function initMap() {
-        var st_petersburg = new google.maps.LatLng(59.940, 30.264);
-
-        var map = new google.maps.Map(document.getElementById('map'), {
-            center: st_petersburg,
-            zoom: 11,
-        });
-        setMarkers(map);
-    };
-
-    function setMarkers(map) {
         var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == XMLHttpRequest.DONE ) {
-                var cars_response = xhr.responseText,
-                        cars = JSON.parse(cars_response).cars;
-                for (var i = 0; i < cars.length; i++) {
-                    var car = cars[i];
-                    var marker = new google.maps.Marker({
-                        position: {lat: car['lat'], lng: car['long']},
-                        map: map,
-                    });
-                    attachContent(marker, car['id'])
-                }
-            }
-        };
-        xhr.open("GET", "/cars/list/", true);
-        xhr.send();
-    }
+        xhr.open("GET", "/cars/list/", false);
+        xhr.send()
+        var cars = JSON.parse(xhr.responseText).cars;
 
-    function attachContent(marker, map_id) {
-            var infowindow = new google.maps.InfoWindow();
-
-            marker.addListener('click', function() {
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "/cars/list/"+map_id, false);
-                xhr.send();
-                var data = JSON.parse(xhr.responseText);
-                infowindow.content = "<strong>"+data['model']+"</strong>";
-                infowindow.open(marker.get('map'), marker);
+        function initMap() {
+            const spb = new google.maps.LatLng(59.940, 30.264);
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: spb,
+                zoom: 11,
             });
-    };
+            var infowindow = new google.maps.InfoWindow();
+            setMarkers(map, infowindow);
+        }
+
+        function setMarkers(map, infowindow) {
+            var markerIcon = {
+              url: 'static/car-icon2.png',
+              scaledSize: new google.maps.Size(60, 60),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(20,40)
+            };
+
+            for (i = 0; i < cars.length; i++) {
+                var car = cars[i];
+                var marker = new google.maps.Marker({
+                    position: {lat: car['lat'], lng: car['long']},
+                    map: map,
+                    icon: markerIcon,
+                });
+                content = "<h1>" + car['model'] + "</h1>" +
+                        "<b>Цвет: </b>" + car['color'] +
+                        "<br><b>Год выпуска: </b>" + car['year'] +
+                        "<a href='#'><h3>Забронировать автомобиль</h3></a>"
+
+                setContent(map, marker, infowindow, content);
+            }
+        }
+
+        function setContent(map, marker, infowindow, content) {
+            google.maps.event.addListener(marker, 'click', (function(marker) {
+                    return function() {
+                        infowindow.setContent(content);
+                        infowindow.open(map, marker);
+                    }
+                })(marker));
+        }
+
+
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{api_key}}&callback=initMap"
-        async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{api_key}}&callback=initMap" async defer></script>
   </body>
 </html>
