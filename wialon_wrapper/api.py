@@ -72,21 +72,6 @@ class WialonClient:
             params=unit_params,
         )
 
-    def execute_command_by_name(self, unit_id, name, params=None):
-        command_params = {
-            'itemId': unit_id,
-            'commandName': name,
-            'linkType': '',
-            'param': params,
-            'timeout': '',
-            'flags': ''
-        }
-
-        return self.request(
-            method='unit/exec_cmd',
-            params=command_params,
-        )
-
     def request(self, method, params, **kwargs):
         url = self.DEFAULT_HOST.format(self.API_URL_POSTFIX)
         par = {
@@ -107,6 +92,24 @@ class WialonClient:
             error = decoded['error']
             print(self.errors[error])
             return False
+
+
+class Command(WialonClient):
+    def __init__(self, name):
+        self.name = name
+
+    def create(self):
+        pass
+
+    def update(self):
+        pass
+
+    def delete(self):
+        pass
+
+    def execute(self):
+        pass
+
 
 
 client = WialonClient(
