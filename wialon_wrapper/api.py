@@ -1,10 +1,11 @@
 import requests
-import wialon
 
 
-class WialonClient():
+class WialonClient:
+
     # Default host settings
-    DEFAULT_HOST = 'https://hst-api.wialon.com/wialon/ajax.html'
+    DEFAULT_HOST = 'https://hst-api.wialon.com/{}'
+    API_URL_POSTFIX = 'wialon/ajax.html'
 
     # Errors codes
     errors = {
@@ -22,29 +23,55 @@ class WialonClient():
         1003: 'Only one request of given time is allowed at the moment'
     }
 
+    token_permission = {
+        0x100: 'online',
+        0x200: 'view access',
+        0x400: 'non-sensitive mod',
+        0x800: 'sensitive mod',
+        0x1000: 'critical mod',
+        0x2000: 'communication',
+        -1: 'unlimited',
+    }
+
     def __init__(self, token=None):
         self.token = token
+        self.authenticated = False
 
         if not token:
-            self.auth()
+            raise Exception
 
     def login(self):
-        login_params = {
-            "token": self.token,
-        }
+        login_params = {"token": self.token}
 
         return self.request(
             method='token/login',
             params=login_params,)
 
-    def request(self, method, params):
+    def get_profile_info(self, detail=False):
+        profile_params = {"type": 1 if not detail else 2}
+
+        return self.request(
+            method='svc=core/get_account_data',
+            params=profile_params,
+        )
+
+    def get_fuel_consumption(self, item_id):
+        fuel_params = {"itemId": item_id}
+
+        return self.request(
+            method='unit/get_fuel_settings',
+            params=fuel_params,
+        )
+
+    def request(self, method, params, **kwargs):
+        url = self.DEFAULT_HOST.format(self.API_URL_POSTFIX)
         par = {
             'svc': method,
             'params': params
         }
 
         response = requests.get(
-            url=self.DEFAULT_HOST,
+            url=url,
             params=par,
         )
 
@@ -64,3 +91,4 @@ client = WialonClient(
 
 if client.login():
     print('Login successful')
+    client.authenticated = True

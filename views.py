@@ -60,3 +60,4 @@ def cars_detail(request):
     car_id = int(request.match_info['car_id'])
     local_data = data['cars'][car_id]
     return web.json_response(local_data)
+
