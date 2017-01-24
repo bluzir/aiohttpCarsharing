@@ -1,6 +1,10 @@
 import requests
 
 
+class WialonException:
+    pass
+
+
 class WialonClient:
 
     # Default host settings
@@ -23,16 +27,6 @@ class WialonClient:
         1003: 'Only one request of given time is allowed at the moment'
     }
 
-    token_permission = {
-        0x100: 'online',
-        0x200: 'view access',
-        0x400: 'non-sensitive mod',
-        0x800: 'sensitive mod',
-        0x1000: 'critical mod',
-        0x2000: 'communication',
-        -1: 'unlimited',
-    }
-
     def __init__(self, token=None):
         self.token = token
         self.authenticated = False
@@ -51,16 +45,46 @@ class WialonClient:
         profile_params = {"type": 1 if not detail else 2}
 
         return self.request(
-            method='svc=core/get_account_data',
+            method='core/get_account_data',
             params=profile_params,
         )
 
-    def get_fuel_consumption(self, item_id):
-        fuel_params = {"itemId": item_id}
+    def get_fuel_consumption(self, unit_id):
+        fuel_params = {"itemId": unit_id}
 
         return self.request(
             method='unit/get_fuel_settings',
             params=fuel_params,
+        )
+
+    def get_sensors_values_by_id(self, unit_id):
+        unit_params = {
+            'source': '',
+            'indexFrom': '',
+            'indexTo': '',
+            'unitId': unit_id,
+            'sensorId': '',
+            'width': ''
+        }
+
+        return self.request(
+            method='unit/calc_sensors',
+            params=unit_params,
+        )
+
+    def execute_command_by_name(self, unit_id, name, params=None):
+        command_params = {
+            'itemId': unit_id,
+            'commandName': name,
+            'linkType': '',
+            'param': params,
+            'timeout': '',
+            'flags': ''
+        }
+
+        return self.request(
+            method='unit/exec_cmd',
+            params=command_params,
         )
 
     def request(self, method, params, **kwargs):
