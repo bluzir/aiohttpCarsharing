@@ -23,7 +23,7 @@ class WialonException(Exception):
         1003: 'Only one request of given time is allowed at the moment'
     }
 
-    def __init__(self, code, text):
+    def __init__(self, code):
         self.code = code
 
         try:

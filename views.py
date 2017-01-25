@@ -52,6 +52,7 @@ def maps(request):
             'api_key': api_key,
         }
 
+
 def cars_list(request):
     return web.json_response(data)
 
@@ -60,4 +61,21 @@ def cars_detail(request):
     car_id = int(request.match_info['car_id'])
     local_data = data['cars'][car_id]
     return web.json_response(local_data)
+
+
+def ride_start(request):
+    return web.Response(text='Ride start!')
+
+
+def ride_end(request):
+    return web.Response(text='Ride end!')
+
+
+def reservation_start(request):
+    return web.Response(text='Reservation start!')
+
+
+def reservation_end(request):
+    return web.Response(text='Reservation end!')
+
 
