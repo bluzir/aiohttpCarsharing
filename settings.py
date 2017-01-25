@@ -14,6 +14,7 @@ DB_NAME = 'test_db'
 DB_USER = 'test_user'
 DB_PASSWORD = ''
 
+
 # Debug settings
 DEBUG = True
 

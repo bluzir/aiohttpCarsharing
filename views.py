@@ -53,30 +53,10 @@ def maps(request):
         }
 
 
-async def cars_list(request):
-    return web.json_response(data)
-
-
-class CarsListView(web.View):
-    async def get(self):
-        return await cars_list(self.request)
-
-
-class CarsDetailView(web.View):
-    def get(self):
-        car_id = int(self.request.match_info['car_id'])
-        local_data = data['cars'][car_id]
-        return web.json_response(local_data)
-
-
-def cars_detail(request):
+async def ride_start(request):
     car_id = int(request.match_info['car_id'])
-    local_data = data['cars'][car_id]
-    return web.json_response(local_data)
-
-
-def ride_start(request):
-    return web.Response(text='Ride start!')
+    # Bussiness logic for car
+    return web.json_response({'success': 'true', 'ride_start_time': 'time', 'car_id': car_id})
 
 
 def ride_end(request):
@@ -90,4 +70,29 @@ def reservation_start(request):
 def reservation_end(request):
     return web.Response(text='Reservation end!')
 
+async def cars_list(request):
+    return web.json_response(data)
+
+async def cars_detail(request):
+    car_id = int(request.match_info['car_id'])
+    local_data = data['cars'][car_id]
+    return web.json_response(local_data)
+
+
+class CarsListView(web.View):
+    async def get(self):
+        return await cars_list(self.request)
+
+
+class CarsDetailView(web.View):
+    async def get(self):
+        return await cars_detail(self.request)
+
+
+class RideStartView(web.View):
+    async def get(self):
+        return await ride_start(self.request)
+
+    async def post(self):
+        return await ride_start(self.request)
 

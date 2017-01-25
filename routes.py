@@ -12,8 +12,8 @@ def setup_routes(app):
     app.router.add_get('/cars/list/{car_id}', cars_detail)
 
     # Ride actions
-    app.router.add_get('/ride/start/', ride_start)
-    app.router.add_get('/ride/end/', ride_end)
+    app.router.add_get('/ride/start/{car_id}', ride_start)
+    app.router.add_get('/ride/end/{car_id}', ride_end)
 
     # Reservation actions
     app.router.add_get('/reservation/start/', reservation_start)
