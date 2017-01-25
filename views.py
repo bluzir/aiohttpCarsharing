@@ -53,8 +53,20 @@ def maps(request):
         }
 
 
-def cars_list(request):
+async def cars_list(request):
     return web.json_response(data)
+
+
+class CarsListView(web.View):
+    async def get(self):
+        return await cars_list(self.request)
+
+
+class CarsDetailView(web.View):
+    def get(self):
+        car_id = int(self.request.match_info['car_id'])
+        local_data = data['cars'][car_id]
+        return web.json_response(local_data)
 
 
 def cars_detail(request):
