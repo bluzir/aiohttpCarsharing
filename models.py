@@ -17,3 +17,34 @@ class Car(peewee.Model):
 
     class Meta:
         database = ''
+
+
+class User(peewee.Model):
+    USER_STATUSES = {
+        '0': 'Неподтвержденный',
+        '1': 'Администратор',
+    }
+
+    id = peewee.IntegerField(
+        primary_key=True,
+    )
+    first_name = peewee.TextField(
+        verbose_name='Имя',
+    )
+    last_name = peewee.TextField(
+        verbose_name='Фамилия',
+    )
+    email = peewee.TextField(
+        verbose_name='Email',
+    )
+    password = peewee.TextField(
+        verbose_name='Пароль',
+    )
+    phone_number = peewee.TextField(
+        verbose_name='Номер телефона',
+    )
+    status = peewee.IntegerField(
+        default=0,
+        choices=USER_STATUSES,
+        verbose_name='Статус'
+    )

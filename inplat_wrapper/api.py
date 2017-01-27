@@ -5,6 +5,11 @@ import json
 import requests
 
 
+ERROR_CODES = {
+    1: 'Неизвестная ошибка',
+    2: ''
+}
+
 class InplatException:
     def __init__(self):
         self.error = None
@@ -12,8 +17,8 @@ class InplatException:
 
 
 class InplatClient:
-    API_KEY = 'F5aPOR2Zm3vHFQXVBjLgpnub'
     DEFAULT_HOST = 'https://demo-api2.inplat.ru/'
+    API_KEY = 'F5aPOR2Zm3vHFQXVBjLgpnub'
     SECRET_WORD = b'B1BUnfwEE2mAUK4D'
 
     def __init__(self):
@@ -98,6 +103,7 @@ class InplatClient:
     def request(self):
         if self.generate_sign():
             self.params.update({'sign': self.sign})
+            print(self.params)
             response = requests.post(url=self.DEFAULT_HOST,
                                      params=self.params,
                                      data=self.data)
@@ -117,7 +123,7 @@ class InplatClient:
             generated = hmac.new(self.SECRET_WORD,
                                  msg=json_data,
                                  digestmod=hashlib.sha256).hexdigest()
-            print(generated)
+            print(json_data)
             self.sign = generated
             return True
         except Exception as e:
@@ -130,7 +136,7 @@ if __name__ == '__main__':
     init = client.init(
         pay_type='mc',
         client_id='hp1L18kmOWVegdka30',
-        pay_params={"msisdn":79265327068},
+        pay_params={"msisdn": 79265327068},
         params={
             "account": "test",
             "sum": 1023,
