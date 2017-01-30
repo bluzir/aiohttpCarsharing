@@ -4,12 +4,6 @@ import json
 
 import requests
 
-
-ERROR_CODES = {
-    1: 'Неизвестная ошибка',
-    2: ''
-}
-
 class InplatException:
     def __init__(self):
         self.error = None
@@ -42,6 +36,7 @@ class InplatClient:
             'pay_params': pay_params,
             'params': params,
             'merc_data': 'Random information',
+            'redirect_url': 'http://127.0.0.1:8080'
         }
         return self.request()
 
@@ -108,7 +103,7 @@ class InplatClient:
                                      params=self.params,
                                      data=json.dumps(self.data))
             if response.status_code == 200:
-                return response
+                return response.json()
             else:
                 print(response.status_code)
                 print(response.text)

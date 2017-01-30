@@ -89,41 +89,37 @@ async def payment_form(request):
 @aiohttp_jinja2.template('payment_form.html')
 async def do_payment(request):
     data = await request.post()
-    if 'card-number' and 'month' and 'year' and 'link' and 'user-id' in data:
+    try:
         card_number = data['card-number']
         year = data['year']
         month = data['month']
         cvv = data['cvv']
         card_holder = data['card-holder']
         user_id = data['user-id']
-        link = data['link']
-        if card_number and year and month:
-            client = InplatClient()
-            if link:
-                print('Привязываем карту')
-                pay_params = {
-                    'pan': card_number,
-                    'expire_month': month,
-                    'expire_year': year,
-                    'cvv': cvv,
-                    'cardholder_name': card_holder,
-                }
-                params = {
-                    'sum': 1111,
-                    'account': '1231231',
-                }
-                init = client.init(pay_type='card',
-                                   client_id=user_id,
-                                   pay_params=pay_params,
-                                   params=params)
-                print(init.json())
-            else:
-                print('Производим оплату')
-            return {'success': True}
+        client = InplatClient()
+        pay_params = {
+            'pan': card_number,
+            'expire_month': month,
+            'expire_year': year,
+            'cvv': cvv,
+            'cardholder_name': card_holder,
+        }
+        params = {
+            'sum': 1111,
+            'account': '1231231',
+        }
+        response = client.init(pay_type='card',
+                               client_id=user_id,
+                               pay_params=pay_params,
+                               params=params)
+        if response['code'] != 0:
+            return {'error': response['message']}
         else:
-            return {'error': 'Заполните все поля'}
-    else:
-        return {'error': 'Ошибка в запросе'}
+            return {'success': True, 'id': response['id'], 'url': response['id']}
+    except KeyError:
+        return {'error': 'Заполните все поля'}
+    except Exception as e:
+        return {'error': e}
 
 
 
