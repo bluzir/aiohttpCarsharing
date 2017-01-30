@@ -82,8 +82,10 @@ async def cars_detail(request):
 
 @aiohttp_jinja2.template('payment_form.html')
 async def payment_form(request):
-    user_id = 123123 # Get user id from session
-    return {'user_id': user_id}
+    user_id = 123123  # Get user id from session
+    account = 3423423  # Get account number from system
+    payment_sum = 1234  # Get sum from system
+    return {'user_id': user_id, 'account': account, 'sum': payment_sum}
 
 
 @aiohttp_jinja2.template('payment_form.html')
@@ -95,27 +97,29 @@ async def do_payment(request):
         month = data['month']
         cvv = data['cvv']
         card_holder = data['card-holder']
-        user_id = data['user-id']
-        client = InplatClient()
-        pay_params = {
-            'pan': card_number,
-            'expire_month': month,
-            'expire_year': year,
-            'cvv': cvv,
-            'cardholder_name': card_holder,
-        }
-        params = {
-            'sum': 1111,
-            'account': '1231231',
-        }
-        response = client.init(pay_type='card',
-                               client_id=user_id,
-                               pay_params=pay_params,
-                               params=params)
-        if response['code'] != 0:
-            return {'error': response['message']}
+        if card_number and year and month and cvv and card_holder:
+            client = InplatClient()
+            pay_params = {
+                'pan': card_number,
+                'expire_month': month,
+                'expire_year': year,
+                'cvv': cvv,
+                'cardholder_name': card_holder,
+            }
+            params = {
+                'sum': data['payment-sum'],
+                'account': data['account'],
+            }
+            response = client.init(pay_type='card',
+                                   client_id=data['user_id'],
+                                   pay_params=pay_params,
+                                   params=params)
+            if response['code'] != 0:
+                return {'error': response['message']}
+            else:
+                return {'success': True, 'id': response['id'], 'url': response['id']}
         else:
-            return {'success': True, 'id': response['id'], 'url': response['id']}
+            return {'error': 'Заполните все поля'}
     except KeyError:
         return {'error': 'Заполните все поля'}
     except Exception as e:

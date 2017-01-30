@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
     {% if not success %}
+    <h3>Платеж на сумму {{ sum }} руб.</h3>
     <div class="col-md-3">
         <form action="/payment/" method="post" accept-charset="utf-8"
               enctype="application/x-www-form-urlencoded">
             <input id="user-id" name="user-id" type="hidden" value="{{ user_id }}"/>
+            <input id="account" name="account" type="hidden" value="{{ account }}"/>
+            <input id="payment-sum" name="payment-sum" type="hidden" value="{{ sum }}"/>
             <div class="form-group">
                 <label for="card-number">Номер карты</label>
                 <input id="card-number" name="card-number" type="text" value="" class="form-control" autofocus/>
