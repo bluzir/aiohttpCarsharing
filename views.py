@@ -79,6 +79,20 @@ async def cars_detail(request):
     return web.json_response(local_data)
 
 
+@aiohttp_jinja2.template('payment_form.html')
+async def payment_form(request):
+    return {'user_id': 1}
+
+
+
+async def do_payment(request):
+    data = await request.post()
+    card_number = data['card_number']
+    month = data['month']
+    year = data['year']
+
+
+
 class CarsListView(web.View):
     async def get(self):
         return await cars_list(self.request)
@@ -96,3 +110,10 @@ class RideStartView(web.View):
     async def post(self):
         return await ride_start(self.request)
 
+
+class PaymentView(web.View):
+    async def get(self):
+        return await payment_form(self.request)
+
+    async def post(self):
+        return await do_payment(self.request)

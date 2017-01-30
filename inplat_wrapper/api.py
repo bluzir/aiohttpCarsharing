@@ -106,7 +106,7 @@ class InplatClient:
             print(self.params)
             response = requests.post(url=self.DEFAULT_HOST,
                                      params=self.params,
-                                     data=self.data)
+                                     data=json.dumps(self.data))
             if response.status_code == 200:
                 return response
             else:

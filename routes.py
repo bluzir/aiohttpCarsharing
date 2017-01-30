@@ -1,5 +1,5 @@
 from views import index, maps, cars_detail, \
-    ride_start, ride_end, reservation_start, reservation_end, CarsListView
+    ride_start, ride_end, reservation_start, reservation_end, CarsListView, PaymentView
 
 
 def setup_routes(app):
@@ -18,3 +18,6 @@ def setup_routes(app):
     # Reservation actions
     app.router.add_get('/reservation/start/', reservation_start)
     app.router.add_get('/reservation/end/', reservation_end)
+
+    # Payment
+    app.router.add_route('*', '/payment/', PaymentView)
