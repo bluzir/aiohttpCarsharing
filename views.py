@@ -84,12 +84,21 @@ async def payment_form(request):
     return {'user_id': 1}
 
 
-
+@aiohttp_jinja2.template('payment_form.html')
 async def do_payment(request):
     data = await request.post()
-    card_number = data['card_number']
-    month = data['month']
-    year = data['year']
+    if 'card-number' and 'month' and 'year' in data:
+        card_number = data['card-number']
+        year = data['year']
+        month = data['month']
+        if card_number and year and month:
+            print(card_number, year, month)
+            return {'success': True}
+        else:
+            return {'error': 'Заполните все поля'}
+    else:
+        return {'error': 'Ошибка в запросе'}
+
 
 
 
