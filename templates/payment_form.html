@@ -4,19 +4,25 @@
     <div class="col-md-3">
         <form action="/payment/" method="post" accept-charset="utf-8"
               enctype="application/x-www-form-urlencoded">
-
+            <input id="user-id" name="user-id" type="hidden" value="{{ user_id }}"/>
             <div class="form-group">
                 <label for="card-number">Номер карты</label>
                 <input id="card-number" name="card-number" type="text" value="" class="form-control" autofocus/>
             </div>
             <div class="form-group">
                 <label for="password">Истекает</label>
-                <input id="password" name="month" max="12" min="1" type="number" class="form-control" placeholder="MM"/>
-                <input id="password" name="year" max="2030" min="2017" type="number" class="form-control" placeholder="ГГ"/>
+                <input id="month" name="month" max="12" min="1" type="number" class="form-control" placeholder="MM"/>
+                <input id="year" name="year" max="2030" min="2017" type="number" class="form-control" placeholder="ГГ"/>
+            </div>
+            <div class="form-group">
+                <label for="card-holder">Имя на карте</label>
+                <input id="card-holder" name="card-holder" type="text" class="form-control" placeholder="IVAN IVANOV"/>
+                <label for="cvv">CVV</label>
+                <input id="CVV" name="cvv" max="999" min="001" type="number" class="form-control" placeholder="999"/>
             </div>
             <div class="checkbox">
                 <label>
-                    <input type="checkbox"> Запомнить карту
+                    <input type="checkbox" name="link"> Запомнить карту
                 </label>
             </div>
 
