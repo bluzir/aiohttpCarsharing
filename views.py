@@ -1,3 +1,5 @@
+import json
+
 import aiohttp_jinja2 as aiohttp_jinja2
 from aiohttp import web
 from aiohttp.web_exceptions import HTTPError, HTTPInternalServerError
@@ -53,24 +55,6 @@ def maps(request):
         return {
             'api_key': api_key,
         }
-
-
-async def ride_start(request):
-    car_id = int(request.match_info['car_id'])
-    # Bussiness logic for car
-    return web.json_response({'success': 'true', 'ride_start_time': 'time', 'car_id': car_id})
-
-
-def ride_end(request):
-    return web.Response(text='Ride end!')
-
-
-def reservation_start(request):
-    return web.Response(text='Reservation start!')
-
-
-def reservation_end(request):
-    return web.Response(text='Reservation end!')
 
 async def cars_list(request):
     return web.json_response(data)
@@ -129,6 +113,21 @@ async def do_payment(request):
         raise HTTPInternalServerError(reason=e)
 
 
+async def do_rest_payment(request):
+    data = await request.post()
+    card_number = data['card-number']
+    print('rest payment?')
+    return web.json_response({'card_number': card_number})
+
+
+@aiohttp_jinja2.template('rest_payment_form.html')
+async def rest_payment_form(request):
+    user_id = 123123  # Get user id from session
+    account = 3423423  # Get account number from system
+    payment_sum = 1234  # Get sum from system
+    return {'user_id': user_id, 'account': account, 'sum': payment_sum}
+
+
 class CarsListView(web.View):
     async def get(self):
         return await cars_list(self.request)
@@ -139,17 +138,17 @@ class CarsDetailView(web.View):
         return await cars_detail(self.request)
 
 
-class RideStartView(web.View):
-    async def get(self):
-        return await ride_start(self.request)
-
-    async def post(self):
-        return await ride_start(self.request)
-
-
 class PaymentView(web.View):
     async def get(self):
         return await payment_form(self.request)
 
     async def post(self):
         return await do_payment(self.request)
+
+
+class RestPaymentView(web.View):
+    async def get(self):
+        return await rest_payment_form(self.request)
+
+    async def post(self):
+        return await do_rest_payment(self.request)
