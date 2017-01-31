@@ -4,10 +4,10 @@ import json
 
 import requests
 
-class InplatException:
-    def __init__(self):
-        self.error = None
-        self.text = None
+class InplatException(BaseException):
+    def __init__(self, code, message):
+        self.code = code
+        self.message = message
 
 
 class InplatClient:
@@ -102,15 +102,17 @@ class InplatClient:
             response = requests.post(url=self.DEFAULT_HOST,
                                      params=self.params,
                                      data=json.dumps(self.data))
-            if response.status_code == 200:
-                return response.json()
+            decoded = response.json()
+            if 'code' in decoded:
+                if decoded['code'] != 0:
+                    raise InplatException(decoded['code'], decoded['message'])
+                else:
+                    return decoded
             else:
-                print(response.status_code)
-                print(response.text)
-                return False
+                print(decoded)
+                raise InplatException(500, 'Problem with request')
         else:
-            print('Problem with generating sign')
-            return False
+            raise InplatException(-1, 'Problem with generating sign')
 
     def generate_sign(self):
         try:

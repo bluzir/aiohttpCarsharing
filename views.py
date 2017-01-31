@@ -2,7 +2,7 @@ import aiohttp_jinja2 as aiohttp_jinja2
 from aiohttp import web
 
 import settings
-from inplat_wrapper.api import InplatClient
+from inplat_wrapper.api import InplatClient, InplatException
 
 data = {
     'cars': [
@@ -97,6 +97,11 @@ async def do_payment(request):
         month = data['month']
         cvv = data['cvv']
         card_holder = data['card-holder']
+        try:
+            payment_sum = int(data['payment-sum'])
+        except Exception as e:
+            print(e)
+            return {'error': e}
         if card_number and year and month and cvv and card_holder:
             client = InplatClient()
             pay_params = {
@@ -107,23 +112,19 @@ async def do_payment(request):
                 'cardholder_name': card_holder,
             }
             params = {
-                'sum': data['payment-sum'],
+                'sum': payment_sum,
                 'account': data['account'],
             }
             response = client.init(pay_type='card',
-                                   client_id=data['user_id'],
+                                   client_id=data['user-id'],
                                    pay_params=pay_params,
                                    params=params)
-            if response['code'] != 0:
-                return {'error': response['message']}
-            else:
-                return {'success': True, 'id': response['id'], 'url': response['id']}
+            return {'success': True, 'id': response['id'], 'url': response['id']}
         else:
             return {'error': 'Заполните все поля'}
-    except KeyError:
-        return {'error': 'Заполните все поля'}
-    except Exception as e:
-        return {'error': e}
+    except InplatException as e:
+        return {'error': e.message}
+
 
 
 
