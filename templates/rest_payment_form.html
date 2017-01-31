@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
     <h3>Платеж на сумму {{ sum }} руб.</h3>
-    <div class="col-md-4">
+    <div class="error"></div>
+    <div class="col-md-4 payment">
         <form id="payment-form" action="/rest/payment/" method="POST" accept-charset="utf-8">
             <input id="user-id" name="user-id" type="hidden" value="{{ user_id }}"/>
             <input id="account" name="account" type="hidden" value="{{ account }}"/>
@@ -35,17 +36,26 @@
 {% block javascript %}
     <script type="text/javascript" language="javascript">
         function payment_call() {
-          var msg   = $('#payment-form').serialize();
-            console.log(msg);
+          var msg = $('#payment-form').serialize(),
+                  error_div = $('.error');
+
             $.ajax({
               type: 'POST',
               url: '/rest/payment/',
               data: msg,
               success: function(response) {
-                  console.log(response);
+                  console.log('Success');
+                  if ("error" in response){
+                      console.log('Error');
+                      error_div.addClass('alert alert-danger');
+                      error_div.text(response['error']);
+                  } else {
+                      console.log('No error');
+                  }
               },
               error:  function(xhr, str){
-                  alert('Возникла ошибка: ' + xhr.responseCode);
+                  error_div.addClass('alert alert-danger');
+                  error_div.text(str);
               }
             });
         }

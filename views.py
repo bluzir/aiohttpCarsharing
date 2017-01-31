@@ -66,14 +66,6 @@ async def cars_detail(request):
 
 
 @aiohttp_jinja2.template('payment_form.html')
-async def payment_form(request):
-    user_id = 123123  # Get user id from session
-    account = 3423423  # Get account number from system
-    payment_sum = 1234  # Get sum from system
-    return {'user_id': user_id, 'account': account, 'sum': payment_sum}
-
-
-@aiohttp_jinja2.template('payment_form.html')
 async def do_payment(request):
     data = await request.post()
     try:
@@ -115,13 +107,52 @@ async def do_payment(request):
 
 async def do_rest_payment(request):
     data = await request.post()
-    card_number = data['card-number']
-    print('rest payment?')
-    return web.json_response({'card_number': card_number})
+    try:
+        card_number = data['card-number']
+        year = data['year']
+        month = data['month']
+        cvv = data['cvv']
+        card_holder = data['card-holder']
+        try:
+            payment_sum = int(data['payment-sum'])
+        except Exception as e:
+            payment_sum = data['payment-sum']
+            return {'error': e}
+        if card_number and year and month and cvv and card_holder:
+            client = InplatClient()
+            pay_params = {
+                'pan': card_number,
+                'expire_month': month,
+                'expire_year': year,
+                'cvv': cvv,
+                'cardholder_name': card_holder,
+            }
+            params = {
+                'sum': payment_sum,
+                'account': data['account'],
+            }
+            response = client.init(pay_type='card',
+                                   client_id=data['user-id'],
+                                   pay_params=pay_params,
+                                   params=params)
+            return {'success': True, 'id': response['id'], 'url': response['id']}
+        else:
+            return {'user_id': data['user-id'], 'account': data['account'], 'sum': payment_sum,
+                    'error': 'Заполните все поля'}
+    except InplatException as e:
+        return web.json_response({'error': e.message, 'status': e.code})
 
 
 @aiohttp_jinja2.template('rest_payment_form.html')
 async def rest_payment_form(request):
+    user_id = 123123  # Get user id from session
+    account = 3423423  # Get account number from system
+    payment_sum = 1234  # Get sum from system
+    return {'user_id': user_id, 'account': account, 'sum': payment_sum}
+
+
+@aiohttp_jinja2.template('payment_form.html')
+async def payment_form(request):
     user_id = 123123  # Get user id from session
     account = 3423423  # Get account number from system
     payment_sum = 1234  # Get sum from system
