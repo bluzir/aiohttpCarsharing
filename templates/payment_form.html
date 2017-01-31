@@ -2,7 +2,7 @@
 {% block content %}
     {% if not success %}
     <h3>Платеж на сумму {{ sum }} руб.</h3>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <form action="/payment/" method="post" accept-charset="utf-8"
               enctype="application/x-www-form-urlencoded">
             <input id="user-id" name="user-id" type="hidden" value="{{ user_id }}"/>
@@ -10,18 +10,18 @@
             <input id="payment-sum" name="payment-sum" type="hidden" value="{{ sum }}"/>
             <div class="form-group">
                 <label for="card-number">Номер карты</label>
-                <input id="card-number" name="card-number" type="text" value="" class="form-control" autofocus/>
+                <input id="card-number" name="card-number" type="number" maxlength="12" value="" class="form-control" autofocus/>
             </div>
-            <div class="form-group">
-                <label for="password">Истекает</label>
+            <label for="password">Истекает</label>
+            <div class="form-inline">
                 <input id="month" name="month" max="12" min="1" type="number" class="form-control" placeholder="MM"/>
                 <input id="year" name="year" max="2030" min="2017" type="number" class="form-control" placeholder="ГГ"/>
             </div>
-            <div class="form-group">
-                <label for="card-holder">Имя на карте</label>
+            <br>
+            <label for="card-holder">Имя на карте и код безопасности</label>
+            <div class="form-inline">
                 <input id="card-holder" name="card-holder" type="text" class="form-control" placeholder="IVAN IVANOV"/>
-                <label for="cvv">CVV</label>
-                <input id="CVV" name="cvv" max="999" min="001" type="number" class="form-control" placeholder="999"/>
+                <input id="CVV" name="cvv" max="999" min="001" type="number" class="form-control" placeholder="CVV"/>
             </div>
             <div class="checkbox">
                 <label>
@@ -29,7 +29,7 @@
                 </label>
             </div>
 
-            <input type="submit" class="btn btn-primary btn-lg" value="Оплатить"/>
+            <input type="submit" class="btn btn-default btn-lg" value="Оплатить"/>
         </form>
     </div>
     {% else %}

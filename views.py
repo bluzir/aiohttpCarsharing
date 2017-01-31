@@ -1,5 +1,6 @@
 import aiohttp_jinja2 as aiohttp_jinja2
 from aiohttp import web
+from aiohttp.web_exceptions import HTTPError, HTTPInternalServerError
 
 import settings
 from inplat_wrapper.api import InplatClient, InplatException
@@ -101,6 +102,7 @@ async def do_payment(request):
             payment_sum = int(data['payment-sum'])
         except Exception as e:
             print(e)
+            payment_sum = data['payment-sum']
             return {'error': e}
         if card_number and year and month and cvv and card_holder:
             client = InplatClient()
@@ -121,11 +123,10 @@ async def do_payment(request):
                                    params=params)
             return {'success': True, 'id': response['id'], 'url': response['id']}
         else:
-            return {'error': 'Заполните все поля'}
+            return {'user_id': data['user-id'], 'account': data['account'], 'sum': payment_sum,
+                    'error': 'Заполните все поля'}
     except InplatException as e:
-        return {'error': e.message}
-
-
+        raise HTTPInternalServerError(reason=e)
 
 
 class CarsListView(web.View):
