@@ -16,6 +16,9 @@ DB_NAME = 'test_db'
 DB_USER = 'test_user'
 DB_PASSWORD = ''
 
+# Secret key settings
+SECRET_KEY = 'uPoDT+5qRvWni/xLarnefaZ17otdOEPthkc6whvirSo='
+
 
 # Debug settings
 DEBUG = True

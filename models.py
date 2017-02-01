@@ -1,6 +1,10 @@
+import datetime
+
+import jwt
 from peewee import *
 
-from inplat_wrapper.api import InplatException
+from inplat_wrapper.api import InplatException, InplatClient
+import settings as config
 
 database = SqliteDatabase('carsharing.db')  # Temporary database
 
@@ -27,12 +31,38 @@ class User(BaseModel):
     phone_number = TextField(null=True)
     status = IntegerField(default=0, choices=USER_STATUSES)
 
-    def encode_auth_token(self, user_id):
-        pass
+    def encode_auth_token(self, user_id, jwt=None):
+        """
+        Generates the Auth Token
+        :return: string
+        """
+        try:
+            payload = {
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+                'iat': datetime.datetime.utcnow(),
+                'sub': user_id
+            }
+            return jwt.encode(
+                payload,
+                config.SECRET_KEY,
+                algorithm='HS256')
+        except Exception as e:
+            return e
 
     @staticmethod
     def decode_auth_token(auth_token):
-        pass
+        """
+        Decodes the auth token
+        :param auth_token:
+        :return: integer|string
+        """
+        try:
+            payload = jwt.decode(auth_token, config.SECRET_KEY)
+            return payload['sub']
+        except jwt.ExpiredSignatureError:
+            return 'Signature expired. Please log in again.'
+        except jwt.InvalidTokenError:
+            return 'Invalid token. Please log in again.'
 
 
 class Payment(BaseModel):
@@ -52,7 +82,7 @@ class Invoice(BaseModel):
             month = data['month']
             cvv = data['cvv']
             card_holder = data['card-holder']
-            print(user_id, card_number, year, month, cvv, card_holder )
+            client = InplatClient()
             return {'success': True}
         except InplatException as e:
             return {'error': e.code, 'message': e.message}
@@ -61,7 +91,7 @@ class Invoice(BaseModel):
 class Order(BaseModel):
     user = ForeignKeyField(User)
     car = ForeignKeyField(Car)
-    invoice = ForeignKeyField(Invoice)
+    invoice = ForeignKeyField(Invoice, null=True)
 
 
 
