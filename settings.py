@@ -8,6 +8,8 @@ PORT = 8080
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATES_ROOT = os.path.join(BASE_DIR, 'templates')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+CARS_DATA_FILE = os.path.join(TEMPLATES_ROOT, 'cars_data.json')
+
 
 # Database settings
 DB_NAME = 'test_db'

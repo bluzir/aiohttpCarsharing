@@ -6,7 +6,7 @@
             "long": 30.2878,
             "model": "Toyota Camry",
             "color": "Красный",
-            "year": "2012",
+            "year": "2012"
         },
         {
             "id": 1,
@@ -14,7 +14,7 @@
             "long": 30.3645,
             "model": "Hyundai Solaris",
             "color": "Черный",
-            "year": "2014",
+            "year": "2014"
         },
         {
             "id": 2,
@@ -22,7 +22,7 @@
             "long": 30.3245,
             "model": "Kia Ceed",
             "color": "Красный",
-            "year": "2016",
+            "year": "2016"
         },
         {
             "id": 3,
@@ -30,7 +30,7 @@
             "long": 30.2260552,
             "model": "Kia Ceed",
             "color": "Белый",
-            "year": "2015",
-        },
+            "year": "2015"
+        }
     ]
 }

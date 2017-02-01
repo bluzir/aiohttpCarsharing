@@ -1,4 +1,4 @@
-from views import cars_list, cars_detail, index, cars_map, payment_form, do_payment
+from views import cars_list, cars_detail, index, cars_map, payment_form, do_payment, login, do_login
 
 
 def setup_routes(app):
@@ -13,3 +13,7 @@ def setup_routes(app):
     # Payment
     app.router.add_get(path='/payment/', handler=payment_form, name='payment_form')
     app.router.add_post(path='/payment/', handler=do_payment)
+
+    # Authentification
+    app.router.add_get(path='/login/', handler=login, name='login')
+    app.router.add_post(path='/login/', handler=do_login)
