@@ -3,7 +3,7 @@
     <h3>Платеж на сумму {{ invoice_sum }} руб.</h3>
     <div class="error"></div>
     <div class="col-md-4 payment">
-        <form id="payment-form" action="/rest/payment/" method="POST" accept-charset="utf-8">
+        <form id="payment-form" action="/payment/" method="POST" accept-charset="utf-8">
             <input id="user-id" name="user-id" type="hidden" value="{{ user_id }}"/>
             <input id="account" name="invoice_id" type="hidden" value="{{ invoice_id }}"/>
             <input id="payment-sum" name="invoice_sum" type="hidden" value="{{ invoice_sum }}"/>
@@ -41,11 +41,11 @@
 
             $.ajax({
               type: 'POST',
-              url: '/rest/payment/',
+              url: '/payment/',
               data: msg,
               success: function(response) {
-                  console.log('Success');
-                  if ("error" in response){
+                  console.log(response);
+                  if (response['error'] != undefined){
                       console.log('Error');
                       error_div.addClass('alert alert-danger');
                       error_div.text(response['error']);

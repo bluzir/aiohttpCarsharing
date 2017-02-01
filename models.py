@@ -53,6 +53,7 @@ class Invoice(BaseModel):
             cvv = data['cvv']
             card_holder = data['card-holder']
             print(user_id, card_number, year, month, cvv, card_holder )
+            return {'success': True}
         except InplatException as e:
             return {'error': e.code, 'message': e.message}
 
