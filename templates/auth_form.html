@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<form action="/auth/" method="post" accept-charset="utf-8"
+      enctype="application/x-www-form-urlencoded">
+    <div class="form-group">
+        <label for="login">Логин</label>
+        <input id="login" name="login" type="text" value="" class="form-control" autofocus/>
+        <label for="login">Пароль</label>
+        <input id="password" name="password" type="text" value="" class="form-control"/>
+    </div>
+</form>
+{% endblock %}
+

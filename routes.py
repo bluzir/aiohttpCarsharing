@@ -1,16 +1,15 @@
-from views import index, maps, cars_detail,\
-    CarsListView, PaymentView, RestPaymentView
+from views import cars_list, cars_detail, index, cars_map, payment_form, do_payment
 
 
 def setup_routes(app):
     # Basic urls
-    app.router.add_get('/', index)
-    app.router.add_get('/maps', maps)
+    app.router.add_get(path='/', handler=index, name='index')
+    app.router.add_get(path='/map/', handler=cars_map, name='cars_map')
 
     # Information about cars
-    app.router.add_route('*', '/cars/list/', CarsListView)
-    app.router.add_get('/cars/list/{car_id}', cars_detail)
+    app.router.add_get(path='/cars/list/', handler=cars_list, name='cars_list')
+    app.router.add_get(path='/cars/list/{car_id}', handler=cars_detail, name='cars_detail')
 
     # Payment
-    app.router.add_route('*', '/payment/', PaymentView)
-    app.router.add_route('*', '/rest/payment/', RestPaymentView)
+    app.router.add_get(path='/payment/', handler=payment_form, name='payment_form')
+    app.router.add_post(path='/payment/', handler=do_payment)

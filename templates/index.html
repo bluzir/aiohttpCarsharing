@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="page-header">
+      <h1>Список доступных на сайте URL'ов</h1>
+    </div>
+    <div class="list-group">
+    {% for r in routes %}
+        {% if r.name != None %}
+        <a href="{{ r._path }}" target="_blank" class="list-group-item">{{ r._name }}</a>
+        {% endif %}
+    {% endfor %}
+    </div>
+{% endblock %}
