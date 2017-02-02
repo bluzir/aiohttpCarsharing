@@ -5,6 +5,8 @@ from aiohttp import web
 
 import settings
 
+import peewee
+
 from models import Payment, Invoice, User
 
 with open("cars_data.json") as cars_json:
@@ -63,15 +65,17 @@ async def login(request):
 # POST '/login/ :
 async def do_login(request):
     data = await request.post()
-    email = data['email']
-    password = data['password']
     try:
+        email = data['email']
+        password = data['password']
         user = User.get(email=email, password=password)
-        print(user.id)
-        auth_token = str(user.encode_auth_token())
-        return web.json_response({'success': True, 'auth_token': auth_token})
+        auth_token = user.encode_auth_token().decode("utf-8")
+        return web.json_response({'auth_token': auth_token})
+    except KeyError:
+        return web.json_response({'error': 'Заполните все необходимые поля'})
     except Exception as e:
         return web.json_response({'error': e})
+
 
 
 

@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="col-md-3 col-md-offset-4">
+<div class="col-md-3 col-md-offset-4 authorization">
     <div class="page-header">
       <h1>Авторизация</h1>
     </div>
-    <form action="/login/" method="post" accept-charset="utf-8"
+    <div class="error"></div>
+    <form action="/login/" method="post" accept-charset="utf-8" id="login-form"
           enctype="application/x-www-form-urlencoded">
         <div class="form-group">
             <label for="email">Email</label>
@@ -15,5 +16,46 @@
         <input type="submit" class="btn btn-success btn-lg" value="Войти"/>
     </form>
 </div>
+<div class="col-md-12">
+    <div class="success"></div>
+</div>
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript" language="javascript">
+        function payment_call() {
+          var msg = $('#login-form').serialize(),
+                  error_div = $('.error'),
+                  success_div = $('.success');
+
+            $.ajax({
+              type: 'POST',
+              url: '/login/',
+              data: msg,
+              success: function(response) {
+                  console.log(response);
+                  if (response['error'] != undefined){
+                      console.log('Error');
+                      error_div.addClass('alert alert-danger');
+                      error_div.text(response['error']);
+                  } else {
+                      console.log('No error');
+                      $('#login-form').hide();
+                      success_div.addClass('well');
+                      success_div.text("Успешно авторизованы. Ваш токен: "+response['auth_token']);
+                  }
+              },
+              error:  function(xhr, str){
+                  error_div.addClass('alert alert-danger');
+                  error_div.text(str);
+              }
+            });
+        }
+
+        $('#login-form').on('submit', function(event){
+            event.preventDefault();
+            console.log("form submitted!")  // sanity check
+            payment_call();
+        });
+    </script>
 {% endblock %}
 
