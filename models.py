@@ -81,10 +81,27 @@ class Invoice(BaseModel):
             month = data['month']
             cvv = data['cvv']
             card_holder = data['card-holder']
-            client = InplatClient()
-            return {'success': True}
+            payment_sum = self.summ
+            if card_holder and card_number and month and year and cvv:
+                client = InplatClient()
+                pay_params = {
+                    'pan': card_number,
+                    'expire_month': month,
+                    'expire_year': year,
+                    'cvv': cvv,
+                    'cardholder_name': card_holder,
+                }
+                params = {
+                    'sum': int(self.summ),
+                    'account': self.id,
+                }
+                response = client.init(pay_type='card',  client_id=user_id,  pay_params=pay_params, params=params)
+                return {'success': True, 'response': response}
+            else:
+                error = 'Заполните все поля'
+            return {'error': error}
         except InplatException as e:
-            return {'error': e.code, 'message': e.message}
+            return {'error': e.message, 'code': e.code}
 
 
 class Order(BaseModel):
