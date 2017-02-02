@@ -5,7 +5,7 @@ from aiohttp import web
 
 import settings
 
-from models import Payment, Invoice
+from models import Payment, Invoice, User
 
 with open("cars_data.json") as cars_json:
     cars_data = json.loads(cars_json.read())
@@ -63,8 +63,16 @@ async def login(request):
 # POST '/login/ :
 async def do_login(request):
     data = await request.post()
-    session = await request.session()
-    return web.json_response({})
+    email = data['email']
+    password = data['password']
+    try:
+        user = User.get(email=email, password=password)
+        print(user.id)
+        auth_token = str(user.encode_auth_token())
+        return web.json_response({'success': True, 'auth_token': auth_token})
+    except Exception as e:
+        return web.json_response({'error': e})
+
 
 
 
