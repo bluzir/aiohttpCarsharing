@@ -1,17 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="col-md-3 col-md-offset-4 authorization">
+<div class="col-md-3 col-md-offset-4 authorization" xmlns="http://www.w3.org/1999/html"
+     xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
     <div class="page-header">
-      <h1>Авторизация</h1>
+      <h1>Декодирование токена</h1>
     </div>
     <div class="error"></div>
-    <form action="/login/" method="post" accept-charset="utf-8" id="login-form"
+    <form action="/decode_token/" method="post" accept-charset="utf-8" id="decode-form"
           enctype="application/x-www-form-urlencoded">
         <div class="form-group">
-            <label for="email">Email</label>
-            <input id="email" name="email" type="text" value="" class="form-control" autofocus/>
-            <label for="password">Пароль</label>
-            <input id="password" name="password" type="password" value="" class="form-control"/>
+            <label for="token">Введите ваш токен</label>
+            <p><textarea id="token" name="token" type="text" value="" class="form-control" autofocus/></textarea></p>
         </div>
         <input type="submit" class="btn btn-success btn-lg" value="Войти"/>
     </form>
@@ -23,13 +22,13 @@
 {% block javascript %}
     <script type="text/javascript" language="javascript">
         function payment_call() {
-          var msg = $('#login-form').serialize(),
+          var msg = $('#decode-form').serialize(),
                   error_div = $('.error'),
                   success_div = $('.success');
 
             $.ajax({
               type: 'POST',
-              url: '/login/',
+              url: '/decode_token/',
               data: msg,
               success: function(response) {
                   console.log(response);
@@ -39,10 +38,10 @@
                       error_div.text(response['error']);
                   } else {
                       console.log('No error');
-                      $('#login-form').hide();
+                      $('#decode-form').hide();
                       error_div.hide();
                       success_div.addClass('well');
-                      success_div.html("Успешно авторизованы. Ваш токен: <p><textarea>"+response['auth_token']+"</textarea></p>");
+                      success_div.html("Ваш ID пользователя: "+response['user_id']);
                   }
               },
               error:  function(xhr, str){
@@ -52,7 +51,7 @@
             });
         }
 
-        $('#login-form').on('submit', function(event){
+        $('#decode-form').on('submit', function(event){
             event.preventDefault();
             console.log("form submitted!")  // sanity check
             payment_call();

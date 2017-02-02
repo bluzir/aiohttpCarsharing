@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 
 import aiohttp_jinja2 as aiohttp_jinja2
@@ -68,15 +69,41 @@ async def do_login(request):
     try:
         email = data['email']
         password = data['password']
-        user = User.get(email=email, password=password)
-        auth_token = user.encode_auth_token().decode("utf-8")
-        return web.json_response({'auth_token': auth_token})
+        if email and password:
+            user = User.get(email=email, password=password)
+            auth_token = user.encode_auth_token().decode("utf-8")
+            return web.json_response({'auth_token': auth_token})
+        else:
+            error = 'Заполните все необходимые полня'
     except KeyError:
-        return web.json_response({'error': 'Заполните все необходимые поля'})
+        error = 'Заполните все необходимые полня'
+    except User.DoesNotExist:
+        error = 'Неправильный логин или пароль'
     except Exception as e:
-        return web.json_response({'error': e})
+        error = str(e)
+
+    return web.json_response({'error': error})
 
 
+# GET '/decode_token/'
+@aiohttp_jinja2.template('decode_token.html')
+async def decode_form(request):
+    return {}
+
+
+# POST '/decode_token/
+async def decode_token(request):
+    data = await request.post()
+    try:
+        auth_token = data['token']
+        decoded = User.decode_auth_token(auth_token)
+        if 'error' not in decoded:
+            return web.json_response({'user_id': decoded['user_id']})
+        else:
+            error = decoded['error']
+    except Exception as e:
+        error = str(e)
+    return web.json_response({'error': error})
 
 
 

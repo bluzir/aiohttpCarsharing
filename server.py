@@ -8,7 +8,8 @@ from aiohttp import web
 import settings
 from routes import setup_routes
 
-logging.basicConfig(level=settings.LEVEL)
+logging.basicConfig(level=settings.LEVEL, filename='logs/aiohttp.log')
+
 
 
 def main():

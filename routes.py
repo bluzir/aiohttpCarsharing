@@ -1,4 +1,5 @@
-from views import cars_list, cars_detail, index, cars_map, payment_form, do_payment, login, do_login
+from views import cars_list, cars_detail, index, cars_map, payment_form, do_payment, login, do_login, decode_form, \
+    decode_token
 
 
 def setup_routes(app):
@@ -17,3 +18,5 @@ def setup_routes(app):
     # Authentification
     app.router.add_get(path='/login/', handler=login, name='login')
     app.router.add_post(path='/login/', handler=do_login)
+    app.router.add_get(path='/decode_token/', handler=decode_form, name='decode')
+    app.router.add_post(path='/decode_token/', handler=decode_token)

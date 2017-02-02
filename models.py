@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import datetime
 
 import jwt
@@ -6,7 +7,7 @@ from peewee import *
 from inplat_wrapper.api import InplatException, InplatClient
 import settings as config
 
-database = SqliteDatabase('carsharing.db')  # Temporary database
+database = PostgresqlDatabase(config.DB_NAME, user=config.DB_USER)
 
 
 class BaseModel(Model):
@@ -36,18 +37,16 @@ class User(BaseModel):
         Generates the Auth Token
         :return: string
         """
-        try:
-            payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
-                'iat': datetime.datetime.utcnow(),
-                'sub': self.id,
-            }
-            return jwt.encode(
-                payload=payload,
-                key=config.SECRET_KEY,
-                algorithm='HS256')
-        except Exception as e:
-            return e
+
+        payload = {
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
+            'iat': datetime.datetime.utcnow(),
+            'sub': self.id,
+        }
+        return jwt.encode(
+            payload=payload,
+            key=config.SECRET_KEY,
+            algorithm='HS256')
 
     @staticmethod
     def decode_auth_token(auth_token):
@@ -58,11 +57,11 @@ class User(BaseModel):
         """
         try:
             payload = jwt.decode(auth_token, config.SECRET_KEY)
-            return payload['sub']
+            return {'user_id': payload['sub']}
         except jwt.ExpiredSignatureError:
-            return 'Signature expired. Please log in again.'
+            return {'error': 'Signature expired. Please log in again.'}
         except jwt.InvalidTokenError:
-            return 'Invalid token. Please log in again.'
+            return {'error': 'Invalid token. Please log in again.'}
 
 
 class Payment(BaseModel):
