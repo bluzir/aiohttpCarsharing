@@ -1,21 +1,16 @@
 # -*- coding: utf-8 -*-
-import json
 
 import aiohttp_jinja2 as aiohttp_jinja2
 from aiohttp import web
-from playhouse.shortcuts import model_to_dict
 
 import settings
 
-import peewee
+from serializers import CarSerializer
 
 from models import Invoice, User, Car
 
 
 # GET '/' :
-from utils.decimal_encoder import DecimalEncoder
-
-
 @aiohttp_jinja2.template('index.html')
 async def index(request):
     routes = request.app.router._resources
@@ -25,19 +20,17 @@ async def index(request):
 # GET '/cars/list/' :
 async def cars_list(request):
     cars_query = Car.get_available_cars()
-    cars_dict = dict()
-    cars_dict['cars'] = []
-    for item in cars_query:
-        serialized = model_to_dict(item)
-        cars_dict['cars'].append(serialized)
-    return web.json_response(cars_dict)
-
+    serializer = CarSerializer(cars_query)
+    serializer.serialize()
+    return web.json_response(serializer.json)
 
 # GET '/cars/list/{id}' :
 async def cars_detail(request):
     car_id = int(request.match_info['car_id'])
-    local_data = {}
-    return web.json_response(local_data)
+    cars_query = Car.get(id=car_id)
+    serializer = CarSerializer(cars_query)
+    serializer.serialize()
+    return web.json_response(serializer.json)
 
 
 # GET '/map/' :
