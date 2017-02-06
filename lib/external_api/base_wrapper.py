@@ -1,3 +1,5 @@
+import json
+
 import requests
 
 
@@ -13,6 +15,6 @@ class BaseClient:
     def post(self, url, params, data):
         response = requests.post(url=url,
                                  params=params,
-                                 data=data)
+                                 data=json.dumps(data))
         return response
 

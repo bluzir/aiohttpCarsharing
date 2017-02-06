@@ -4,13 +4,16 @@ import json
 
 import requests
 
+from lib.external_api.base_wrapper import BaseClient
+
+
 class InplatException(BaseException):
     def __init__(self, code, message):
         self.code = code
         self.message = message
 
 
-class InplatClient:
+class InplatClient(BaseClient):
     DEFAULT_HOST = 'https://demo-api2.inplat.ru/'
     API_KEY = 'F5aPOR2Zm3vHFQXVBjLgpnub'
     SECRET_WORD = b'B1BUnfwEE2mAUK4D'
@@ -25,6 +28,7 @@ class InplatClient:
 
         self.pay_type = None
         self.client_id = None
+        super(InplatClient, self).__init__()
 
     # Initialize payment
     def init(self, pay_type, client_id, pay_params, params):
@@ -38,7 +42,10 @@ class InplatClient:
             'merc_data': 'Random information',
             'redirect_url': 'http://127.0.0.1:8080'
         }
-        return self.request()
+        self.generate_sign()
+        return self.post(url=self.DEFAULT_HOST,
+                         params=self.params,
+                         data=self.data)
 
     # Check payment status in Inplat system
     def check(self, payment_id):
@@ -120,15 +127,14 @@ class InplatClient:
             generated = hmac.new(self.SECRET_WORD,
                                  msg=json_data,
                                  digestmod=hashlib.sha256).hexdigest()
-            print(json_data)
             self.sign = generated
+            self.params.update({'sign': self.sign})
             return True
         except Exception as e:
             print(e)
             return False
 
-
-if __name__ == '__main__':
+def main():
     client = InplatClient()
     init = client.init(
         pay_type='mc',
@@ -143,3 +149,7 @@ if __name__ == '__main__':
         }
     )
     print(init.json())
+
+
+if __name__ == '__main__':
+    main()

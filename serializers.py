@@ -5,7 +5,6 @@ from models import Car
 
 
 class BaseSerializer:
-    fields = []
     name = None
     select_query = None
 
@@ -27,7 +26,6 @@ class BaseSerializer:
 
 
 class CarSerializer(BaseSerializer):
-    fields = ['id', 'car_model']
     name = 'cars'
     select_query = SelectQuery(Car, Car.id, Car.car_model)
 
