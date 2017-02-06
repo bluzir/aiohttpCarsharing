@@ -3,18 +3,19 @@ import json
 
 import aiohttp_jinja2 as aiohttp_jinja2
 from aiohttp import web
+from playhouse.shortcuts import model_to_dict
 
 import settings
 
 import peewee
 
-from models import Payment, Invoice, User
-
-with open("cars_data.json") as cars_json:
-    cars_data = json.loads(cars_json.read())
+from models import Invoice, User, Car
 
 
 # GET '/' :
+from utils.decimal_encoder import DecimalEncoder
+
+
 @aiohttp_jinja2.template('index.html')
 async def index(request):
     routes = request.app.router._resources
@@ -23,13 +24,19 @@ async def index(request):
 
 # GET '/cars/list/' :
 async def cars_list(request):
-    return web.json_response(cars_data)
+    cars_query = Car.get_available_cars()
+    cars_dict = dict()
+    cars_dict['cars'] = []
+    for item in cars_query:
+        serialized = model_to_dict(item)
+        cars_dict['cars'].append(serialized)
+    return web.json_response(cars_dict)
 
 
 # GET '/cars/list/{id}' :
 async def cars_detail(request):
     car_id = int(request.match_info['car_id'])
-    local_data = cars_data['cars'][car_id]
+    local_data = {}
     return web.json_response(local_data)
 
 

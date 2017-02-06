@@ -36,7 +36,7 @@
 
         function setMarkers(map, infowindow) {
             var markerIcon = {
-              url: 'static/car-icon2.png',
+              url: '/static/car-icon2.png',
               scaledSize: new google.maps.Size(60, 60),
               origin: new google.maps.Point(0, 0),
               anchor: new google.maps.Point(20,40)
@@ -49,9 +49,7 @@
                     map: map,
                     icon: markerIcon,
                 });
-                content = "<h1>" + car['model'] + "</h1>" +
-                        "<b>Цвет: </b>" + car['color'] +
-                        "<br><b>Год выпуска: </b>" + car['year'] +
+                content = "<h1>" + car['car_model'] + "</h1>" +
                         "<a href='#'><h3>Начать аренду</h3></a>" +
                         "<a href='#'><h3>Закончить аренду</h3></a>" +
                         "<a href='#'><h3>Забронировать</h3></a>" +

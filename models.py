@@ -4,8 +4,8 @@ import datetime
 import jwt
 from peewee import *
 
-from inplat_wrapper.api import InplatException, InplatClient
 import settings as config
+from lib.external_api.inplat_wrapper import InplatException, InplatClient
 
 database = PostgresqlDatabase(config.DB_NAME, user=config.DB_USER)
 
@@ -16,7 +16,26 @@ class BaseModel(Model):
 
 
 class Car(BaseModel):
+    CAR_STATUSES = {
+        '0': 'Недоступна',
+        '1': 'Доступна',
+        '2': 'Забронирована',
+        '3': 'В поездке'
+    }
+
+    wialon_id = IntegerField(unique=True, null=True)
     car_model = TextField()
+    lat = FloatField(default=0)
+    long = FloatField(default=0)
+    status = IntegerField(choices=CAR_STATUSES)
+
+    def get_fuel(self):
+        # request to external API
+        return None
+
+    @staticmethod
+    def get_available_cars():
+        return Car.select().where(Car.status == 1)
 
 
 class User(BaseModel):
