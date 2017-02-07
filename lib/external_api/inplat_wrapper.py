@@ -16,7 +16,7 @@ class InplatException(BaseException):
 class InplatClient(BaseClient):
     DEFAULT_HOST = 'https://demo-api2.inplat.ru/'
     API_KEY = 'F5aPOR2Zm3vHFQXVBjLgpnub'
-    SECRET_WORD = b'B1BUnfwEE2mAUK4D'
+    SECRET_WORD = b'B1BUnfwEE2mAUK4D'  # TODO: Hide into non-versioned file
 
     def __init__(self):
         self.sign = None
@@ -53,7 +53,10 @@ class InplatClient(BaseClient):
             'method': 'check',
             'id': payment_id,
         }
-        return self.request()
+        self.generate_sign()
+        return self.post(url=self.DEFAULT_HOST,
+                         params=self.params,
+                         data=self.data)
 
     # Payment by linked card
     def pay(self, client_id, link_id, params):
@@ -64,62 +67,52 @@ class InplatClient(BaseClient):
             'params': params,
             'merc_data': 'Random information',
         }
-        return self.request()
+        return self.post(url=self.DEFAULT_HOST,
+                         params=params,
+                         data=self.data)
 
     # Refund payment
-    def refund(self, payment_id, amount):
+    def refund(self, payment_id, amount, params):
         self.data = {
             'method': 'refund',
             'id': payment_id,
             'amount': amount,
         }
-        return self.request()
+        return self.post(url=self.DEFAULT_HOST,
+                         params=params,
+                         data=self.data)
 
     # Link a card
-    def link(self, client_id, pay_params):
+    def link(self, client_id, pay_params, params):
         self.data = {
             'method': 'link',
             'pay_type': 'card',
             'client_id': client_id,
             'pay_params': pay_params,
         }
-        return self.request()
+        return self.post(url=self.DEFAULT_HOST,
+                         params=params,
+                         data=self.data)
 
     # Unlink a card
-    def unlink(self, link_id):
+    def unlink(self, link_id, params):
         self.data = {
             'method': 'unlink',
             'link_id': link_id,
         }
-        return self.request()
+        return self.request(url=self.DEFAULT_HOST,
+                            params=params,
+                            data=self.data)
 
     # List of linked cards by id
-    def links(self, client_id):
+    def links(self, client_id, params):
         self.data = {
             'method': 'links',
             'client_id': client_id,
         }
-        return self.request()
-
-    # Basic request with self.data
-    def request(self):
-        if self.generate_sign():
-            self.params.update({'sign': self.sign})
-            print(self.params)
-            response = requests.post(url=self.DEFAULT_HOST,
-                                     params=self.params,
-                                     data=json.dumps(self.data))
-            decoded = response.json()
-            if 'code' in decoded:
-                if decoded['code'] != 0:
-                    raise InplatException(decoded['code'], decoded['message'])
-                else:
-                    return decoded
-            else:
-                print(decoded)
-                raise InplatException(500, 'Problem with request')
-        else:
-            raise InplatException(-1, 'Problem with generating sign')
+        return self.post(url=self.DEFAULT_HOST,
+                         params=params,
+                         data=self.data)
 
     def generate_sign(self):
         try:

@@ -1,13 +1,14 @@
 import logging
 import os
 
-# Port settings
-PORT = 8080
 
-# Folders settings
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-TEMPLATES_ROOT = os.path.join(BASE_DIR, 'templates')
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# SSL Settings
+CRT_ROOT = '/etc/letsencrypt/live/bluzir.me/fullchain.pem'
+KEY_ROOT = '/etc/letsencrypt/live/bluzir.me/privkey.pem'
+
+# Host settings
+HOST = '89.223.26.255'
+PORT = 8080
 
 
 # Database settings
@@ -30,3 +31,4 @@ else:
 
 # API Keys
 GMAPS_API_KEY = 'AIzaSyCZwQePt-z3n2lCnK-nApgzIyxXF3hIMrw'
+INPLAT_API_KEY = 'F5aPOR2Zm3vHFQXVBjLgpnub'

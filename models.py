@@ -4,7 +4,7 @@ import datetime
 import jwt
 from peewee import *
 
-import settings as config
+from config import base_settings as config
 from lib.external_api.inplat_wrapper import InplatException, InplatClient
 
 database = PostgresqlDatabase(config.DB_NAME, user=config.DB_USER)

@@ -4,6 +4,7 @@ import requests
 
 
 class BaseClient:
+
     def __init__(self):
         pass
 
