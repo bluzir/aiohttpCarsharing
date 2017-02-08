@@ -1,27 +1,26 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Carcahring map</title>
-    <meta name="viewport" content="initial-scale=1.0">
-    <meta charset="utf-8">
-    <style>
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      #map {
-        height: 100%;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="map"></div>
+{% extends 'base.html' %}
+{% block title %}Карта{% endblock %}
 
+{% block style %}
+    html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    }
+    #map {
+    height: 100%;
+    }
+{% endblock %}
+
+{% block content %}
+    <div id="map"></div>
+{% endblock %}
+
+{% block javascript %}
     <script>
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "/api/cars/list/", false);
-        xhr.send()
+        xhr.send();
         var cars = JSON.parse(xhr.responseText).cars;
 
         function initMap() {
@@ -71,5 +70,4 @@
 
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{api_key}}&callback=initMap" async defer></script>
-  </body>
-</html>
+{% endblock %}

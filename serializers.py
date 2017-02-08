@@ -27,7 +27,7 @@ class BaseSerializer:
 
 class CarSerializer(BaseSerializer):
     name = 'cars'
-    select_query = SelectQuery(Car, Car.id, Car.car_model)
+    select_query = SelectQuery(Car, Car.id, Car.car_model, Car.lat, Car.long)
 
 
 class UserSerializer(BaseSerializer):

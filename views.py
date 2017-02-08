@@ -73,6 +73,11 @@ def tariff_detail(request):
         return web.json_response({'error': 'No access token passed'})
 
 
+# GET '/api/payments/' :
+def payments_list(request):
+    return {}
+
+
 # GET '/payment/' :
 @aiohttp_jinja2.template('rest_payment_form.html')
 async def payment_form(request):
