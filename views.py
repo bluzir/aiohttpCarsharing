@@ -3,6 +3,7 @@ import logging
 
 import aiohttp_jinja2 as aiohttp_jinja2
 from aiohttp import web
+from aiohttp_session import get_session
 
 from config import base_settings as config
 from models import Invoice, User, Car
@@ -15,6 +16,24 @@ async def index(request):
     routes = request.app.router._resources
     return {'routes': routes}
 
+
+# GET '/':
+@aiohttp_jinja2.template('profile.html')
+async def profile_view(request):
+    session = await get_session(request)
+    try:
+        auth_token = session['auth_token']
+        print(auth_token)
+        check_token = User.decode_auth_token(auth_token)
+        print(check_token)
+        if 'error' not in check_token:
+            return {'session': session}
+        else:
+            return web.HTTPFound('/login/')
+    except KeyError:
+        return web.HTTPFound('/login/')
+    except Exception as e:
+        return web.HTTPInternalServerError(e)
 
 # GET '/cars/list/' :
 async def cars_list(request):
@@ -109,11 +128,14 @@ async def login(request):
 # POST '/login/ :
 async def do_login(request):
     data = await request.post()
+    session = await get_session(request)
     try:
         email = data['email']
         password = data['password']
         user = User.get(email=email, password=password)
         auth_token = user.encode_auth_token().decode("utf-8")
+        session['auth_token'] = auth_token
+        session['is_authorized'] = True
         return web.json_response({'auth_token': auth_token})
     except KeyError:
         return web.json_response({'error': 'Заполните все необходимые поля'})

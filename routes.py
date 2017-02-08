@@ -5,6 +5,7 @@ def setup_routes(app):
     # Basic urls
     app.router.add_get(path='/', handler=index, name='index')
     app.router.add_get(path='/map/', handler=cars_map, name='cars_map')
+    app.router.add_get(path='/profile/', handler=profile_view, name='profile')
 
     # Payment
     app.router.add_get(path='/payment/', handler=payment_form, name='payment_form')
