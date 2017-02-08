@@ -1,5 +1,5 @@
 from views import cars_list, cars_detail, index, cars_map, payment_form, do_payment, login, do_login, decode_form, \
-    decode_token
+    decode_token, profile_detail
 
 
 def setup_routes(app):
@@ -15,8 +15,11 @@ def setup_routes(app):
     app.router.add_get(path='/payment/', handler=payment_form, name='payment_form')
     app.router.add_post(path='/payment/', handler=do_payment)
 
-    # Authentification
+    # Authentication
     app.router.add_get(path='/login/', handler=login, name='login')
     app.router.add_post(path='/login/', handler=do_login)
     app.router.add_get(path='/decode_token/', handler=decode_form, name='decode')
     app.router.add_post(path='/decode_token/', handler=decode_token)
+
+    # REST URL's
+    app.router.add_get(path='/api/profile/', handler=profile_detail, name='api_profile')

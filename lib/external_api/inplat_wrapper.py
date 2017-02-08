@@ -14,6 +14,7 @@ class InplatException(BaseException):
 
 
 class InplatClient(BaseClient):
+    API_ID = 1
     DEFAULT_HOST = 'https://demo-api2.inplat.ru/'
     API_KEY = 'F5aPOR2Zm3vHFQXVBjLgpnub'
     SECRET_WORD = b'B1BUnfwEE2mAUK4D'  # TODO: Hide into non-versioned file
@@ -100,7 +101,7 @@ class InplatClient(BaseClient):
             'method': 'unlink',
             'link_id': link_id,
         }
-        return self.request(url=self.DEFAULT_HOST,
+        return self.post(url=self.DEFAULT_HOST,
                             params=params,
                             data=self.data)
 
@@ -126,23 +127,3 @@ class InplatClient(BaseClient):
         except Exception as e:
             print(e)
             return False
-
-def main():
-    client = InplatClient()
-    init = client.init(
-        pay_type='mc',
-        client_id='hp1L18kmOWVegdka30',
-        pay_params={"msisdn": 79265327068},
-        params={
-            "account": "test",
-            "sum": 1023,
-            "email": "pay@example.com",
-            "details": "Оплата благотворительности",
-            "address": "ул. Пролетарская 23",
-        }
-    )
-    print(init.json())
-
-
-if __name__ == '__main__':
-    main()

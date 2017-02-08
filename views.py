@@ -6,7 +6,7 @@ from aiohttp import web
 
 from config import base_settings as config
 from models import Invoice, User, Car
-from serializers import CarSerializer
+from serializers import CarSerializer, UserSerializer
 
 
 # GET '/' :
@@ -40,6 +40,22 @@ def cars_map(request):
     return {'api_key': api_key}
 
 
+# GET '/profile/' :
+def profile_detail(request):
+    try:
+        auth_token = request.GET['auth_token']
+        user_id = User.decode_auth_token(auth_token=auth_token)
+        if 'error' not in user_id:
+            user = User.get(id=user_id['user_id'])
+            user_serializer = UserSerializer(user)
+            user_serializer.serialize()
+            return web.json_response(user_serializer.json)
+        else:
+            return web.json_response(user_id)
+    except KeyError:
+        return web.json_response({'error': 'No access token passed'})
+
+
 # GET '/payment/' :
 @aiohttp_jinja2.template('rest_payment_form.html')
 async def payment_form(request):
@@ -71,7 +87,16 @@ async def login(request):
 # POST '/login/ :
 async def do_login(request):
     data = await request.post()
-    return web.json_response({'data': data})
+    try:
+        email = data['email']
+        password = data['password']
+        user = User.get(email=email, password=password)
+        auth_token = user.encode_auth_token().decode("utf-8")
+        return web.json_response({'auth_token': auth_token})
+    except KeyError:
+        return web.json_response({'error': 'Заполните все необходимые поля'})
+    except Exception as e:
+        return web.json_response({'error': e})
 
 
 # GET '/decode_token/'
