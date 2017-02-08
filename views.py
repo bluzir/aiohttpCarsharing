@@ -52,11 +52,13 @@ async def payment_form(request):
 # POST '/payment/' :
 async def do_payment(request):
     data = await request.post()
-    logging.debug(msg=data)
-    print(request.post())
-    invoice_id = data['invoice_id']
-    invoice = Invoice.get(id=invoice_id)
-    result = invoice.handle_form(data)
+    try:
+        invoice_id = request.GET['invoice_id']
+        crypto = data['inplat_payment_crypto_input']
+        invoice = Invoice.get(id=invoice_id)
+        result = invoice.handle_form(crypto=crypto)
+    except KeyError as e:
+        result = {'error': 'No cryptograma'}
     return web.json_response(result)
 
 

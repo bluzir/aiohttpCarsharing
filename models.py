@@ -92,23 +92,13 @@ class Invoice(BaseModel):
     payment = ForeignKeyField(Payment, null=True)
     user = ForeignKeyField(User)
 
-    def handle_form(self, data):
+    def handle_form(self, crypto):
         try:
             user_id = self.user.id
-            card_number = data['card-number']
-            year = data['year']
-            month = data['month']
-            cvv = data['cvv']
-            card_holder = data['card-holder']
-            payment_sum = self.summ
-            if card_holder and card_number and month and year and cvv:
+            if crypto:
                 client = InplatClient()
                 pay_params = {
-                    'pan': card_number,
-                    'expire_month': month,
-                    'expire_year': year,
-                    'cvv': cvv,
-                    'cardholder_name': card_holder,
+                    'crypto': crypto,
                 }
                 params = {
                     'sum': int(self.summ),
