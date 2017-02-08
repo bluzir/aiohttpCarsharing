@@ -1,15 +1,11 @@
 from views import cars_list, cars_detail, index, cars_map, payment_form, do_payment, login, do_login, decode_form, \
-    decode_token, profile_detail
+    decode_token, profile_detail, tariff_detail
 
 
 def setup_routes(app):
     # Basic urls
     app.router.add_get(path='/', handler=index, name='index')
     app.router.add_get(path='/map/', handler=cars_map, name='cars_map')
-
-    # Information about cars
-    app.router.add_get(path='/cars/list/', handler=cars_list, name='cars_list')
-    app.router.add_get(path='/cars/list/{car_id}', handler=cars_detail, name='cars_detail')
 
     # Payment
     app.router.add_get(path='/payment/', handler=payment_form, name='payment_form')
@@ -23,3 +19,6 @@ def setup_routes(app):
 
     # REST URL's
     app.router.add_get(path='/api/profile/', handler=profile_detail, name='api_profile')
+    app.router.add_get(path='/api/tariff/', handler=tariff_detail, name='api_tariff')
+    app.router.add_get(path='/api/cars/list/', handler=cars_list, name='cars_list')
+    app.router.add_get(path='/api/cars/list/{car_id}', handler=cars_detail, name='cars_detail')

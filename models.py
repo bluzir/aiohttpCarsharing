@@ -15,6 +15,10 @@ class BaseModel(Model):
         database = database
 
 
+class Tariff(BaseModel):
+    name = TextField()
+
+
 class Car(BaseModel):
     CAR_STATUSES = {
         '0': 'Недоступна',
@@ -50,6 +54,7 @@ class User(BaseModel):
     password = TextField()
     phone_number = TextField(null=True)
     status = IntegerField(default=0, choices=USER_STATUSES)
+    tariff = ForeignKeyField(Tariff, null=True)
 
     def encode_auth_token(self):
         """
@@ -117,9 +122,5 @@ class Order(BaseModel):
     user = ForeignKeyField(User)
     car = ForeignKeyField(Car)
     invoice = ForeignKeyField(Invoice, null=True)
-
-
-
-
 
 

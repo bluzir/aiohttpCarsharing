@@ -20,7 +20,7 @@
 
     <script>
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/cars/list/", false);
+        xhr.open("GET", "/api/cars/list/", false);
         xhr.send()
         var cars = JSON.parse(xhr.responseText).cars;
 

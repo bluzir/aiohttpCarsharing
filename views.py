@@ -6,7 +6,7 @@ from aiohttp import web
 
 from config import base_settings as config
 from models import Invoice, User, Car
-from serializers import CarSerializer, UserSerializer
+from serializers import CarSerializer, UserSerializer, TariffSerializer
 
 
 # GET '/' :
@@ -40,7 +40,7 @@ def cars_map(request):
     return {'api_key': api_key}
 
 
-# GET '/profile/' :
+# GET '/api/profile/' :
 def profile_detail(request):
     try:
         auth_token = request.GET['auth_token']
@@ -50,6 +50,23 @@ def profile_detail(request):
             user_serializer = UserSerializer(user)
             user_serializer.serialize()
             return web.json_response(user_serializer.json)
+        else:
+            return web.json_response(user_id)
+    except KeyError:
+        return web.json_response({'error': 'No access token passed'})
+
+
+# GET '/api/tariff/' :
+def tariff_detail(request):
+    try:
+        auth_token = request.GET['auth_token']
+        user_id = User.decode_auth_token(auth_token=auth_token)
+        if 'error' not in user_id:
+            user = User.get(id=user_id['user_id'])
+            tariff = user.tariff
+            tariff_serializer = TariffSerializer(tariff)
+            tariff_serializer.serialize()
+            return web.json_response(tariff_serializer.json)
         else:
             return web.json_response(user_id)
     except KeyError:
