@@ -39,7 +39,7 @@ class CarSerializer(BaseSerializer):
 
 class UserSerializer(BaseSerializer):
     name = 'users'
-    select_query = SelectQuery(User, User.id, User.first_name, User.last_name )
+    select_query = SelectQuery(User, User.id, User.first_name, User.last_name, User.email)
 
 
 class TariffSerializer(BaseSerializer):
@@ -49,4 +49,4 @@ class TariffSerializer(BaseSerializer):
 
 class InvoiceSerializer(BaseSerializer):
     name = 'invoices'
-    select_query = SelectQuery(Invoice, Invoice.id, Invoice.summ)
+    select_query = SelectQuery(Invoice, Invoice.id, Invoice.summ, Invoice.payment)

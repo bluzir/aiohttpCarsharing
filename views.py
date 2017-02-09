@@ -24,7 +24,7 @@ async def profile_view(request):
     if 'auth_token' in session:
         user_id = User.decode_auth_token(session['auth_token'])
         if user_id:
-            return {'auth_token': session['auth_token']}
+            return {'token': session['auth_token']}
 
     return web.HTTPFound('/login/')
 
@@ -52,8 +52,8 @@ def cars_map(request):
 
 # GET '/api/profile/' :
 def profile_detail(request):
-    if 'auth_token' in request.GET:
-        user = User.get_user_by_token(request.GET['auth_token'])
+    if 'token' in request.GET:
+        user = User.get_user_by_token(request.GET['token'])
         if user:
             user_json = UserSerializer(user).get_serialized_json()
             return web.json_response(user_json)

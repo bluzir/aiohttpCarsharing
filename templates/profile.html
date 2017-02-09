@@ -1,3 +1,32 @@
 {% extends 'base.html' %}
+{% block title %}Профиль{% endblock %}
+{% block meta %}
+<meta name="token" content="{{ token }}">
+{% endblock %}
 {% block content %}
+    <div class="container">
+        <div class="page-header">
+            <h1>Профиль</h1>
+        </div>
+        <div class="profile__name"><h3></h3></div>
+        <div class="profile__email"><h4></h4></div>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script>
+        $token = $("meta[name='token']").attr('content');
+        console.log($token);
+        $.ajax({
+            type: 'GET',
+            url: '/api/profile/?token='+$token,
+            success: function(response) {
+                var user = response['users'];
+                $('.profile__name h3').text(user['first_name']+" "+user['last_name']);
+                $('.profile__email h4').text(user['email']);
+            },
+            error:  function(xhr, str){
+                console.log(str);
+            }
+        });
+    </script>
 {% endblock %}
