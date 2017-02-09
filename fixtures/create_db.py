@@ -20,6 +20,7 @@ def main():
                        tariff=tariff)
 
     Invoice.create(summ=654, user=user)
+    Invoice.create(summ=1234, user=user)
 
     Car.create(wialon_id=1,
                car_model='Hyundai Solaris',

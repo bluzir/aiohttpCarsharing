@@ -49,4 +49,4 @@ class TariffSerializer(BaseSerializer):
 
 class InvoiceSerializer(BaseSerializer):
     name = 'invoices'
-    select_query = SelectQuery(Invoice, Invoice.id, )
+    select_query = SelectQuery(Invoice, Invoice.id, Invoice.summ)

@@ -105,7 +105,7 @@ class Payment(BaseModel):
 
 
 class Invoice(BaseModel):
-    summ = DecimalField()
+    summ = IntegerField()
     payment = ForeignKeyField(Payment, null=True)
     user = ForeignKeyField(User, related_name='invoices')
     payment = ForeignKeyField(Payment, null=True)

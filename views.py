@@ -76,12 +76,13 @@ def tariff_detail(request):
 
 # GET '/api/payments/' :
 def payments_list(request):
-    if 'auth_token' in request.GET:
-        user = User.get_user_by_token(request.GET['auth_token'])
+    if 'token' in request.GET:
+        print(request.GET['token'])
+        user = User.get_user_by_token(request.GET['token'])
         if user:
             invoices = user.invoices
             invoices_json = InvoiceSerializer(invoices).get_serialized_json()
-            web.json_response(invoices_json)
+            return web.json_response(invoices_json)
         else:
             return web.json_response({'error': 'invalid token'})
     return web.json_response({'error': 'no access token passed'})
