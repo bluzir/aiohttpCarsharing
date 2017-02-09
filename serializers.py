@@ -24,6 +24,13 @@ class BaseSerializer:
                     items_dict[self.name].append(serialized)
             self.json = items_dict
 
+    def get_serialized_json(self):
+        if self.query:
+            self.serialize()
+            return self.json
+        else:
+            return False
+
 
 class CarSerializer(BaseSerializer):
     name = 'cars'

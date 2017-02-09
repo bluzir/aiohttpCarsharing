@@ -81,12 +81,19 @@ class User(BaseModel):
         """
         try:
             payload = jwt.decode(auth_token, config.SECRET_KEY)
-            return {'user_id': payload['sub']}
+            return payload['sub']
         except jwt.ExpiredSignatureError:
-            return {'error': 'Signature expired. Please log in again.'}
+            return False
         except jwt.InvalidTokenError:
-            return {'error': 'Invalid token. Please log in again.'}
+            return False
 
+    @staticmethod
+    def get_user_by_token(auth_token):
+        user_id = User.decode_auth_token(auth_token)
+        if user_id:
+            return User.get(id=user_id)
+        else:
+            return False
 
 class Payment(BaseModel):
     status = IntegerField()

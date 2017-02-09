@@ -21,35 +21,26 @@ async def index(request):
 @aiohttp_jinja2.template('profile.html')
 async def profile_view(request):
     session = await get_session(request)
-    try:
-        auth_token = session['auth_token']
-        print(auth_token)
-        check_token = User.decode_auth_token(auth_token)
-        print(check_token)
-        if 'error' not in check_token:
-            return {'session': session}
-        else:
-            return web.HTTPFound('/login/')
-    except KeyError:
-        return web.HTTPFound('/login/')
-    except Exception as e:
-        return web.HTTPInternalServerError(e)
+    if 'auth_token' in session:
+        user_id = User.decode_auth_token(session['auth_token'])
+        if user_id:
+            return {'auth_token': session['auth_token']}
+
+    return web.HTTPFound('/login/')
 
 # GET '/cars/list/' :
 async def cars_list(request):
     cars_query = Car.get_available_cars()
-    serializer = CarSerializer(cars_query)
-    serializer.serialize()
-    return web.json_response(serializer.json)
+    cars_json = CarSerializer(cars_query).get_serialized_json()
+    return web.json_response(cars_json)
 
 
 # GET '/cars/list/{id}' :
 async def cars_detail(request):
     car_id = int(request.match_info['car_id'])
     cars_query = Car.get(id=car_id)
-    serializer = CarSerializer(cars_query)
-    serializer.serialize()
-    return web.json_response(serializer.json)
+    cars_json = CarSerializer(cars_query).get_serialized_json()
+    return web.json_response(cars_json)
 
 
 # GET '/map/' :
@@ -61,35 +52,26 @@ def cars_map(request):
 
 # GET '/api/profile/' :
 def profile_detail(request):
-    try:
-        auth_token = request.GET['auth_token']
-        user_id = User.decode_auth_token(auth_token=auth_token)
-        if 'error' not in user_id:
-            user = User.get(id=user_id['user_id'])
-            user_serializer = UserSerializer(user)
-            user_serializer.serialize()
-            return web.json_response(user_serializer.json)
+    if 'auth_token' in request.GET:
+        user = User.get_user_by_token(request.GET['auth_token'])
+        if user:
+            user_json = UserSerializer(user).get_serialized_json()
+            return web.json_response(user_json)
         else:
-            return web.json_response(user_id)
-    except KeyError:
-        return web.json_response({'error': 'No access token passed'})
+            return web.json_response({'error': 'invalid token'})
+    return web.json_response({'error': 'no access token passed'})
 
 
 # GET '/api/tariff/' :
 def tariff_detail(request):
-    try:
-        auth_token = request.GET['auth_token']
-        user_id = User.decode_auth_token(auth_token=auth_token)
-        if 'error' not in user_id:
-            user = User.get(id=user_id['user_id'])
-            tariff = user.tariff
-            tariff_serializer = TariffSerializer(tariff)
-            tariff_serializer.serialize()
-            return web.json_response(tariff_serializer.json)
+    if 'auth_token' in request.GET:
+        user = User.get_user_by_token(request.GET['auth_token'])
+        if user:
+            tariff_json = TariffSerializer(user.tariff).get_serialized_json()
+            return web.json_response(tariff_json)
         else:
-            return web.json_response(user_id)
-    except KeyError:
-        return web.json_response({'error': 'No access token passed'})
+            return web.json_response({'error': 'invalid token'})
+    return web.json_response({'error': 'no access token passed'})
 
 
 # GET '/api/payments/' :
@@ -152,16 +134,13 @@ async def decode_form(request):
 # POST '/decode_token/
 async def decode_token(request):
     data = await request.post()
-    try:
-        auth_token = data['token']
-        decoded = User.decode_auth_token(auth_token)
-        if 'error' not in decoded:
-            return web.json_response({'user_id': decoded['user_id']})
-        else:
-            error = decoded['error']
-    except Exception as e:
-        error = str(e)
-    return web.json_response({'error': error})
+    auth_token = data['token']
+    user_id = User.decode_auth_token(auth_token)
+    if user_id:
+        return web.json_response({'user_id': user_id})
+    else:
+        return web.json_response({'error': 'invalid access token'})
+
 
 
 
