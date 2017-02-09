@@ -19,6 +19,10 @@ class Tariff(BaseModel):
     name = TextField()
 
 
+class Problem(BaseModel):
+    title = TextField()
+
+
 class Car(BaseModel):
     CAR_STATUSES = {
         '0': 'Недоступна',
@@ -95,6 +99,7 @@ class User(BaseModel):
         else:
             return False
 
+
 class Payment(BaseModel):
     status = IntegerField()
 
@@ -102,7 +107,8 @@ class Payment(BaseModel):
 class Invoice(BaseModel):
     summ = DecimalField()
     payment = ForeignKeyField(Payment, null=True)
-    user = ForeignKeyField(User)
+    user = ForeignKeyField(User, related_name='invoices')
+    payment = ForeignKeyField(Payment, null=True)
 
     def handle_form(self, crypto):
         try:
@@ -131,3 +137,10 @@ class Order(BaseModel):
     invoice = ForeignKeyField(Invoice, null=True)
 
 
+class Ride(BaseModel):
+    user = ForeignKeyField(User)
+    car = ForeignKeyField(Car)
+    start_date = DateTimeField()
+    end_date = DateTimeField()
+    invoice = ForeignKeyField(Invoice)
+    problem = ForeignKeyField(Problem)

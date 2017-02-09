@@ -1,7 +1,7 @@
 from peewee import SelectQuery, Model
 from playhouse.shortcuts import model_to_dict
 
-from models import Car, User, Tariff
+from models import Car, User, Tariff, Invoice
 
 
 class BaseSerializer:
@@ -45,3 +45,8 @@ class UserSerializer(BaseSerializer):
 class TariffSerializer(BaseSerializer):
     name = 'tariffs'
     select_query = SelectQuery(Tariff, Tariff.id, Tariff.name)
+
+
+class InvoiceSerializer(BaseSerializer):
+    name = 'invoices'
+    select_query = SelectQuery(Invoice, Invoice.id, )
