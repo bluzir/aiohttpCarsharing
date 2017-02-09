@@ -28,6 +28,31 @@ async def profile_view(request):
 
     return web.HTTPFound('/login/')
 
+
+# GET '/':
+@aiohttp_jinja2.template('payments.html')
+async def payments_view(request):
+    session = await get_session(request)
+    if 'auth_token' in session:
+        user_id = User.decode_auth_token(session['auth_token'])
+        if user_id:
+            return {'token': session['auth_token']}
+
+    return web.HTTPFound('/login/')
+
+
+# GET '/':
+@aiohttp_jinja2.template('tariff.html')
+async def tariff_view(request):
+    session = await get_session(request)
+    if 'auth_token' in session:
+        user_id = User.decode_auth_token(session['auth_token'])
+        if user_id:
+            return {'token': session['auth_token']}
+
+    return web.HTTPFound('/login/')
+
+
 # GET '/cars/list/' :
 async def cars_list(request):
     cars_query = Car.get_available_cars()
@@ -64,8 +89,8 @@ def profile_detail(request):
 
 # GET '/api/tariff/' :
 def tariff_detail(request):
-    if 'auth_token' in request.GET:
-        user = User.get_user_by_token(request.GET['auth_token'])
+    if 'token' in request.GET:
+        user = User.get_user_by_token(request.GET['token'])
         if user:
             tariff_json = TariffSerializer(user.tariff).get_serialized_json()
             return web.json_response(tariff_json)
@@ -127,7 +152,7 @@ async def do_login(request):
         auth_token = user.encode_auth_token().decode("utf-8")
         session['auth_token'] = auth_token
         session['is_authorized'] = True
-        return web.json_response({'auth_token': auth_token})
+        return web.HTTPFound('/profile/')
     except KeyError:
         return web.json_response({'error': 'Заполните все необходимые поля'})
     except Exception as e:

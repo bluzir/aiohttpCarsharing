@@ -4,8 +4,9 @@ from models import *
 
 def main():
     db = database
+    db.d
 
-    db.drop_tables(models=[User, Car, Payment, Invoice, Tariff], cascade=True)
+    db.get_tables()
 
     db.create_tables(models=[User, Car, Payment, Invoice, Tariff])
 

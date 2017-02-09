@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Платежи{% endblock %}
+{% block meta %}
+    <meta name="token" content="{{ token }}">
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="page-header">
+            <h1>Ваши платежи</h1>
+        </div>
+        <div class="payments">
+
+        </div>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script>
+        $token = $("meta[name='token']").attr('content');
+        console.log($token);
+        $.ajax({
+            type: 'GET',
+            url: '/api/payments/?token='+$token,
+            success: function(response) {
+                var payments = response['invoices'];
+                console.log(payments);
+                for (var i = 0; i < payments.length; i++){
+                    var payment = payments[i];
+                    $('.payments').append("<h3>"+payment['summ']+" рублей<h3>");
+                }
+            },
+            error:  function(xhr, str){
+                console.log(str);
+            }
+        });
+    </script>
+{% endblock %}

@@ -108,7 +108,6 @@ class Invoice(BaseModel):
     summ = IntegerField()
     payment = ForeignKeyField(Payment, null=True)
     user = ForeignKeyField(User, related_name='invoices')
-    payment = ForeignKeyField(Payment, null=True)
 
     def handle_form(self, crypto):
         try:
@@ -131,16 +130,11 @@ class Invoice(BaseModel):
             return {'error': e.message, 'code': e.code}
 
 
-class Order(BaseModel):
-    user = ForeignKeyField(User)
-    car = ForeignKeyField(Car)
-    invoice = ForeignKeyField(Invoice, null=True)
-
 
 class Ride(BaseModel):
     user = ForeignKeyField(User)
     car = ForeignKeyField(Car)
     start_date = DateTimeField()
     end_date = DateTimeField()
-    invoice = ForeignKeyField(Invoice)
-    problem = ForeignKeyField(Problem)
+    invoice = ForeignKeyField(Invoice, null=True)
+    problem = ForeignKeyField(Problem, null=True)
