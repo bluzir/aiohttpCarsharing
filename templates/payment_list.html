@@ -25,7 +25,7 @@
                 console.log(payments);
                 for (var i = 0; i < payments.length; i++){
                     var payment = payments[i];
-                    $('.payments').append("<h3>"+payment['summ']+" рублей<h3>");
+                    $('.payments').append("<a href="+payment['uuid']+"><h3>"+payment['summ']+" рублей<h3></a>");
                 }
             },
             error:  function(xhr, str){

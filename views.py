@@ -30,7 +30,7 @@ async def profile_view(request):
 
 
 # GET '/':
-@aiohttp_jinja2.template('payments.html')
+@aiohttp_jinja2.template('payment_list.html')
 async def payments_view(request):
     session = await get_session(request)
     if 'auth_token' in session:
@@ -68,6 +68,13 @@ async def cars_detail(request):
     return web.json_response(cars_json)
 
 
+@aiohttp_jinja2.template('payment_detail.html')
+async def payment_detail(request):
+    payment_uuid = request.match_info['payment_uuid']
+    invoice = Invoice.get(uuid=payment_uuid)
+    return {'invoice': invoice}
+
+
 # GET '/map/' :
 @aiohttp_jinja2.template('maps.html')
 def cars_map(request):
@@ -102,7 +109,6 @@ def tariff_detail(request):
 # GET '/api/payments/' :
 def payments_list(request):
     if 'token' in request.GET:
-        print(request.GET['token'])
         user = User.get_user_by_token(request.GET['token'])
         if user:
             invoices = user.invoices

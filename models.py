@@ -105,6 +105,7 @@ class Payment(BaseModel):
 
 
 class Invoice(BaseModel):
+    uuid = TextField(unique=True)
     summ = IntegerField()
     payment = ForeignKeyField(Payment, null=True)
     user = ForeignKeyField(User, related_name='invoices')

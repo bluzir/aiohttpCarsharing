@@ -6,5 +6,5 @@ def generate_cookie_secret():
     return base64.b64encode(uuid.uuid4().bytes + uuid.uuid4().bytes)
 
 
-if __name__ == '__main__':
-    generate_cookie_secret()
+def generate_uuid():
+    return uuid.uuid4().hex

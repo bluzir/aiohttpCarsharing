@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 from models import *
+from utils.utils import generate_uuid
 
 
 def main():
     db = database
-    db.d
-
-    db.get_tables()
+    db.drop_tables(models=[User, Car, Payment, Invoice, Tariff], cascade=True)
 
     db.create_tables(models=[User, Car, Payment, Invoice, Tariff])
 
@@ -20,8 +19,8 @@ def main():
                        status=1,
                        tariff=tariff)
 
-    Invoice.create(summ=654, user=user)
-    Invoice.create(summ=1234, user=user)
+    Invoice.create(summ=654, user=user, uuid=generate_uuid())
+    Invoice.create(summ=1234, user=user, uuid=generate_uuid())
 
     Car.create(wialon_id=1,
                car_model='Hyundai Solaris',

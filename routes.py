@@ -10,8 +10,7 @@ def setup_routes(app):
     app.router.add_get(path='/tariff/', handler=tariff_view, name='tariff')
 
     # Payment
-    app.router.add_get(path='/payment/', handler=payment_form, name='payment_form')
-    app.router.add_post(path='/payment/', handler=do_payment)
+    app.router.add_get(path='/payments/{payment_uuid}/', handler=payment_detail, name='payment_detail')
 
     # Authentication
     app.router.add_get(path='/login/', handler=login, name='login')
@@ -23,4 +22,4 @@ def setup_routes(app):
     app.router.add_get(path='/api/tariff/', handler=tariff_detail, name='api_tariff')
     app.router.add_get(path='/api/payments/', handler=payments_list, name='api_payments_list')
     app.router.add_get(path='/api/cars/list/', handler=cars_list, name='api_cars_list')
-    app.router.add_get(path='/api/cars/list/{car_id}', handler=cars_detail, name='api_cars_detail')
+    app.router.add_get(path='/api/cars/list/{car_id}/', handler=cars_detail, name='api_cars_detail')
