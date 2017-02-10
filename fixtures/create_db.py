@@ -19,8 +19,10 @@ def main():
                        status=1,
                        tariff=tariff)
 
+    payment = Payment.create(status=1)
     Invoice.create(summ=654, user=user, uuid=generate_uuid())
-    Invoice.create(summ=1234, user=user, uuid=generate_uuid())
+    Invoice.create(summ=1234, user=user, uuid=generate_uuid(), payment=payment)
+
 
     Car.create(wialon_id=1,
                car_model='Hyundai Solaris',

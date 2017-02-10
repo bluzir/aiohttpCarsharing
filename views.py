@@ -158,7 +158,7 @@ async def do_login(request):
         auth_token = user.encode_auth_token().decode("utf-8")
         session['auth_token'] = auth_token
         session['is_authorized'] = True
-        return web.HTTPFound('/profile/')
+        return web.json_response({'auth_token': auth_token})
     except KeyError:
         return web.json_response({'error': 'Заполните все необходимые поля'})
     except Exception as e:

@@ -5,32 +5,9 @@
 {% endblock %}
 {% block content %}
     <div class="container">
-        <div class="page-header">
-            <h1>Ваши платежи</h1>
-        </div>
-        <div class="payments">
-
-        </div>
+        <div id="payments"></div>
     </div>
 {% endblock %}
 {% block javascript %}
-    <script>
-        $token = $("meta[name='token']").attr('content');
-        console.log($token);
-        $.ajax({
-            type: 'GET',
-            url: '/api/payments/?token='+$token,
-            success: function(response) {
-                var payments = response['invoices'];
-                console.log(payments);
-                for (var i = 0; i < payments.length; i++){
-                    var payment = payments[i];
-                    $('.payments').append("<a href="+payment['uuid']+"><h3>"+payment['summ']+" рублей<h3></a>");
-                }
-            },
-            error:  function(xhr, str){
-                console.log(str);
-            }
-        });
-    </script>
+    <script type="text/babel" src="/static/js/payments.js"></script>
 {% endblock %}
