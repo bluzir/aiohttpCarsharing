@@ -16,10 +16,9 @@ def setup_routes(app):
     # Authentication
     app.router.add_get(path='/login/', handler=login, name='login')
     app.router.add_post(path='/login/', handler=do_login)
-    app.router.add_get(path='/decode_token/', handler=decode_form, name='decode')
-    app.router.add_post(path='/decode_token/', handler=decode_token)
+    app.router.add_get(path='/logout/', handler=do_logout, name='logout')
 
-    # REST URL's
+    # REST URL's (Require token in GET parameter)
     app.router.add_get(path='/api/profile/', handler=profile_detail, name='api_profile')
     app.router.add_get(path='/api/tariff/', handler=tariff_detail, name='api_tariff')
     app.router.add_get(path='/api/payments/', handler=payments_list, name='api_payments_list')

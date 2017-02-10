@@ -159,23 +159,14 @@ async def do_login(request):
         return web.json_response({'error': e})
 
 
-# GET '/decode_token/'
-@aiohttp_jinja2.template('decode_token.html')
-async def decode_form(request):
-    return {}
-
-
-# POST '/decode_token/
-async def decode_token(request):
-    data = await request.post()
-    auth_token = data['token']
-    user_id = User.decode_auth_token(auth_token)
-    if user_id:
-        return web.json_response({'user_id': user_id})
+# GET '/logout/' :
+async def do_logout(request):
+    session = await get_session(request)
+    if 'auth_token' in session:
+        session['auth_token'] = None
+        session['is_authorized'] = None
+        return web.HTTPFound('/')
     else:
-        return web.json_response({'error': 'invalid access token'})
-
-
-
+        return web.HTTPFound('/login/')
 
 
