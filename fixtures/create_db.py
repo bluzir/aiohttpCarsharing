@@ -27,8 +27,8 @@ def main():
     Car.create(wialon_id=1,
                car_model='Hyundai Solaris',
                status=1,
-               lat=59.9258,
-               long=30.2878)
+               lat=59.9758,
+               long=30.2178)
 
     Car.create(wialon_id=2,
                car_model='Toyota Camry',
@@ -39,8 +39,8 @@ def main():
     Car.create(wialon_id=3,
                car_model='Kia Ceed',
                status=2,
-               lat=59.9258,
-               long=30.2878)
+               lat=59.1258,
+               long=30.7878)
 
 
 if __name__ == '__main__':

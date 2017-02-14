@@ -11,6 +11,7 @@ def setup_routes(app):
 
     # Payment
     app.router.add_get(path='/payments/{payment_uuid}/', handler=payment_detail, name='payment_detail')
+    app.router.add_post(path='/payments/{payment_uuid}/', handler=do_payment, name='do_payment')
 
     # Authentication
     app.router.add_get(path='/login/', handler=login, name='login')

@@ -43,6 +43,7 @@
                       error_div.hide();
                       success_div.addClass('well');
                       success_div.html("Успешно авторизованы. Ваш токен: <p><textarea>"+response['auth_token']+"</textarea></p>");
+                      window.location.replace("/profile/");
                   }
               },
               error:  function(xhr, str){

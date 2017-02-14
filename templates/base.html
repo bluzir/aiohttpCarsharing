@@ -25,6 +25,7 @@
           <a class="navbar-brand" href="/">Carsharing</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        {% if session.is_authorized %}
           <ul class="nav navbar-nav">
             <li><a href="/map/">Карта</a></li>
             <li><a href="/profile/">Профиль</a></li>
@@ -34,6 +35,11 @@
           <ul class="nav navbar-nav navbar-right">
             <li><a href="/logout/">Выйти</a></li>
           </ul>
+        {% else %}
+            <ul class="nav navbar-nav navbar-right">
+            <li><a href="/login/">Войти</a></li>
+            </ul>
+        {% endif %}
         </div>
       </div>
     </nav>

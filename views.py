@@ -13,42 +13,64 @@ from serializers import CarSerializer, UserSerializer, TariffSerializer, Invoice
 # GET '/' :
 @aiohttp_jinja2.template('index.html')
 async def index(request):
-    routes = request.app.router._resources
-    return {'routes': routes}
+    session = await get_session(request)
+    return {'session': session}
 
 
-# GET '/':
+# GET '/profile/':
 @aiohttp_jinja2.template('profile.html')
 async def profile_view(request):
     session = await get_session(request)
     if 'auth_token' in session:
         user_id = User.decode_auth_token(session['auth_token'])
         if user_id:
-            return {'token': session['auth_token']}
+            return {'token': session['auth_token'], 'session': session}
 
     return web.HTTPFound('/login/')
 
 
-# GET '/':
+# GET '/payments/':
 @aiohttp_jinja2.template('payment_list.html')
 async def payments_view(request):
     session = await get_session(request)
     if 'auth_token' in session:
         user_id = User.decode_auth_token(session['auth_token'])
         if user_id:
-            return {'token': session['auth_token']}
+            return {'token': session['auth_token'], 'session': session}
 
     return web.HTTPFound('/login/')
 
 
-# GET '/':
+# GET '/payments/{uuid}':
+@aiohttp_jinja2.template('payment_detail.html')
+async def payment_detail(request):
+    session = await get_session(request)
+    payment_uuid = request.match_info['payment_uuid']
+    invoice = Invoice.get(uuid=payment_uuid)
+    return {'invoice': invoice, 'inplat_api_key': config.INPLAT_API_KEY, 'session': session}
+
+
+# POST '/payment/{uuid}' :
+async def do_payment(request):
+    data = await request.post()
+    invoice_uuid = request.match_info['payment_uuid']
+    try:
+        crypto = data['inplat_payment_crypto_input']
+        invoice = Invoice.get(uuid=invoice_uuid)
+        result = invoice.handle_form(crypto=crypto)
+    except KeyError as e:
+        result = {'error': 'No cryptograma'}
+    return web.json_response(result)
+
+
+# GET '/tariff/':
 @aiohttp_jinja2.template('tariff.html')
 async def tariff_view(request):
     session = await get_session(request)
     if 'auth_token' in session:
         user_id = User.decode_auth_token(session['auth_token'])
         if user_id:
-            return {'token': session['auth_token']}
+            return {'token': session['auth_token'], 'session': session}
 
     return web.HTTPFound('/login/')
 
@@ -68,18 +90,12 @@ async def cars_detail(request):
     return web.json_response(cars_json)
 
 
-@aiohttp_jinja2.template('payment_detail.html')
-async def payment_detail(request):
-    payment_uuid = request.match_info['payment_uuid']
-    invoice = Invoice.get(uuid=payment_uuid)
-    return {'invoice': invoice}
-
-
 # GET '/map/' :
 @aiohttp_jinja2.template('maps.html')
-def cars_map(request):
+async def cars_map(request):
+    session = await get_session(request)
     api_key = config.GMAPS_API_KEY
-    return {'api_key': api_key}
+    return {'api_key': api_key, 'session': session}
 
 
 # GET '/api/profile/' :
@@ -128,23 +144,15 @@ async def payment_form(request):
             'invoice_sum': invoice.summ, 'inplat_api_key': config.INPLAT_API_KEY}
 
 
-# POST '/payment/' :
-async def do_payment(request):
-    data = await request.post()
-    try:
-        invoice_id = request.GET['invoice_id']
-        crypto = data['inplat_payment_crypto_input']
-        invoice = Invoice.get(id=invoice_id)
-        result = invoice.handle_form(crypto=crypto)
-    except KeyError as e:
-        result = {'error': 'No cryptograma'}
-    return web.json_response(result)
-
-
 # GET '/login/' :
 @aiohttp_jinja2.template('auth_form.html')
 async def login(request):
-    return {}
+    session = await get_session(request)
+    if 'auth_token' in session:
+        decoded = User.decode_auth_token(session['auth_token'])
+        if decoded:
+            return web.HTTPFound('/profile/')
+    return {'session': session}
 
 
 # POST '/login/ :
@@ -169,8 +177,8 @@ async def do_login(request):
 async def do_logout(request):
     session = await get_session(request)
     if 'auth_token' in session:
-        session['auth_token'] = None
-        session['is_authorized'] = None
+        del session['auth_token']
+        del session['is_authorized']
         return web.HTTPFound('/')
     else:
         return web.HTTPFound('/login/')

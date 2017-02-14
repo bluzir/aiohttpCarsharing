@@ -1,17 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
-    <div class="page-header">
-      <h1>Список доступных на сайте URL'ов</h1>
-    </div>
-    <div class="col-md-4">
-        <div class="list-group">
-        {% for r in routes %}
-            {% if r.name != None %}
-            <a href="{{ r._path }}" target="_blank" class="list-group-item {% if r._name == 'index' %}active{% endif %}">{{ r._name }}</a>
-            {% endif %}
-        {% endfor %}
-        </div>
+<div class="jumbotron">
+    <div class="container">
+        <h1>Каршэринг</h1>
+        <h3>Новый вид городского транспорта</h3>
+        <ul>
+            <li>Поминутная аренда автомобиля</li>
+            <li>Доступность: 24 часа / 7 дней</li>
+            <li>Залог: отсутствует</li>
+        </ul>
+      </p>
+      <p><a class="btn btn-primary btn-lg" href="/login/" role="button">Начать использование</a></p>
     </div>
 </div>
 {% endblock %}

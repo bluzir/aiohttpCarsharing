@@ -18,10 +18,7 @@
 
 {% block javascript %}
     <script>
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/cars/list/", false);
-        xhr.send();
-        var cars = JSON.parse(xhr.responseText).cars;
+        var cars = {};
 
         function initMap() {
             const spb = new google.maps.LatLng(59.940, 30.264);
@@ -48,11 +45,9 @@
                     map: map,
                     icon: markerIcon,
                 });
-                content = "<h1>" + car['car_model'] + "</h1>" +
-                        "<a href='#'><h3>Начать аренду</h3></a>" +
-                        "<a href='#'><h3>Закончить аренду</h3></a>" +
-                        "<a href='#'><h3>Забронировать</h3></a>" +
-                        "<a href='#'><h3>Отменить бронь</h3></a>"
+                content = "<h3>" + car['car_model'] + "</h3>" +
+                        "<a href='#'><p>Забронировать</p></a><a href='#'><p>Отменить аренду</p></a>" +
+                        "<a href='#'><p>Начать поездку</p></a><a href='#'><p>Завершить</p></a>"
 
                 setContent(map, marker, infowindow, content);
             }
@@ -65,9 +60,22 @@
                         infowindow.open(map, marker);
                     }
                 })(marker));
-        }
+        };
 
-
+        fetch('/api/cars/list/')
+          .then(
+            function(response) {
+              response.json().then(function(data) {
+                cars = data['cars'];
+                console.log(cars);
+                initMap();
+              });
+            }
+          )
+          .catch(function(err) {
+            console.log('Fetch Error :-S', err);
+            return false;
+        });
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{api_key}}&callback=initMap" async defer></script>
 {% endblock %}

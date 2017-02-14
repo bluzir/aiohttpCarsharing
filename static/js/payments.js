@@ -1,18 +1,23 @@
 var token = document.head.querySelector("[name=token]").content,
     payments = {};
 
+
 var Payments = React.createClass({
   render: function() {
     var data = this.props.data;
-    var paymentsTemplate = data.map(function(item, index) {
-      return (
-        <a href={item.uuid+'/'}>
-            <li key={index} className={item.payment > 0 ? 'list-group-item':'list-group-item list-group-item-danger'}>
-                {item.summ} руб.
-            </li>
-        </a>
-      )
-    });
+    var paymentsTemplate;
+
+    if (data.length > 0) {
+        paymentsTemplate = data.map(function(item, index) {
+    return (
+        <div key={index}>
+            <Payment data={item} />
+        </div>
+    )
+        })
+    } else {
+      paymentsTemplate = <p>Нет платежей</p>
+    }
 
     return (
       <ul className="list-group">
@@ -22,14 +27,35 @@ var Payments = React.createClass({
   }
 });
 
+
+var Payment = React.createClass({
+    render: function () {
+        var uuid = this.props.data.uuid,
+            payment = this.props.data.payment,
+            summ = this.props.data.summ;
+
+
+        return (
+            <a href={uuid+'/'}>
+                <li
+                    className={payment.status == 1 ? 'list-group-item list-group-item-success':'list-group-item list-group-item-danger'}>
+                    {summ} руб.
+                </li>
+            </a>
+      )
+    }
+});
+
+
 var App = React.createClass({
   render: function() {
     return (
       <div className="app">
         <ol className="breadcrumb">
-          <li><a className="active">Платежи</a></li>
+          <li>Платежи</li>
         </ol>
-        <div className="col-md-3">
+        <h3>Количество платежей: {payments.length} </h3>
+        <div className="col-md-6">
         <Payments data={payments}/>
         </div>
       </div>
@@ -44,7 +70,7 @@ fetch('/api/payments/?token=' + token)
         payments = data['invoices'];
         console.log(payments);
         ReactDOM.render(
-            <App />,
+            <div className="col-md-6"><App /></div>,
             document.getElementById('payments')
           );
       });

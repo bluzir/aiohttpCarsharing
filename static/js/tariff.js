@@ -1,12 +1,11 @@
 var token = document.head.querySelector("[name=token]").content,
-    user = {};
+    tariff = {};
 
-var Profile = React.createClass({
+var Tariff = React.createClass({
   render: function() {
     return (
-      <div className="profile__info">
-         <h3>{user.first_name} {user.last_name}</h3>
-         <h4>{user.email}</h4>
+      <div className="tariff__info">
+         <h3><strong>Ваш тариф:</strong> {tariff.name}</h3>
       </div>
     );
   }
@@ -17,22 +16,22 @@ var App = React.createClass({
     return (
       <div className="app">
         <ol className="breadcrumb">
-          <li>Профиль</li>
+          <li>Тариф</li>
         </ol>
-        <Profile data={user}/>
+        <Tariff data={tariff}/>
       </div>
     );
   }
 });
 
-fetch('/api/profile/?token=' + token)
+fetch('/api/tariff/?token=' + token)
   .then(
     function(response) {
       response.json().then(function(data) {
-        user = data['users'];
+        tariff = data['tariffs'];
         ReactDOM.render(
             <div className="col-md-6"><App /></div>,
-            document.getElementById('profile')
+            document.getElementById('tariff')
           );
       });
     }
