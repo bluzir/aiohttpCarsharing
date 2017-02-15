@@ -54,12 +54,13 @@ async def payment_detail(request):
 async def do_payment(request):
     data = await request.post()
     invoice_uuid = request.match_info['payment_uuid']
-    try:
+    if 'crypto' in data:
         crypto = data['inplat_payment_crypto_input']
         invoice = Invoice.get(uuid=invoice_uuid)
         result = invoice.handle_form(crypto=crypto)
-    except KeyError:
+    else:
         result = {'error': 'No cryptograma'}
+
     return web.json_response(result)
 
 
@@ -91,8 +92,8 @@ async def cars_detail(request):
         return web.json_response(cars_json)
     except Car.DoesNotExist:
         return web.HTTPNotFound()
-    except Exception:
-        return web.HTTPInternalServerError()
+    except Exception as e:
+        return web.HTTPInternalServerError(text=e.__traceback__)  # TODO: Remove after debug
 
 
 # GET '/map/' :

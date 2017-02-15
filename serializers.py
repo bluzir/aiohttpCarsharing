@@ -13,8 +13,8 @@ class BaseSerializer:
         self.json = None
 
     def serialize(self):
+        items_dict = dict()
         if self.query and self.name:
-            items_dict = dict()
             if isinstance(self.query, Model):
                 items_dict[self.name] = model_to_dict(self.query, fields_from_query=self.select_query)
             else:
@@ -22,15 +22,14 @@ class BaseSerializer:
                 for item in self.query:
                     serialized = model_to_dict(item, fields_from_query=self.select_query)
                     items_dict[self.name].append(serialized)
-            self.json = items_dict
+        else:
+            items_dict[self.name] = {}
+
+        self.json = items_dict
 
     def get_serialized_json(self):
-        if self.query:
-            self.serialize()
-            return self.json
-        else:
-            return False
-
+        self.serialize()
+        return self.json
 
 class CarSerializer(BaseSerializer):
     name = 'cars'
