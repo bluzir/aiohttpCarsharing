@@ -84,10 +84,15 @@ async def cars_list(request):
 
 # GET '/cars/list/{id}' :
 async def cars_detail(request):
-    car_id = int(request.match_info['car_id'])
-    cars_query = Car.get(id=car_id)
-    cars_json = CarSerializer(cars_query).get_serialized_json()
-    return web.json_response(cars_json)
+    try:
+        car_id = int(request.match_info['car_id'])
+        cars_query = Car.get(id=car_id)
+        cars_json = CarSerializer(cars_query).get_serialized_json()
+        return web.json_response(cars_json)
+    except Car.DoesNotExist:
+        return web.HTTPNotFound()
+    except Exception:
+        return web.HTTPInternalServerError()
 
 
 # GET '/map/' :
@@ -162,15 +167,22 @@ async def do_login(request):
     try:
         email = data['email']
         password = data['password']
-        user = User.get(email=email, password=password)
-        auth_token = user.encode_auth_token().decode("utf-8")
-        session['auth_token'] = auth_token
-        session['is_authorized'] = True
-        return web.json_response({'auth_token': auth_token})
+        if email and password:
+            user = User.get(email=email, password=password)
+            auth_token = user.encode_auth_token().decode("utf-8")
+            session['auth_token'] = auth_token
+            session['is_authorized'] = True
+            return web.json_response({'auth_token': auth_token})
+        else:
+            error = 'Заполните все необходимые поля'
+    except User.DoesNotExist:
+        error = 'Введены неправильный логин или пароль'
     except KeyError:
-        return web.json_response({'error': 'Заполните все необходимые поля'})
+        error = 'Заполните все необходимые поля'
     except Exception as e:
-        return web.json_response({'error': e})
+        error = e.__traceback__  # TODO: Remove after debug
+
+    return web.json_response({'error': error})
 
 
 # GET '/logout/' :

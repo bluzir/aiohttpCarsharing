@@ -18,10 +18,15 @@ class BaseModel(Model):
 
 class Tariff(BaseModel):
     name = TextField()
+    description = TextField(null=True)
 
 
 class Problem(BaseModel):
     title = TextField()
+
+
+class Media(BaseModel):
+    path = TextField()
 
 
 class Car(BaseModel):
@@ -113,7 +118,6 @@ class Invoice(BaseModel):
 
     def handle_form(self, crypto):
         try:
-            user_id = self.user.id
             if crypto:
                 client = InplatClient()
                 pay_params = {
@@ -132,7 +136,6 @@ class Invoice(BaseModel):
             return {'error': e.message, 'code': e.code}
 
 
-
 class Ride(BaseModel):
     user = ForeignKeyField(User)
     car = ForeignKeyField(Car)
@@ -140,3 +143,11 @@ class Ride(BaseModel):
     end_date = DateTimeField()
     invoice = ForeignKeyField(Invoice, null=True)
     problem = ForeignKeyField(Problem, null=True)
+
+
+class Damage(BaseModel):
+    car = ForeignKeyField(Car)
+    applicant = ForeignKeyField(User)
+    car_part = IntegerField()
+    photos = ForeignKeyField(Media)
+
