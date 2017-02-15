@@ -7,10 +7,6 @@
         </ol>
         <div class="col-md-4 payment">
         <h3>Платеж на сумму {{ invoice.summ }} руб.</h3>
-            <form data-errors-container-id="InPlat_cardErrors">
-                <div id="InPlat_cardErrors">
-                </div>
-            </form>
             <form id="InPlat_cardForm" data-action="/payments/{{ invoice.uuid }}/" data-ajax-url="demo" data-locale="ru" data-apikey="{{ inplat_api_key }}">
                 <input type="hidden" name="invoice_id" value="{{ invoice.id }}">
                 <div class="form-group">
@@ -43,6 +39,16 @@
         document.body.appendChild(s);
         window.InplatCheckoutValidation = function (errorsArray) {
             console.log('InplatCheckoutValidation', errorsArray);
+            errorsArray.map(function (item, index) {
+                var error = item['type'];
+                if (error == 'ajax-crypto-wrong-answer'){
+                    console.log('Something gone wrong')
+                } else {
+                    $element = $('#'+item['param']);
+                    $element.addClass('validation-error');
+                }
+            })
         };
+
     </script>
 {% endblock %}
