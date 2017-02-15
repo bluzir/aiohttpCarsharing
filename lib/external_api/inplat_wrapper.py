@@ -16,8 +16,8 @@ class InplatException(BaseException):
 class InplatClient(BaseClient):
     API_ID = 1
     DEFAULT_HOST = 'https://demo-api2.inplat.ru/'
-    API_KEY = 'F5aPOR2Zm3vHFQXVBjLgpnub'
-    SECRET_WORD = b'B1BUnfwEE2mAUK4D'  # TODO: Hide into non-versioned file
+    API_KEY = 'EVrAuGGEjgN020MmMdwV0dqp'
+    SECRET_WORD = b'a3NchcP7P2145qTE'  # TODO: Hide into non-versioned file
 
     def __init__(self):
         self.sign = None
@@ -32,18 +32,16 @@ class InplatClient(BaseClient):
         super(InplatClient, self).__init__()
 
     # Initialize payment
-    def init(self, pay_type, client_id, pay_params, params):
+    def init(self, pay_type, pay_params, params):
         self.data = {
             'method': 'init',
             'pay_type': pay_type,
-            'client_id': client_id,
-            'case': 'link',
             'pay_params': pay_params,
             'params': params,
             'merc_data': 'Random information',
-            'redirect_url': 'http://127.0.0.1:8080'
         }
         self.generate_sign()
+        print(self.params)
         return self.post(url=self.DEFAULT_HOST,
                          params=self.params,
                          data=self.data)
@@ -127,3 +125,5 @@ class InplatClient(BaseClient):
         except Exception as e:
             print(e)
             return False
+
+

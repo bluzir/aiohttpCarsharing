@@ -58,7 +58,7 @@ async def do_payment(request):
         crypto = data['inplat_payment_crypto_input']
         invoice = Invoice.get(uuid=invoice_uuid)
         result = invoice.handle_form(crypto=crypto)
-    except KeyError as e:
+    except KeyError:
         result = {'error': 'No cryptograma'}
     return web.json_response(result)
 

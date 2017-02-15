@@ -3,7 +3,7 @@ var webpack = require('webpack');
 
 module.exports = {
   entry: ['whatwg-fetch', './static/js/profile.js', './static/js/tariff.js', './static/js/payments.js'],
-  output: { path: __dirname, filename: 'bundle.js' },
+  output: { path: __dirname+'/static/js/', filename: 'bundle.js' },
   module: {
     loaders: [
       {

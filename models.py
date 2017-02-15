@@ -117,13 +117,13 @@ class Invoice(BaseModel):
             if crypto:
                 client = InplatClient()
                 pay_params = {
-                    'crypto': crypto,
+                    'cryptogramma': crypto,
                 }
                 params = {
-                    'sum': int(self.summ),
+                    'sum': self.summ,
                     'account': self.id,
                 }
-                response = client.init(pay_type='card',  client_id=user_id,  pay_params=pay_params, params=params)
+                response = client.init(pay_type='card',  pay_params=pay_params, params=params)
                 return {'success': True, 'response': response}
             else:
                 error = 'Заполните все поля'

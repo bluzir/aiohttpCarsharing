@@ -1,4 +1,5 @@
 import json
+import logging
 
 import requests
 
@@ -17,6 +18,8 @@ class BaseClient:
         response = requests.post(url=url,
                                  params=params,
                                  data=json.dumps(data))
+        logging.debug(params)
+        logging.debug(data)
         return response.json()
 
     @staticmethod

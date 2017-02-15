@@ -1,3 +1,6 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 var token = document.head.querySelector("[name=token]").content,
     payments = {};
 
