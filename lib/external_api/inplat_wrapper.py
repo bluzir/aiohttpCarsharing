@@ -36,8 +36,8 @@ class InplatClient(BaseClient):
         self.data = {
             'method': 'init',
             'pay_type': pay_type,
-            'pay_params': json.dumps(pay_params),
-            'params': json.dumps(params),
+            'pay_params': pay_params,
+            'params': params,
             'merc_data': merc_data,
         }
         self.generate_sign()
