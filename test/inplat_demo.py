@@ -4,15 +4,18 @@ import unittest
 
 
 
-class TestSmoke(unittest.TestCase):
+class TestInplat(unittest.TestCase):
     def __init__(self, *args, **kwargs):
-        super(TestSmoke, self).__init__(*args, **kwargs)
+        super(TestInplat, self).__init__(*args, **kwargs)
         self.inplat_client = InplatClient()
 
     def test_init(self):
         account = generate_uuid()
         print(self.inplat_client.init(
-            params={'account': account},
+            params={
+                'account': account,
+                'sum': 123
+            },
             pay_params={'cryptogramma':'yqzMckvNzouPYboEEBt2CHBiOHDpNVg/BYTkVYxKv643uxC9HtwdOYkaJVed/lTcLtOJbdZ+q5TBC7pNHJ0fyq45VODuXPCOa3hFgmxE+7U='}))
 
 
