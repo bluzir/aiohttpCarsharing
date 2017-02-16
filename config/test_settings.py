@@ -31,4 +31,4 @@ else:
 
 # API Keys
 GMAPS_API_KEY = 'AIzaSyCZwQePt-z3n2lCnK-nApgzIyxXF3hIMrw'
-INPLAT_API_KEY = 'F5aPOR2Zm3vHFQXVBjLgpnub'
+INPLAT_API_KEY = 'EVrAuGGEjgN020MmMdwV0dqp'
