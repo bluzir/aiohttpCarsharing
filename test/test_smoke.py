@@ -15,21 +15,25 @@ class TestSmoke(unittest.TestCase):
     def _make_post_request(self, url, data):
         return self.s.post(WEB_ROOT + url, data, verify=False)  # TODO: fix cert
 
-
-    def test_index(self):
+    def _index(self):
         r = self._make_get_request('')
         self.assertAlmostEqual(r.status_code, 200)
 
-    def test_login(self):
+    def _login(self):
         r = self._make_post_request('login/', {'email': 'bluzir@bluzir.me', 'password':'qweqwe'})
         self.assertAlmostEqual(r.status_code, 200)
 
-    def test_profile(self):
+    def _profile(self):
         r = self._make_get_request('profile/')
         # TODO: проверить существование на странице инфы о пользователе
         self.assertAlmostEqual(r.status_code, 200)
 
-    def test_logout(self):
+    def _logout(self):
         r = self._make_get_request('logout/')
         self.assertAlmostEqual(r.status_code, 200)
 
+    def test_main(self):
+        self._index()
+        self._login()
+        self._profile()
+        self._logout()
