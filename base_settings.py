@@ -1,3 +1,5 @@
+import os
+
 from config.stage_settings import *
 
 # Folders settings
