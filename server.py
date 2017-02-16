@@ -7,6 +7,10 @@ from aiohttp_session.cookie_storage import EncryptedCookieStorage
 from config import base_settings as config
 from routes import setup_routes
 
+import logging
+
+logging.basicConfig(filename='log/main.log', level=logging.DEBUG)
+
 
 app = web.Application()
 setup_routes(app)
