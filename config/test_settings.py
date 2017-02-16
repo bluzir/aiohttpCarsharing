@@ -7,8 +7,8 @@ CRT_ROOT = '/etc/letsencrypt/live/bluzir.me/fullchain.pem'
 KEY_ROOT = '/etc/letsencrypt/live/bluzir.me/privkey.pem'
 
 # Host settings
-HOST = '89.223.26.255'
-PORT = 8080
+HOST = '127.0.0.1'
+PORT = 9090
 
 
 # Database settings
