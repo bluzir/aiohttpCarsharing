@@ -4,10 +4,9 @@ import os
 HOST = '127.0.0.1'
 PORT = 9090
 
-# Database settings
 DB_NAME = 'twocar_stage'
-DB_USER = 'postgres'
-DB_PASSWORD = ''
+DB_USER = 'twocar_stage'
+DB_PASSWORD = 'CtVWQGlthUqSHdu2fmEA'
 
 
 # Debug settings
@@ -17,3 +16,5 @@ if DEBUG:
     LEVEL = logging.DEBUG
 else:
     LEVEL = logging.INFO
+
+SECRET_KEY = 'uPoDT+5qRvWni/xLarnefaZ17otdOEPthkc6whvirSo='
