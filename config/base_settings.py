@@ -1,4 +1,4 @@
-from config.local_settings import *
+from config.stage_settings import *
 
 # Folders settings
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

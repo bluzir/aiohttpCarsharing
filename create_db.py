@@ -5,7 +5,7 @@ from utils.utils import generate_uuid
 
 def main():
     db = database
-    db.drop_tables(models=[User, Car, Payment, Invoice, Tariff], cascade=True)
+    db.drop_tables(models=[User, Car, Payment, Invoice, Tariff], cascade=True, safe=True)
 
     db.create_tables(models=[User, Car, Payment, Invoice, Tariff])
 
