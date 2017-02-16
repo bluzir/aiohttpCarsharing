@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-import logging
 
 import aiohttp_jinja2 as aiohttp_jinja2
 from aiohttp import web
 from aiohttp_session import get_session
 
-from config import base_settings as config
+import base_settings as config
 from models import Invoice, User, Car
 from serializers import CarSerializer, UserSerializer, TariffSerializer, InvoiceSerializer
 

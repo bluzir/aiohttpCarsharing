@@ -4,9 +4,8 @@ import datetime
 import jwt
 from peewee import *
 
-from config import base_settings as config
+import base_settings as config
 from lib.external_api.inplat_wrapper import InplatException, InplatClient
-from utils.utils import generate_uuid
 
 database = PostgresqlDatabase(config.DB_NAME, user=config.DB_USER, password=config.DB_PASSWORD)
 

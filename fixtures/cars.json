@@ -1,0 +1,16 @@
+{
+  "cars": [
+    {
+      "car_model": "Hyundai Solaris",
+      "lat": 59.9758,
+      "long": 30.2178,
+      "status": 0
+    },
+    {
+      "car_model": "Toyota Camry",
+      "lat": 59.9258,
+      "long": 30.2878,
+      "status": 1
+    }
+  ]
+}

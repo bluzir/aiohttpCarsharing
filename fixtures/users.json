@@ -1,0 +1,17 @@
+{
+  "users": [
+      {
+        "first_name": "Vladislav",
+        "last_name": "Kooklev",
+        "email": "bluzir@bluzir.me",
+        "password": "qweqwe",
+        "tariff": 1
+      },
+      {
+        "first_name": "Test",
+        "last_name": "User",
+        "email": "admin@2car.spb.ru",
+        "password": "testpassword"
+      }
+    ]
+}
