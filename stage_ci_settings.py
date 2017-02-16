@@ -2,7 +2,7 @@ import logging
 import os
 
 HOST = '127.0.0.1'
-PORT = 9090
+PORT = 9999
 
 DB_NAME = 'twocar_stage'
 DB_USER = 'twocar_stage'
