@@ -32,13 +32,13 @@ class InplatClient(BaseClient):
         super(InplatClient, self).__init__()
 
     # Initialize payment
-    def init(self, pay_type, pay_params, params):
+    def init(self, pay_type='card', pay_params={}, params={}, merc_data=''):
         self.data = {
             'method': 'init',
             'pay_type': pay_type,
-            'pay_params': pay_params,
-            'params': params,
-            'merc_data': 'Random information',
+            'pay_params': json.dumps(pay_params),
+            'params': json.dumps(params),
+            'merc_data': merc_data,
         }
         self.generate_sign()
         print(self.params)

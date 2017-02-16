@@ -11,7 +11,7 @@ from aiohttp_session.cookie_storage import EncryptedCookieStorage
 from config import base_settings as config
 from routes import setup_routes
 
-logging.basicConfig(level=config.LEVEL)
+logging.basicConfig(level=config.LEVEL, filename='log/main.log')
 
 
 def main():

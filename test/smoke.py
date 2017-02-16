@@ -26,11 +26,10 @@ class TestSmoke(unittest.TestCase):
 
     def test_profile(self):
         r = self._make_get_request('profile/')
-        # проверить существование на странице инфы о пользователе
+        # TODO: проверить существование на странице инфы о пользователе
         self.assertAlmostEqual(r.status_code, 200)
 
+    def test_logout(self):
+        r = self._make_get_request('logout/')
+        self.assertAlmostEqual(r.status_code, 200)
 
-
-
-if __name__ == '__main__':
-    unittest.main()
