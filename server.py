@@ -13,8 +13,3 @@ setup_routes(app)
 setup(app, EncryptedCookieStorage(config.SECRET_KEY))
 aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(config.TEMPLATES_ROOT))
 app.router.add_static('/static', config.STATIC_ROOT, show_index=True)
-
-
-
-
-
