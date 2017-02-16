@@ -12,9 +12,9 @@ PORT = 9090
 
 
 # Database settings
-DB_NAME = 'test_db'
-DB_USER = 'test_user'
-DB_PASSWORD = ''
+DB_NAME = 'twocar_stage'
+DB_USER = 'twocar_stage'
+DB_PASSWORD = 'CtVWQGlthUqSHdu2fmEA'
 
 # Secret key settings
 SECRET_KEY = 'uPoDT+5qRvWni/xLarnefaZ17otdOEPthkc6whvirSo='
