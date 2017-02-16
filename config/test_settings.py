@@ -7,14 +7,14 @@ CRT_ROOT = '/etc/letsencrypt/live/bluzir.me/fullchain.pem'
 KEY_ROOT = '/etc/letsencrypt/live/bluzir.me/privkey.pem'
 
 # Host settings
-HOST = '89.223.26.255'
-PORT = 8080
+HOST = '127.0.0.1'
+PORT = 9090
 
 
 # Database settings
-DB_NAME = 'test_db'
-DB_USER = 'test_user'
-DB_PASSWORD = ''
+DB_NAME = 'twocar_stage'
+DB_USER = 'twocar_stage'
+DB_PASSWORD = 'CtVWQGlthUqSHdu2fmEA'
 
 # Secret key settings
 SECRET_KEY = 'uPoDT+5qRvWni/xLarnefaZ17otdOEPthkc6whvirSo='
