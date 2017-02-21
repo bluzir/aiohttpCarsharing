@@ -5,48 +5,55 @@ from aiohttp import web
 from aiohttp_session import get_session
 
 import base_settings as config
+from decorators import session_decorator, token_required, check_token
+from errors import _error
 from models import Invoice, User, Car
 from serializers import CarSerializer, UserSerializer, TariffSerializer, InvoiceSerializer
 
 
 # GET '/' :
 @aiohttp_jinja2.template('index.html')
+@session_decorator()
 async def index(request):
-    session = await get_session(request)
-    return {'session': session}
+    return {}
 
 
 # GET '/profile/':
 @aiohttp_jinja2.template('profile.html')
+@token_required()
 async def profile_view(request):
-    session = await get_session(request)
-    if 'auth_token' in session:
-        user_id = User.decode_auth_token(session['auth_token'])
-        if user_id:
-            return {'token': session['auth_token'], 'session': session}
+    return {}
 
-    return web.HTTPFound('/login/')
+
+# GET '/map/' :
+@aiohttp_jinja2.template('maps.html')
+@token_required()
+async def cars_map(request):
+    api_key = config.GMAPS_API_KEY
+    return {'api_key': api_key}
 
 
 # GET '/payments/':
 @aiohttp_jinja2.template('payment_list.html')
+@token_required()
 async def payments_view(request):
-    session = await get_session(request)
-    if 'auth_token' in session:
-        user_id = User.decode_auth_token(session['auth_token'])
-        if user_id:
-            return {'token': session['auth_token'], 'session': session}
+    return {}
 
-    return web.HTTPFound('/login/')
+
+# GET '/tariff/':
+@aiohttp_jinja2.template('tariff.html')
+@token_required()
+async def tariff_view(request):
+    return {}
 
 
 # GET '/payments/{uuid}':
 @aiohttp_jinja2.template('payment_detail.html')
+@token_required()
 async def payment_detail(request):
-    session = await get_session(request)
     payment_uuid = request.match_info['payment_uuid']
     invoice = Invoice.get(uuid=payment_uuid)
-    return {'invoice': invoice, 'inplat_api_key': config.INPLAT_API_KEY, 'session': session}
+    return {'invoice': invoice, 'inplat_api_key': config.INPLAT_API_KEY}
 
 
 # POST '/payment/{uuid}' :
@@ -61,18 +68,6 @@ async def do_payment(request):
         result = {'error': 'No cryptograma'}
 
     return web.json_response(result)
-
-
-# GET '/tariff/':
-@aiohttp_jinja2.template('tariff.html')
-async def tariff_view(request):
-    session = await get_session(request)
-    if 'auth_token' in session:
-        user_id = User.decode_auth_token(session['auth_token'])
-        if user_id:
-            return {'token': session['auth_token'], 'session': session}
-
-    return web.HTTPFound('/login/')
 
 
 # GET '/cars/list/' :
@@ -95,58 +90,25 @@ async def cars_detail(request):
         return web.HTTPInternalServerError(text=e.__traceback__)  # TODO: Remove after debug
 
 
-# GET '/map/' :
-@aiohttp_jinja2.template('maps.html')
-async def cars_map(request):
-    session = await get_session(request)
-    api_key = config.GMAPS_API_KEY
-    return {'api_key': api_key, 'session': session}
-
-
 # GET '/api/profile/' :
-def profile_detail(request):
-    if 'token' in request.GET:
-        user = User.get_user_by_token(request.GET['token'])
-        if user:
-            user_json = UserSerializer(user).get_serialized_json()
-            return web.json_response(user_json)
-        else:
-            return web.json_response({'error': 'invalid token'})
-    return web.json_response({'error': 'no access token passed'})
+@check_token()
+def profile_detail(request, user):
+    user_json = UserSerializer(user).get_serialized_json()
+    return web.json_response(user_json)
 
 
 # GET '/api/tariff/' :
-def tariff_detail(request):
-    if 'token' in request.GET:
-        user = User.get_user_by_token(request.GET['token'])
-        if user:
-            tariff_json = TariffSerializer(user.tariff).get_serialized_json()
-            return web.json_response(tariff_json)
-        else:
-            return web.json_response({'error': 'invalid token'})
-    return web.json_response({'error': 'no access token passed'})
+@check_token()
+def tariff_detail(request, user):
+    tariff_json = TariffSerializer(user.tariff).get_serialized_json()
+    return web.json_response(tariff_json)
 
 
 # GET '/api/payments/' :
-def payments_list(request):
-    if 'token' in request.GET:
-        user = User.get_user_by_token(request.GET['token'])
-        if user:
-            invoices = user.invoices
-            invoices_json = InvoiceSerializer(invoices).get_serialized_json()
-            return web.json_response(invoices_json)
-        else:
-            return web.json_response({'error': 'invalid token'})
-    return web.json_response({'error': 'no access token passed'})
-
-
-# GET '/payment/' :
-@aiohttp_jinja2.template('rest_payment_form.html')
-async def payment_form(request):
-    user_id = 1  # Get user id from session
-    invoice = Invoice.get(id=1)
-    return {'user_id': user_id, 'invoice_id': invoice.id,
-            'invoice_sum': invoice.summ, 'inplat_api_key': config.INPLAT_API_KEY}
+@check_token()
+def payments_list(request, user):
+    invoices_json = InvoiceSerializer(user.invoices).get_serialized_json()
+    return web.json_response(invoices_json)
 
 
 # GET '/login/' :
@@ -194,5 +156,7 @@ async def do_logout(request):
         return web.HTTPFound('/')
     else:
         return web.HTTPFound('/login/')
+
+
 
 

@@ -1,4 +1,4 @@
-from views import *
+from controller import *
 
 
 def setup_routes(app):
