@@ -1,6 +1,22 @@
 from models import *
 
+
 def main():
+    if Tariff.table_exists():
+        Tariff.drop_table(cascade=True)
+
+    Tariff.create_table()
+
+    if Car.table_exists():
+        Car.drop_table(cascade=True)
+
+    Car.create_table()
+
+    if Problem.table_exists():
+        Problem.drop_table(cascade=True)
+
+    Problem.create_table()
+
     if User.table_exists():
         User.drop_table(cascade=True)
 
@@ -16,15 +32,12 @@ def main():
 
     Payment.create_table()
 
-    if Tariff.table_exists():
-        Tariff.drop_table(cascade=True)
+    if Ride.table_exists():
+        Ride.drop_table(cascade=True)
 
-    Tariff.create_table()
+    Ride.create_table()
 
-    if Car.table_exists():
-        Car.drop_table(cascade=True)
 
-    Car.create_table()
 
 
 if __name__ == '__main__':

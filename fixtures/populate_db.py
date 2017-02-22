@@ -18,12 +18,17 @@ def main():
         for i in invoices:
             Invoice.create(**i)
 
-
     with open('fixtures/cars.json') as cars_file:
         cars_json = json.load(cars_file)
         cars = cars_json['cars']
         for c in cars:
             Car.create(**c)
+
+    with open('fixtures/rides.json') as rides_file:
+        rides_json = json.load(rides_file)
+        rides = rides_json['rides']
+        for r in rides:
+            Ride.create(**r)
 
 
 if __name__ == '__main__':

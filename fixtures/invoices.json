@@ -2,17 +2,14 @@
   "invoices":
     [
       {
-        "uuid": "c59d4f40869a4d299ff589912f8a2d7d",
         "summ": 654,
         "user": 1
       },
       {
-        "uuid": "4sdfdsfsdfsda4d299ff58hgfjfgfgd7d",
         "summ": 1400,
         "user": 1
       },
       {
-        "uuid": "2bfd68d61a174169b1162e3e22f8c309",
         "summ": 1234,
         "user": 2
       }

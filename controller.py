@@ -69,14 +69,14 @@ async def do_payment(request):
     return web.json_response(result)
 
 
-# GET '/cars/list/' :
+# GET '/api/cars/list/' :
 async def cars_list(request):
     cars_query = Car.get_available_cars()
     cars_json = CarSerializer(cars_query).get_serialized_json()
     return web.json_response(cars_json)
 
 
-# GET '/cars/list/{id}' :
+# GET '/api/cars/list/{id}' :
 async def cars_detail(request):
     try:
         car_id = int(request.match_info['car_id'])
@@ -128,13 +128,11 @@ async def do_login(request):
     return response
 
 
-
 # GET '/logout/' :
 async def do_logout(request):
     session = await get_session(request)
     if 'auth_token' in session:
         del session['auth_token']
-        del session['is_authorized']
         return web.HTTPFound('/')
     else:
         return web.HTTPFound('/login/')

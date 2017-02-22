@@ -9,6 +9,7 @@ from peewee import *
 import base_settings as config
 from errors import _error
 from lib.external_api.inplat_wrapper import InplatException, InplatClient
+from utils.utils import generate_uuid
 
 database = PostgresqlDatabase(config.DB_NAME, user=config.DB_USER, password=config.DB_PASSWORD)
 
@@ -79,10 +80,19 @@ class User(BaseModel):
             'iat': datetime.datetime.utcnow(),
             'sub': self.id,
         }
+
         return jwt.encode(
             payload=payload,
             key=config.SECRET_KEY,
             algorithm='HS256')
+
+    def get_current_ride(self):
+        current_rides = self.rides.where(Ride.status == 1)
+        if current_rides.__len__() == 1:
+            ride = current_rides.get()
+            return ride
+
+
 
     @staticmethod
     def decode_auth_token(auth_token):
@@ -126,16 +136,12 @@ class User(BaseModel):
         return _error.error_response(_error, _error.EMPTY_FIELD)
 
 
-
-
-
-
 class Payment(BaseModel):
     status = IntegerField()
 
 
 class Invoice(BaseModel):
-    uuid = TextField(unique=True)
+    uuid = TextField(unique=True, default=generate_uuid)
     summ = IntegerField()
     payment = ForeignKeyField(Payment, null=True)
     user = ForeignKeyField(User, related_name='invoices')
@@ -161,12 +167,18 @@ class Invoice(BaseModel):
 
 
 class Ride(BaseModel):
-    user = ForeignKeyField(User)
-    car = ForeignKeyField(Car)
-    start_date = DateTimeField()
-    end_date = DateTimeField()
+    RIDE_STATUSES = {
+        '0': 'Завершена',
+        '1': 'Происходит',
+    }
+
+    user = ForeignKeyField(User, related_name='rides')
+    car = ForeignKeyField(Car, related_name='rides')
+    start_date = DateTimeField(default=datetime.datetime.now)
+    end_date = DateTimeField(null=True)
     invoice = ForeignKeyField(Invoice, null=True)
     problem = ForeignKeyField(Problem, null=True)
+    status = IntegerField(default=0)
 
 
 class Damage(BaseModel):
