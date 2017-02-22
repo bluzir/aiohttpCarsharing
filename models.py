@@ -176,7 +176,7 @@ class Ride(BaseModel):
 
     user = ForeignKeyField(User, related_name='rides')
     car = ForeignKeyField(Car, related_name='rides')
-    start_date = DateTimeField(default=datetime.datetime.now)
+    start_date = DateTimeField(null=True)
     end_date = DateTimeField(null=True)
     invoice = ForeignKeyField(Invoice, null=True)
     problem = ForeignKeyField(Problem, null=True)
