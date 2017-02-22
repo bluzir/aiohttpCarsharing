@@ -43,7 +43,7 @@ def token_required():
     return wrapper
 
 
-# Decorator for API function that checks if auth_token passed and valid
+# Decorator for API controllers that checks if auth_token passed and valid
 def check_token():
     def wrapper(func):
         @asyncio.coroutine

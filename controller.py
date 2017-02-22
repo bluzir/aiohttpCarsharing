@@ -6,7 +6,6 @@ from aiohttp_session import get_session
 
 import base_settings as config
 from decorators import session_decorator, token_required, check_token
-from errors import _error
 from models import Invoice, User, Car
 from serializers import CarSerializer, UserSerializer, TariffSerializer, InvoiceSerializer
 
@@ -125,26 +124,9 @@ async def login(request):
 # POST '/login/ :
 async def do_login(request):
     data = await request.post()
-    session = await get_session(request)
-    try:
-        email = data['email']
-        password = data['password']
-        if email and password:
-            user = User.get(email=email, password=password)
-            auth_token = user.encode_auth_token().decode("utf-8")
-            session['auth_token'] = auth_token
-            session['is_authorized'] = True
-            return web.json_response({'auth_token': auth_token})
-        else:
-            error = 'Заполните все необходимые поля'
-    except User.DoesNotExist:
-        error = 'Введены неправильный логин или пароль'
-    except KeyError:
-        error = 'Заполните все необходимые поля'
-    except Exception as e:
-        error = e.__traceback__  # TODO: Remove after debug
+    response = await User.handle_authorization_form(data, request)
+    return response
 
-    return web.json_response({'error': error})
 
 
 # GET '/logout/' :

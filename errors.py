@@ -9,6 +9,7 @@ class _error:
     INVALID_TOKEN = 2
     NO_CRYPTOGRAMA = 3
     INVALID_LOGIN = 4
+    EMPTY_FIELD = 5
 
     errors = {
         1: {
@@ -27,7 +28,13 @@ class _error:
             'ru': 'Неверный логин или пароль',
             'en': 'Wrond login or password'
 
+        },
+        5: {
+            'ru': 'Заполнены не все поля',
+            'en': 'Not all fields are filled'
+
         }
+
     }
 
     def error_response(self, error):

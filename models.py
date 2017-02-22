@@ -2,9 +2,12 @@
 import datetime
 
 import jwt
+from aiohttp import web
+from aiohttp_session import get_session
 from peewee import *
 
 import base_settings as config
+from errors import _error
 from lib.external_api.inplat_wrapper import InplatException, InplatClient
 
 database = PostgresqlDatabase(config.DB_NAME, user=config.DB_USER, password=config.DB_PASSWORD)
@@ -103,6 +106,28 @@ class User(BaseModel):
             return User.get(id=user_id)
         else:
             return False
+
+    @staticmethod
+    async def handle_authorization_form(data, request):
+        session = await get_session(request)
+        if 'email' in data and 'password' in data:
+            email = data['email']
+            password = data['password']
+            if email and password:
+                user = User.select().where(User.email == email, User.password == password)
+                if user.__len__() == 1:
+                    user = user.get()
+                    auth_token = user.encode_auth_token().decode("utf-8")
+                    session['auth_token'] = auth_token
+                    return web.json_response({'auth_token': auth_token})
+                else:
+                    return _error.error_response(_error, _error.INVALID_LOGIN)
+
+        return _error.error_response(_error, _error.EMPTY_FIELD)
+
+
+
+
 
 
 class Payment(BaseModel):
