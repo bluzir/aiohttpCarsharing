@@ -91,6 +91,8 @@ class User(BaseModel):
         if current_rides.__len__() == 1:
             ride = current_rides.get()
             return ride
+        else:
+            return {}
 
 
 

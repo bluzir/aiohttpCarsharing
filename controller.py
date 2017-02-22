@@ -7,7 +7,7 @@ from aiohttp_session import get_session
 import base_settings as config
 from decorators import session_decorator, token_required, check_token
 from models import Invoice, User, Car
-from serializers import CarSerializer, UserSerializer, TariffSerializer, InvoiceSerializer
+from serializers import CarSerializer, UserSerializer, TariffSerializer, InvoiceSerializer, RideSerializer
 
 
 # GET '/' :
@@ -43,6 +43,12 @@ async def payments_view(request):
 @aiohttp_jinja2.template('tariff.html')
 @token_required()
 async def tariff_view(request):
+    return {}
+
+
+@aiohttp_jinja2.template('ride.html')
+@token_required()
+async def ride_view(request):
     return {}
 
 
@@ -108,6 +114,17 @@ def tariff_detail(request, user):
 def payments_list(request, user):
     invoices_json = InvoiceSerializer(user.invoices).get_serialized_json()
     return web.json_response(invoices_json)
+
+
+@check_token()
+def current_ride(request, user):
+    ride = user.get_current_ride()
+    if ride:
+        rides_json = RideSerializer(ride).get_serialized_json()
+        return web.json_response(rides_json)
+    else:
+        return web.json_response({})
+
 
 
 # GET '/login/' :

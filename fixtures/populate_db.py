@@ -4,7 +4,8 @@ from models import *
 
 
 def main():
-    Tariff.create(name='Базовый', description="Бронирование: Бесплатно \nАренда: 8 Р/мин\nОжидание: 2.5 Р/мин")
+    Tariff.create(name='Базовый',
+                  description="Бронирование: Бесплатно \nАренда: 8 Р/мин\nОжидание: 2.5 Р/мин")
 
     with open('fixtures/users.json') as users_file:
         users_json = json.load(users_file)
