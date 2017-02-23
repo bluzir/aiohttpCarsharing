@@ -189,3 +189,9 @@ class Damage(BaseModel):
     car_part = IntegerField()
     photos = ForeignKeyField(Media)
 
+class CardLink(BaseModel):
+    masked_pan = TextField()
+    user = ForeignKeyField(User)
+    create_date = DateTimeField(null=True)
+
+

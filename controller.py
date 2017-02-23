@@ -156,4 +156,20 @@ async def do_logout(request):
 
 
 
+# GET '/card/':
+@aiohttp_jinja2.template('list.html')
+@token_required()
+async def card_view(request):
+    return {}
+
+
+# GET '/card/link/':
+@aiohttp_jinja2.template('link.html')
+@token_required()
+async def card_link_view(request):
+    return {}
+
+
+
+
 

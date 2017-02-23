@@ -82,12 +82,14 @@ class InplatClient(BaseClient):
                          data=self.data)
 
     # Link a card
-    def link(self, client_id, pay_params, params):
+    def link(self, client_id, cryptogramma):
         self.data = {
             'method': 'link',
             'pay_type': 'card',
             'client_id': client_id,
-            'pay_params': pay_params,
+            'pay_params': {
+                'cryptogramma': cryptogramma
+            },
         }
         return self.post(url=self.DEFAULT_HOST,
                          params=params,

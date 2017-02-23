@@ -14,6 +14,10 @@ def setup_routes(app):
     app.router.add_get(path='/payments/{payment_uuid}/', handler=payment_detail, name='payment_detail')
     app.router.add_post(path='/payments/{payment_uuid}/', handler=do_payment, name='do_payment')
 
+    # Card
+    app.router.add_get(path='/card/', handler=card_view, name='card')
+    app.router.add_get(path='/card/link/', handler=card_link_view, name='card_link')
+
     # Authentication
     app.router.add_get(path='/login/', handler=login, name='login')
     app.router.add_post(path='/login/', handler=do_login)
