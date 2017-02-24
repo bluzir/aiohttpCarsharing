@@ -37,6 +37,6 @@ class _error:
 
     }
 
-    def error_response(self, error):
-        error = self.errors[error]
-        return web.json_response({'error': error['ru']})
+    def error_response(self, error_code):
+        _error = self.errors[error]
+        return web.json_response({'error_code': error_code, 'error': _error['ru']})
