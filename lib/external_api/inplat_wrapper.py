@@ -31,6 +31,12 @@ class InplatClient(BaseClient):
         self.client_id = None
         super(InplatClient, self).__init__()
 
+    def _post(self):
+        self.generate_sign()
+        super().post(url=self.DEFAULT_HOST,
+                         params=self.params,
+                         data=self.data)
+
     # Initialize payment
     def init(self, pay_type='card', pay_params={}, params={}, merc_data=''):
         self.data = {
@@ -40,11 +46,8 @@ class InplatClient(BaseClient):
             'params': params,
             'merc_data': merc_data,
         }
-        self.generate_sign()
-        print(self.params)
-        return self.post(url=self.DEFAULT_HOST,
-                         params=self.params,
-                         data=self.data)
+
+        return self._post()
 
     # Check payment status in Inplat system
     def check(self, payment_id):
@@ -52,10 +55,7 @@ class InplatClient(BaseClient):
             'method': 'check',
             'id': payment_id,
         }
-        self.generate_sign()
-        return self.post(url=self.DEFAULT_HOST,
-                         params=self.params,
-                         data=self.data)
+        return self._post()
 
     # Payment by linked card
     def pay(self, client_id, link_id, params):
@@ -66,9 +66,7 @@ class InplatClient(BaseClient):
             'params': params,
             'merc_data': 'Random information',
         }
-        return self.post(url=self.DEFAULT_HOST,
-                         params=params,
-                         data=self.data)
+        return self._post()
 
     # Refund payment
     def refund(self, payment_id, amount, params):
@@ -77,9 +75,7 @@ class InplatClient(BaseClient):
             'id': payment_id,
             'amount': amount,
         }
-        return self.post(url=self.DEFAULT_HOST,
-                         params=params,
-                         data=self.data)
+        return self._post()
 
     # Link a card
     def link(self, client_id, cryptogramma):
@@ -91,9 +87,32 @@ class InplatClient(BaseClient):
                 'cryptogramma': cryptogramma
             },
         }
-        return self.post(url=self.DEFAULT_HOST,
-                         params=params,
-                         data=self.data)
+        return self._post()
+
+    # Link a card
+    def pay_and_link(self, client_id, cryptogramma):
+        '''
+                        "params": {
+                    "account": "test",
+                    "sum": 1023,
+                    "email": "pay@example.com",
+                    "details": "Some data",
+                    "address": " Some data"
+                },
+                "merc_data": "Random information"
+        '''
+
+        self.data = {
+            'method': 'init',
+            'pay_type': 'card',
+            'client_id': client_id,
+            'case': 'link',
+            'pay_params': {
+                'cryptogramma': cryptogramma
+            },
+        }
+
+        return self._post()
 
     # Unlink a card
     def unlink(self, link_id, params):
@@ -101,9 +120,7 @@ class InplatClient(BaseClient):
             'method': 'unlink',
             'link_id': link_id,
         }
-        return self.post(url=self.DEFAULT_HOST,
-                            params=params,
-                            data=self.data)
+        return self._post()
 
     # List of linked cards by id
     def links(self, client_id, params):
@@ -111,9 +128,7 @@ class InplatClient(BaseClient):
             'method': 'links',
             'client_id': client_id,
         }
-        return self.post(url=self.DEFAULT_HOST,
-                         params=params,
-                         data=self.data)
+        return self._post()
 
     def generate_sign(self):
         try:

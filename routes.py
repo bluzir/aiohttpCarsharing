@@ -17,6 +17,7 @@ def setup_routes(app):
     # Card
     app.router.add_get(path='/card/', handler=card_view, name='card')
     app.router.add_get(path='/card/link/', handler=card_link_view, name='card_link')
+    app.router.add_post(path='/card/link/', handler=do_card_link, name='do_card_link')
 
     # Authentication
     app.router.add_get(path='/login/', handler=login, name='login')

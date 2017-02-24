@@ -9,6 +9,8 @@ from decorators import session_decorator, token_required, check_token
 from models import Invoice, User, Car
 from serializers import CarSerializer, UserSerializer, TariffSerializer, InvoiceSerializer, RideSerializer
 
+from lib.inplat import Inplat
+
 
 # GET '/' :
 @aiohttp_jinja2.template('index.html')
@@ -167,8 +169,27 @@ async def card_view(request):
 @aiohttp_jinja2.template('card/link.html')
 @token_required()
 async def card_link_view(request):
-    return {}
+    return {'inplat_api_key': config.INPLAT_API_KEY}
 
+# POST '/card/link/':
+# TODO: пофиксить
+async def do_card_link(request):
+    data = await request.post()
+    if not 'inplat_payment_crypto_input' in data:
+        result = {'error': 'No cryptograma'}
+
+    crypto = data['inplat_payment_crypto_input']
+
+    session = await get_session(request)
+    user_id = User.decode_auth_token(session['auth_token'])
+
+    _inplat = Inplat()
+    result = _inplat.link_card_by_cryptogramma(user_id, crypto)
+    if result['error_code'] == 0:
+        return web.HTTPFound(result['url'])
+
+    # 'inplat_payment_crypto_input'
+    # return web.json_response(result)
 
 
 

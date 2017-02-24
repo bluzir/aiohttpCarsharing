@@ -1,3 +1,5 @@
+from .external_api.inplat_wrapper import InplatClient
+
 class Inplat():
 
     '''
@@ -8,10 +10,14 @@ class Inplat():
     4) pay
     '''
 
+    def __init__(self):
+        self.inplat_client = InplatClient()
 
-    def _link_card(self):
+    def link_card_by_cryptogramma(self, user_id, crypto):
+        result = self.inplat_client.pay_and_link(client_id=user_id, cryptogramma=crypto)
 
-        pass
+        if result['code'] == 0:
+            return {'error_code': 0, 'url': result['url']}
 
     def _hold(self):
         pass
