@@ -6,10 +6,13 @@ from aiohttp import web
 from aiohttp_session import get_session
 
 from errors import _error
-from models import User
 
+from models.user import User
 
 # Simple decorator that add information about session to template context
+
+
+
 def session_decorator():
     def wrapper(func):
         @asyncio.coroutine

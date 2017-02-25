@@ -6,7 +6,9 @@ from aiohttp_session import get_session
 
 import base_settings as config
 from decorators import session_decorator, token_required, check_token
-from models import Invoice, User, Car
+from models.car import Car
+from models.invoice import Invoice
+from models.user import User
 from serializers import CarSerializer, UserSerializer, TariffSerializer, InvoiceSerializer, RideSerializer
 
 from lib.inplat import Inplat
@@ -155,7 +157,6 @@ async def do_logout(request):
         return web.HTTPFound('/')
     else:
         return web.HTTPFound('/login/')
-
 
 
 # GET '/card/':

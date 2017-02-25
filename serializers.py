@@ -1,7 +1,12 @@
 from peewee import SelectQuery, Model
 from playhouse.shortcuts import model_to_dict
 
-from models import Car, User, Tariff, Invoice, Payment, Ride
+from models.car import Car
+from models.invoice import Invoice
+from models.payment import Payment
+from models.ride import Ride
+from models.tariff import Tariff
+from models.user import User
 
 
 class BaseSerializer:
