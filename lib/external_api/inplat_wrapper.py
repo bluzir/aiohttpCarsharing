@@ -110,6 +110,10 @@ class InplatClient(BaseClient):
             'pay_params': {
                 'cryptogramma': cryptogramma
             },
+            'params': {
+                'account': client_id,
+                'sum': 100
+                }
         }
 
         return self._post()
