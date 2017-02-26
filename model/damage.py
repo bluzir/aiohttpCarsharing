@@ -1,8 +1,8 @@
 from peewee import *
 
-from models.base import *
-from models.car import Car
-from models.user import User
+from model.base import *
+from model.car import Car
+from model.user import User
 
 
 class Damage(BaseModel):

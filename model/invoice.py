@@ -1,8 +1,8 @@
 from peewee import *
 
-from models.base import *
-from models.payment import Payment
-from models.user import User
+from model.base import *
+from model.payment import Payment
+from model.user import User
 from utils.utils import generate_uuid
 
 

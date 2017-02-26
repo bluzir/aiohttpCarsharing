@@ -1,5 +1,5 @@
 from .external_api.inplat_wrapper import InplatClient
-from models.payment import Payment
+from model.payment import Payment
 
 class Inplat():
 

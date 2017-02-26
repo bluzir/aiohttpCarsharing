@@ -1,10 +1,10 @@
-from models.payment import Payment
-from models.tariff import Tariff
-from models.car import Car
-from models.user import User
-from models.problem import Problem
-from models.invoice import Invoice
-from models.ride import Ride
+from model.payment import Payment
+from model.tariff import Tariff
+from model.car import Car
+from model.user import User
+from model.problem import Problem
+from model.invoice import Invoice
+from model.ride import Ride
 
 
 def main():

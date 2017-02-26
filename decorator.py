@@ -5,9 +5,9 @@ import functools
 from aiohttp import web
 from aiohttp_session import get_session
 
-from errors import _error
+from error import _error
 
-from models.user import User
+from model.user import User
 
 # Simple decorator that add information about session to template context
 

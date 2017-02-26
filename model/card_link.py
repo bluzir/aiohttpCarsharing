@@ -1,7 +1,7 @@
 from peewee import *
 
-from models.base import *
-from models.user import User
+from model.base import *
+from model.user import User
 
 
 class CardLink(BaseModel):

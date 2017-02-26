@@ -5,9 +5,9 @@ from aiohttp import web
 from aiohttp_session import get_session
 from peewee import *
 
-from errors import _error
-from models.base import *
-from models.tariff import Tariff
+from error import _error
+from model.base import *
+from model.tariff import Tariff
 
 
 class User(BaseModel):

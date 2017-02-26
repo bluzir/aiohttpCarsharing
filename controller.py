@@ -5,12 +5,12 @@ from aiohttp import web
 from aiohttp_session import get_session
 
 import base_settings as config
-from decorators import session_decorator, token_required, check_token
-from errors import _error
-from models.car import Car
-from models.invoice import Invoice
-from models.user import User
-from serializers import CarSerializer, UserSerializer, TariffSerializer, InvoiceSerializer, RideSerializer
+from decorator import session_decorator, token_required, check_token
+from error import _error
+from model.car import Car
+from model.invoice import Invoice
+from model.user import User
+from serializer import CarSerializer, UserSerializer, TariffSerializer, InvoiceSerializer, RideSerializer
 
 from lib.inplat import Inplat
 

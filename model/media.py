@@ -1,6 +1,6 @@
 from peewee import *
 
-from models.base import *
+from model.base import *
 
 
 class Media(BaseModel):

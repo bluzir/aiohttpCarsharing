@@ -7,7 +7,7 @@ from aiohttp_session import setup, get_session, session_middleware
 from aiohttp_session.cookie_storage import EncryptedCookieStorage
 
 import base_settings as config
-from routes import setup_routes
+from route import setup_routes
 
 import logging
 

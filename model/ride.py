@@ -1,10 +1,10 @@
 from peewee import *
 
-from models.base import *
-from models.car import Car
-from models.invoice import Invoice
-from models.problem import Problem
-from models.user import User
+from model.base import *
+from model.car import Car
+from model.invoice import Invoice
+from model.problem import Problem
+from model.user import User
 
 
 class Ride(BaseModel):
