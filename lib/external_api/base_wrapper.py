@@ -21,7 +21,7 @@ class BaseClient:
 
     async def post(self, url, cookies=None, data=None, params=None):
         async with aiohttp.ClientSession(cookies=cookies) as session:
-            async with session.post(url, data=data, params=params) as resp:
+            async with session.post(url, data=json.dumps(data).encode("utf-8"), params=params) as resp:
                 decoded = await resp.json()
 
         logging.debug(params)
