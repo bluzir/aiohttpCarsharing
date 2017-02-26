@@ -16,7 +16,7 @@ class TestInplat(unittest.TestCase):
                 'account': account,
                 'sum': 123
             },
-            pay_params={'cryptogramma':'yqzMckvNzouPYboEEBt2CHBiOHDpNVg/BYTkVYxKv643uxC9HtwdOYkaJVed/lTcLtOJbdZ+q5TBC7pNHJ0fyq45VODuXPCOa3hFgmxE+7U='}))
+            pay_params={'cryptogramma':'0dUZK7Iy0I4S9xggWJXH9Y+QUGUn/6cARcnH4B8jZUhDD/A9dyKq9PlBKhyjDHVDWdWYtNSZuDNa4YTLFzt+5O7xzh5dyGP9eZitzws8/ag='}))
 
 
 if __name__ == '__main__':

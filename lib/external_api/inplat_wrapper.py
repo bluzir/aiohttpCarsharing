@@ -105,13 +105,13 @@ class InplatClient(BaseClient):
         self.data = {
             'method': 'init',
             'pay_type': 'card',
-            'client_id': client_id,
+            'client_id': str(client_id),
             'case': 'link',
             'pay_params': {
                 'cryptogramma': cryptogramma
             },
             'params': {
-                'account': client_id,
+                'account': str(account),
                 'sum': 100
                 }
         }

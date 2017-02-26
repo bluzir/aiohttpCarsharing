@@ -1,4 +1,5 @@
 from .external_api.inplat_wrapper import InplatClient
+from models import Payment
 
 class Inplat():
 
@@ -14,7 +15,9 @@ class Inplat():
         self.inplat_client = InplatClient()
 
     async def link_card_by_cryptogramma(self, user_id, crypto):
-        result = await self.inplat_client.pay_and_link(client_id=user_id, cryptogramma=crypto)
+        payment = Payment.create()
+
+        result = self.inplat_client.pay_and_link(client_id=user_id, cryptogramma=crypto, account=payment.get_id())
 
         if result['code'] == 0:
             return {'error_code': 0, 'url': result['url']}
