@@ -12,7 +12,6 @@ from models.user import User
 # Simple decorator that add information about session to template context
 
 
-
 def session_decorator():
     def wrapper(func):
         @asyncio.coroutine

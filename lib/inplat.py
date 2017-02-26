@@ -13,8 +13,8 @@ class Inplat():
     def __init__(self):
         self.inplat_client = InplatClient()
 
-    def link_card_by_cryptogramma(self, user_id, crypto):
-        result = self.inplat_client.pay_and_link(client_id=user_id, cryptogramma=crypto)
+    async def link_card_by_cryptogramma(self, user_id, crypto):
+        result = await self.inplat_client.pay_and_link(client_id=user_id, cryptogramma=crypto)
 
         if result['code'] == 0:
             return {'error_code': 0, 'url': result['url']}

@@ -31,14 +31,14 @@ class InplatClient(BaseClient):
         self.client_id = None
         super(InplatClient, self).__init__()
 
-    def _post(self):
+    async def _post(self):
         self.generate_sign()
-        super().post(url=self.DEFAULT_HOST,
-                         params=self.params,
-                         data=self.data)
+        return await super().post(url=self.DEFAULT_HOST,
+                                  params=self.params,
+                                  data=self.data)
 
     # Initialize payment
-    def init(self, pay_type='card', pay_params={}, params={}, merc_data=''):
+    async def init(self, pay_type='card', pay_params={}, params={}, merc_data=''):
         self.data = {
             'method': 'init',
             'pay_type': pay_type,
@@ -47,15 +47,15 @@ class InplatClient(BaseClient):
             'merc_data': merc_data,
         }
 
-        return self._post()
+        return await self._post()
 
     # Check payment status in Inplat system
-    def check(self, payment_id):
+    async def check(self, payment_id):
         self.data = {
             'method': 'check',
             'id': payment_id,
         }
-        return self._post()
+        return await self._post()
 
     # Payment by linked card
     def pay(self, client_id, link_id, params):
@@ -90,16 +90,16 @@ class InplatClient(BaseClient):
         return self._post()
 
     # Link a card
-    def pay_and_link(self, client_id, cryptogramma):
+    async def pay_and_link(self, client_id, cryptogramma):
         '''
-                        "params": {
-                    "account": "test",
-                    "sum": 1023,
-                    "email": "pay@example.com",
-                    "details": "Some data",
-                    "address": " Some data"
-                },
-                "merc_data": "Random information"
+            "params": {
+                "account": "test",
+                "sum": 1023,
+                "email": "pay@example.com",
+                "details": "Some data",
+                "address": " Some data"
+            },
+            "merc_data": "Random information"
         '''
 
         self.data = {
@@ -116,7 +116,7 @@ class InplatClient(BaseClient):
                 }
         }
 
-        return self._post()
+        return await self._post()
 
     # Unlink a card
     def unlink(self, link_id, params):
