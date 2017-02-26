@@ -10,6 +10,7 @@ class _error:
     NO_CRYPTOGRAMA = 3
     INVALID_LOGIN = 4
     EMPTY_FIELD = 5
+    INPLAT_API_ERROR = 6
 
     errors = {
         1: {
@@ -33,6 +34,10 @@ class _error:
             'ru': 'Заполнены не все поля',
             'en': 'Not all fields are filled'
 
+        },
+        6: {
+            'ru': 'Ошибка в API Inplat',
+            'en': 'Inplat API error'
         }
 
     }

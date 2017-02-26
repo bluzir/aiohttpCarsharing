@@ -6,6 +6,7 @@ from aiohttp_session import get_session
 
 import base_settings as config
 from decorators import session_decorator, token_required, check_token
+from errors import _error
 from models.car import Car
 from models.invoice import Invoice
 from models.user import User
@@ -188,6 +189,8 @@ async def do_card_link(request):
     result = await _inplat.link_card_by_cryptogramma(user_id, crypto)
     if result['error_code'] == 0:
         return web.HTTPFound(result['url'])
+    else:
+        return _error.error_response(_error, _error.INPLAT_API_ERROR)
 
     # 'inplat_payment_crypto_input'
     # return web.json_response(result)

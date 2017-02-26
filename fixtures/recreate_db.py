@@ -1,4 +1,10 @@
-from models import *
+from models.payment import Payment
+from models.tariff import Tariff
+from models.car import Car
+from models.user import User
+from models.problem import Problem
+from models.invoice import Invoice
+from models.ride import Ride
 
 
 def main():
@@ -36,8 +42,6 @@ def main():
         Ride.drop_table(cascade=True)
 
     Ride.create_table()
-
-
 
 
 if __name__ == '__main__':

@@ -4,4 +4,4 @@ from models.base import *
 
 
 class Payment(BaseModel):
-    status = IntegerField()
+    status = IntegerField(default=0)

@@ -90,7 +90,7 @@ class InplatClient(BaseClient):
         return self._post()
 
     # Link a card
-    async def pay_and_link(self, client_id, cryptogramma):
+    async def pay_and_link(self, client_id, cryptogramma, account):
         '''
             "params": {
                 "account": "test",

@@ -1,6 +1,10 @@
 import json
 
-from models import *
+from models.tariff import Tariff
+from models.user import User
+from models.ride import Ride
+from models.car import Car
+from models.invoice import Invoice
 
 
 def main():
