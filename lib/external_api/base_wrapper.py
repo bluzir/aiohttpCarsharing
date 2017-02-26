@@ -10,8 +10,8 @@ class BaseClient:
     def __init__(self):
         pass
 
-    async def get(self, url, params=None):
-        async with aiohttp.ClientSession() as session:
+    async def get(self, url, cookies=None, params=None):
+        async with aiohttp.ClientSession(cookies=cookies) as session:
             async with session.get(url, params=params) as resp:
                 decoded = await resp.json()
 
@@ -19,8 +19,8 @@ class BaseClient:
         logging.debug(decoded)
         return decoded
 
-    async def post(self, url, data, params=None):
-        async with aiohttp.ClientSession() as session:
+    async def post(self, url, cookies=None, data=None, params=None):
+        async with aiohttp.ClientSession(cookies=cookies) as session:
             async with session.post(url, data=data, params=params) as resp:
                 decoded = await resp.json()
 
