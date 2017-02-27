@@ -5,13 +5,15 @@
         "last_name": "Kooklev",
         "email": "bluzir@bluzir.me",
         "password": "qweqwe",
-        "tariff": 1
+        "tariff": 1,
+        "phone_number": "+79111111111"
       },
       {
         "first_name": "Test",
         "last_name": "User",
         "email": "admin@2car.spb.ru",
-        "password": "testpassword"
+        "password": "testpassword",
+        "phone_number": "+79111111112"
       }
     ]
 }

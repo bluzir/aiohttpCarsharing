@@ -16,11 +16,11 @@ class User(BaseModel):
         '1': 'Администратор',
     }
 
-    first_name = TextField()
-    last_name = TextField()
-    email = TextField()
+    first_name = TextField(null=True)
+    last_name = TextField(null=True)
+    email = TextField(unique=True)
     password = TextField()
-    phone_number = TextField(null=True)
+    phone_number = TextField(unique=True)
     status = IntegerField(default=0, choices=USER_STATUSES)
     tariff = ForeignKeyField(Tariff, null=True)
 
@@ -40,6 +40,8 @@ class User(BaseModel):
             payload=payload,
             key=config.SECRET_KEY,
             algorithm='HS256')
+
+
 
 
 
@@ -65,6 +67,25 @@ class User(BaseModel):
             return User.get(id=user_id)
         else:
             return False
+
+    @staticmethod
+    async def handle_registration_form(data, request):
+        session = await get_session(request)
+        if 'phone' and 'password' in data:
+            phone = data['phone']
+            password = data['password']
+            if 'email' in data:
+                email = data['email']
+            else:
+                email = None
+
+            if phone and password:
+                user = User.create(phone_number=phone, email=email, password=password)
+                auth_token = user.encode_auth_token().decode("utf-8")
+                session['auth_token'] = auth_token
+                return web.json_response({'auth_token': auth_token})
+
+        return _error.error_response(_error, _error.EMPTY_FIELD)
 
     @staticmethod
     async def handle_authorization_form(data, request):

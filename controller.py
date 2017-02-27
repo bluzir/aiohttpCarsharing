@@ -131,6 +131,19 @@ def current_ride(request, user):
         return web.json_response({})
 
 
+# GET '/registration/
+@aiohttp_jinja2.template('registration.html')
+@session_decorator()
+async def registration(request):
+    return {}
+
+
+# POST '/registration/ :
+async def do_registration(request):
+    data = await request.post()
+    response = await User.handle_registration_form(data, request)
+    return response
+
 
 # GET '/login/' :
 @aiohttp_jinja2.template('auth_form.html')

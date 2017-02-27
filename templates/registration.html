@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-md-3 col-md-offset-4 authorization">
+    <div class="page-header">
+      <h1>Регистрация</h1>
+    </div>
+    <div class="error"></div>
+    <form action="/registration/" method="post" accept-charset="utf-8" id="login-form"
+          enctype="application/x-www-form-urlencoded">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="text" value="" class="form-control" autofocus/>
+            <label for="email">Телефон</label>
+            <input id="phone" name="phone" type="phone" value="" class="form-control"/>
+            <label for="password">Пароль</label>
+            <input id="password" name="password" type="password" value="" class="form-control"/>
+        </div>
+        <input type="submit" class="btn btn-success btn-lg" value="Зарегистрироваться"/>
+        <br><br>
+        <a href="/login/">Уже есть аккаунт?  </a>
+    </form>
+</div>
+<div class="col-md-12">
+    <div class="success"></div>
+</div>
+{% endblock %}
