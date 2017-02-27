@@ -20,8 +20,9 @@ class InplatClient(BaseClient):
     SECRET_WORD = b'a3NchcP7P2145qTE'  # TODO: Hide into non-versioned file
 
     def __init__(self):
+        super(InplatClient, self).__init__()
         self.sign = None
-        self.data = None
+        self.url = self.DEFAULT_HOST
 
         self.params = {
             'api_key': self.API_KEY,
@@ -29,13 +30,11 @@ class InplatClient(BaseClient):
 
         self.pay_type = None
         self.client_id = None
-        super(InplatClient, self).__init__()
+
 
     async def _post(self):
         self.generate_sign()
-        return await super().post(url=self.DEFAULT_HOST,
-                                  params=self.params,
-                                  data=self.data)
+        return await super().post()
 
     # Initialize payment
     async def init(self, pay_type='card', pay_params={}, params={}, merc_data=''):

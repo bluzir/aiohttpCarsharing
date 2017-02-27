@@ -8,24 +8,28 @@ import requests
 class BaseClient:
 
     def __init__(self):
-        pass
+        self.data = {}
+        self.params = {}
+        self.cookies = None
+        self.url = None
 
-    async def get(self, url, cookies=None, params=None):
-        async with aiohttp.ClientSession(cookies=cookies) as session:
-            async with session.get(url, params=params) as resp:
+    async def get(self):
+        async with aiohttp.ClientSession(cookies=self.cookies) as session:
+            async with session.get(self.url, params=self.params) as resp:
                 decoded = await resp.json()
 
-        logging.debug(params)
+        logging.debug(self.params)
         logging.debug(decoded)
         return decoded
 
-    async def post(self, url, cookies=None, data=None, params=None):
-        async with aiohttp.ClientSession(cookies=cookies) as session:
-            async with session.post(url, data=data, params=params) as resp:
+    async def post(self):
+        async with aiohttp.ClientSession(cookies=self.cookies) as session:
+            async with session.post(self.url, data=json.dumps(self.data).encode("utf-8"),
+                                    params=self.params) as resp:
                 decoded = await resp.json()
 
-        logging.debug(params)
-        logging.debug(data)
+        logging.debug(self.params)
+        logging.debug(self.data)
         logging.debug(decoded)
 
         return decoded
