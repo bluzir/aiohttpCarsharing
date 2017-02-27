@@ -31,7 +31,6 @@ class BaseClient:
         logging.debug(self.params)
         logging.debug(self.data)
         logging.debug(decoded)
-
         return decoded
 
     @staticmethod

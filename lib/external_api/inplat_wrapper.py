@@ -31,7 +31,6 @@ class InplatClient(BaseClient):
         self.pay_type = None
         self.client_id = None
 
-
     async def _post(self):
         self.generate_sign()
         return await super().post()
