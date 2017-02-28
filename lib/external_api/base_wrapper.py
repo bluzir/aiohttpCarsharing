@@ -13,10 +13,19 @@ class BaseClient:
         self.cookies = None
         self.url = None
 
+    @staticmethod
+    async def _decode(resp):
+        try:
+            decoded = await resp.json()
+        except Exception as e:
+            print(resp.text())
+
+
     async def get(self):
         async with aiohttp.ClientSession(cookies=self.cookies) as session:
             async with session.get(self.url, params=self.params) as resp:
-                decoded = await resp.json()
+                decoded = await self._decode(resp)
+
 
         logging.debug(self.params)
         logging.debug(decoded)
@@ -26,7 +35,7 @@ class BaseClient:
         async with aiohttp.ClientSession(cookies=self.cookies) as session:
             async with session.post(self.url, data=json.dumps(self.data).encode("utf-8"),
                                     params=self.params) as resp:
-                decoded = await resp.json()
+                decoded = await self._decode(resp)
 
         logging.debug(self.params)
         logging.debug(self.data)
