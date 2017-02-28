@@ -230,7 +230,7 @@ async def api_inplat_redirect(request):
         # если пеймент был для привязки, то реврешим всё
         if payment.case == 0:
             _inplat = Inplat()
-            links = await _inplat.refresh_links_by_client_id(payment.user_id)
+            await _inplat.refresh_links_by_client_id(payment.user_id)
     else:
         # ТУДУ: передавать сюда сериализованный пеймент
         logging.debug('ACHTUNG!!! api_inplat_redirect: %s %s') % (order_id, inplat_id)

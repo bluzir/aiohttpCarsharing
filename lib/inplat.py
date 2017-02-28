@@ -57,7 +57,7 @@ class Inplat():
                     inplat_link_id=link['link_id'],
                     masked_pan=link['alias']
                     )
-                card_link.upsert()
+                card_link.insert(upsert=True)
         elif result['code'] == 46:
             # ТУДУ: выпилить все привязки пользователя из БД
             pass
