@@ -18,6 +18,7 @@ class BaseClient:
         try:
             logging.debug(await resp.text())
             logging.debug(resp.headers)
+            logging.debug(resp.status)
             decoded = await resp.json()
             return decoded
         except Exception as e:
