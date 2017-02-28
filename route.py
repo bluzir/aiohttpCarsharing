@@ -38,6 +38,6 @@ def setup_routes(app):
 
     # INPLAT routes / api / inplat / redirect
     app.router.add_get(path='/api/inplat/redirect/', handler=api_inplat_redirect, name='api_inplat_redirect')
-    app.router.add_get(path='/api/inplat/callback/', handler=api_inplat_callback, name='api_inplat_callback')
+    app.router.add_post(path='/api/inplat/callback/', handler=api_inplat_callback, name='api_inplat_callback')
 
 

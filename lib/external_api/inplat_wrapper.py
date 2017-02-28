@@ -115,7 +115,9 @@ class InplatClient(BaseClient):
             'params': {
                 'account': str(account),
                 'sum': sum
-                }
+                },
+            # only for test
+            #'redirect_url': 'http://127.0.0.1:9999/api/inplat/redirect/'
         }
 
         return await self._post()
