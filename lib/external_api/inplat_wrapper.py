@@ -103,7 +103,6 @@ class InplatClient(BaseClient):
         self.data = {
             'method': 'init',
             'pay_type': 'card',
-            'client_id': self._md5(client_id),
             'case': 'link',
             #'recurrent': {
             #    'checked': 'true',
@@ -114,7 +113,8 @@ class InplatClient(BaseClient):
             },
             'params': {
                 'account': account, # fuck inplat
-                'sum': sum
+                'sum': sum,
+                'client_id': self._md5(client_id),
                 },
             # only for test
             #'redirect_url': 'http://127.0.0.1:9999/api/inplat/redirect/'
