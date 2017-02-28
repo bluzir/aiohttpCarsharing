@@ -1,7 +1,6 @@
 from peewee import *
 
 from model.base import *
-from model.invoice import Invoice
 from model.user import User
 
 class Payment(BaseModel):
