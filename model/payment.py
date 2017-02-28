@@ -18,5 +18,5 @@ class Payment(BaseModel):
     order_id = TextField(null=True, unique=True)
     sum = IntegerField()
     # 0 - links, 1 - checkout
-    case = IntegerField(default=0)
+    case = IntegerField()
     user = ForeignKeyField(User, related_name='payments')

@@ -1,5 +1,6 @@
 from .external_api.inplat_wrapper import InplatClient
 from model.payment import Payment
+from model.card_link import CardLink
 
 class Inplat():
 
@@ -16,7 +17,7 @@ class Inplat():
 
     async def link_card_by_cryptogramma(self, user_id, crypto):
         # пофиксить и передавать сюда юзера целиком, а не только айди
-        payment = Payment.create(user_id=user_id, sum=100)
+        payment = Payment.create(user_id=user_id, sum=100, case=0)
 
         result = await self.inplat_client.pay_and_link(client_id=user_id,
                                                        cryptogramma=crypto,
@@ -47,12 +48,19 @@ class Inplat():
     def _checkout(self):
         pass
 
-    async def get_links_by_client_id(self, user_id):
+    async def refresh_links_by_client_id(self, user_id):
         result = await self.inplat_client.links(user_id)
-        if result['code'] == 46:
-            # не делаем ничего: привязок нет
+        if result['code'] == 0:
+            links = result['links']
+            for link in links:
+                card_link = CardLink(
+                    inplat_link_id=link['link_id'],
+                    masked_pan=link['alias']
+                    )
+                card_link.upsert()
+        elif result['code'] == 46:
+            # ТУДУ: выпилить все привязки пользователя из БД
             pass
         else:
-            # бизнес логика
-            pass
+            raise Exception('wtf?!')
 

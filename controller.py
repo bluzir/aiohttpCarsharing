@@ -203,10 +203,9 @@ async def do_card_link(request):
     user_id = User.decode_auth_token(session['auth_token'])
 
     _inplat = Inplat()
-    # await _inplat.get_links_by_client_id(user_id)
+    #await _inplat.get_links_by_client_id(user_id)
     result = await _inplat.link_card_by_cryptogramma(user_id, crypto)
-    links = await _inplat.get_links_by_client_id(user_id)
-    print(links)
+
     if result['error_code'] == 0:
         return web.HTTPFound(result['url'])
     else:
@@ -228,6 +227,10 @@ async def api_inplat_redirect(request):
     if payment.status == payment.PAYMENT_STATUS['wait_for_redirect']:
         payment.order_id = order_id
         payment.status = payment.PAYMENT_STATUS['wait_for_callback']
+        # если пеймент был для привязки, то реврешим всё
+        if payment.case == 0:
+            _inplat = Inplat()
+            links = await _inplat.refresh_links_by_client_id(payment.user_id)
     else:
         # ТУДУ: передавать сюда сериализованный пеймент
         logging.debug('ACHTUNG!!! api_inplat_redirect: %s %s') % (order_id, inplat_id)

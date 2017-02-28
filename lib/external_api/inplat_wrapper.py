@@ -104,10 +104,7 @@ class InplatClient(BaseClient):
             'method': 'init',
             'pay_type': 'card',
             'case': 'link',
-            #'recurrent': {
-            #    'checked': 'true',
-            #    'editable': 'false'
-            #},
+
             'redirect_url': 'https://stage.2car.spb.ru/api/inplat/redirect/',
             'pay_params': {
                 'cryptogramma': cryptogramma
