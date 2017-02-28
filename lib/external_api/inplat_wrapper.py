@@ -77,7 +77,8 @@ class InplatClient(BaseClient):
 
     # Link a card
     def link(self, client_id, cryptogramma):
-        self.data = {
+        self.data = {            'client_id': str(client_id),
+
             'method': 'link',
             'pay_type': 'card',
             'client_id': client_id,
@@ -113,7 +114,7 @@ class InplatClient(BaseClient):
                 'cryptogramma': cryptogramma
             },
             'params': {
-                'account': str(account),
+                'account': hashlib.md5(account), # fuck inplat
                 'sum': sum
                 },
             # only for test
@@ -134,7 +135,7 @@ class InplatClient(BaseClient):
     def links(self, client_id):
         self.data = {
             'method': 'links',
-            'client_id': str(client_id),
+            'client_id': hashlib.md5(client_id), # fuck inplat [2]
         }
         return self._post()
 
