@@ -13,7 +13,7 @@ class Payment(BaseModel):
         'error': 4
     }
 
-    status = IntegerField(default=0)
+    status = IntegerField(default=0, choices=PAYMENT_STATUS)
     inplat_id = IntegerField()
     order_id = TextField()
     sum = IntegerField()

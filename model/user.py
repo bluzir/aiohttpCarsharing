@@ -11,7 +11,7 @@ from model.tariff import Tariff
 
 
 class User(BaseModel):
-    USER_STATUSES = {
+    USER_STATUS = {
         '0': 'Неподтвержденный',
         '1': 'Администратор',
     }
@@ -21,7 +21,7 @@ class User(BaseModel):
     email = TextField(unique=True)
     password = TextField()
     phone_number = TextField(unique=True)
-    status = IntegerField(default=0, choices=USER_STATUSES)
+    status = IntegerField(default=0, choices=USER_STATUS)
     tariff = ForeignKeyField(Tariff, null=True)
 
     def encode_auth_token(self):
