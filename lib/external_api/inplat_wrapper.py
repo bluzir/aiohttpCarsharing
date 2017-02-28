@@ -104,7 +104,11 @@ class InplatClient(BaseClient):
             'method': 'init',
             'pay_type': 'card',
             'client_id': str(client_id),
-            'case': 'link',
+            #'case': 'link',
+            'recurrent': {
+                'checked': 'true',
+                'editable': 'false'
+            },
             'pay_params': {
                 'cryptogramma': cryptogramma
             },
@@ -117,7 +121,7 @@ class InplatClient(BaseClient):
         return await self._post()
 
     # Unlink a card
-    def unlink(self, link_id, params):
+    def unlink(self, link_id):
         self.data = {
             'method': 'unlink',
             'link_id': link_id,
@@ -125,7 +129,7 @@ class InplatClient(BaseClient):
         return self._post()
 
     # List of linked cards by id
-    def links(self, client_id, params):
+    def links(self, client_id):
         self.data = {
             'method': 'links',
             'client_id': client_id,

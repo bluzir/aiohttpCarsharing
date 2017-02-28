@@ -199,6 +199,7 @@ async def do_card_link(request):
     user_id = User.decode_auth_token(session['auth_token'])
 
     _inplat = Inplat()
+    # await _inplat.get_links_by_client_id(user_id)
     result = await _inplat.link_card_by_cryptogramma(user_id, crypto)
     if result['error_code'] == 0:
         return web.HTTPFound(result['url'])
