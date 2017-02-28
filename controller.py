@@ -221,6 +221,7 @@ async def api_inplat_redirect(request):
     order_id = request.match_info['orderId']
     inplat_id = request.match_info['pid']
 
+    # блокировки!!!
     payment = Payment.get(inplat_id=inplat_id)
 
     if payment.status == payment.PAYMENT_STATUS['wait_for_redirect']:
@@ -232,8 +233,11 @@ async def api_inplat_redirect(request):
 
     payment.update()
 
+    url = request.app.router['card'].url()
+    return web.HTTPFound(url)
 
-    pass
+
+
 
 async def api_inplat_callback(request):
     # захардкожено что это привязка
