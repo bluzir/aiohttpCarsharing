@@ -37,7 +37,7 @@ def setup_routes(app):
     app.router.add_get(path='/api/ride/', handler=current_ride, name='api_current_ride')
 
     # INPLAT routes / api / inplat / redirect
-    app.router.add_get(path='/api/inplat/redirect/', handler=profile_detail, name='api_inplat_redirect')
-    app.router.add_get(path='/api/inplat/callback/', handler=profile_detail, name='api_inplat_callback')
+    app.router.add_get(path='/api/inplat/redirect/', handler=api_inplat_redirect, name='api_inplat_redirect')
+    app.router.add_get(path='/api/inplat/callback/', handler=api_inplat_callback, name='api_inplat_callback')
 
 

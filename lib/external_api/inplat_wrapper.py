@@ -88,7 +88,7 @@ class InplatClient(BaseClient):
         return self._post()
 
     # Link a card
-    async def pay_and_link(self, client_id, cryptogramma, account):
+    async def pay_and_link(self, client_id, cryptogramma, account, sum):
         '''
             "params": {
                 "account": "test",
@@ -114,7 +114,7 @@ class InplatClient(BaseClient):
             },
             'params': {
                 'account': str(account),
-                'sum': 100
+                'sum': sum
                 }
         }
 
@@ -132,7 +132,7 @@ class InplatClient(BaseClient):
     def links(self, client_id):
         self.data = {
             'method': 'links',
-            'client_id': client_id,
+            'client_id': str(client_id),
         }
         return self._post()
 

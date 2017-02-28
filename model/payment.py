@@ -1,7 +1,6 @@
 from peewee import *
 
 from model.base import *
-from model.invoice import Invoice
 from model.user import User
 
 class Payment(BaseModel):
@@ -14,8 +13,10 @@ class Payment(BaseModel):
     }
 
     status = IntegerField(default=0)
-    inplat_id = IntegerField()
-    order_id = TextField()
+    error_code = IntegerField(default=0)
+    inplat_id = IntegerField(null=True, unique=True)
+    order_id = TextField(null=True, unique=True)
     sum = IntegerField()
-    invoice = ForeignKeyField(Invoice, null=True)
+    # 0 - links, 1 - checkout
+    case = IntegerField(default=0)
     user = ForeignKeyField(User, related_name='payments')

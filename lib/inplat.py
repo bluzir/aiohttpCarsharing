@@ -15,14 +15,25 @@ class Inplat():
         self.inplat_client = InplatClient()
 
     async def link_card_by_cryptogramma(self, user_id, crypto):
-        payment = Payment.create()
+        # пофиксить и передавать сюда юзера целиком, а не только айди
+        payment = Payment.create(user_id=user_id, sum=100)
 
-        result = await self.inplat_client.pay_and_link(client_id=user_id, cryptogramma=crypto, account=payment.get_id())
+        result = await self.inplat_client.pay_and_link(client_id=user_id,
+                                                       cryptogramma=crypto,
+                                                       account=payment.get_id(),
+                                                       sum=payment.sum)
 
         if result['code'] == 0:
+            payment.inplat_id = result['id']
+            payment.error_code = 0
+            payment.status = payment.PAYMENT_STATUS['wait_for_redirect']
+            payment.update()
             return {'error_code': 0, 'url': result['url']}
 
         else:
+            payment.status = payment.PAYMENT_STATUS['error']
+            payment.error_code = result['code']
+            payment.update()
             return {'error_code': result['code'], 'message': result['message']}
 
     def _hold(self):

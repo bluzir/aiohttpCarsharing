@@ -10,7 +10,11 @@ from error import _error
 from model.car import Car
 from model.invoice import Invoice
 from model.user import User
+from model.payment import Payment
 from serializer import CarSerializer, UserSerializer, TariffSerializer, InvoiceSerializer, RideSerializer
+
+
+import logging
 
 from lib.inplat import Inplat
 
@@ -201,6 +205,8 @@ async def do_card_link(request):
     _inplat = Inplat()
     # await _inplat.get_links_by_client_id(user_id)
     result = await _inplat.link_card_by_cryptogramma(user_id, crypto)
+    links = await _inplat.get_links_by_client_id(user_id)
+    print(links)
     if result['error_code'] == 0:
         return web.HTTPFound(result['url'])
     else:
@@ -208,6 +214,31 @@ async def do_card_link(request):
 
     # 'inplat_payment_crypto_input'
     # return web.json_response(result)
+
+async def api_inplat_redirect(request):
+    # проверить валидность?
+    logging.debug(request.match_info)
+    order_id = request.match_info['orderId']
+    inplat_id = request.match_info['pid']
+
+    payment = Payment.get(inplat_id=inplat_id)
+
+    if payment.status == payment.PAYMENT_STATUS['wait_for_redirect']:
+        payment.order_id = order_id
+        payment.status = payment.PAYMENT_STATUS['wait_for_callback']
+    else:
+        # ТУДУ: передавать сюда сериализованный пеймент
+        logging.debug('ACHTUNG!!! api_inplat_redirect: %s %s') % (order_id, inplat_id)
+
+    payment.update()
+
+
+    pass
+
+async def api_inplat_callback(request):
+    # захардкожено что это привязка
+    logging.debug(request.match_info)
+
 
 
 
