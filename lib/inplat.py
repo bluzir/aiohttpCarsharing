@@ -34,5 +34,12 @@ class Inplat():
     def _checkout(self):
         pass
 
-    def _get_links_by_client_id(self):
-        pass
+    async def get_links_by_client_id(self, user_id):
+        result = await self.inplat_client.links(user_id)
+        if result['code'] == 46:
+            # не делаем ничего: привязок нет
+            pass
+        else:
+            # бизнес логика
+            pass
+

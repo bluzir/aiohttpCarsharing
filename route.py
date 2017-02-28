@@ -35,3 +35,9 @@ def setup_routes(app):
     app.router.add_get(path='/api/cars/list/', handler=cars_list, name='api_cars_list')
     app.router.add_get(path='/api/cars/list/{car_id}/', handler=cars_detail, name='api_cars_detail')
     app.router.add_get(path='/api/ride/', handler=current_ride, name='api_current_ride')
+
+    # INPLAT routes / api / inplat / redirect
+    app.router.add_get(path='/api/inplat/redirect/', handler=profile_detail, name='api_inplat_redirect')
+    app.router.add_get(path='/api/inplat/callback/', handler=profile_detail, name='api_inplat_callback')
+
+
