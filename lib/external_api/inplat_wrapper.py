@@ -114,7 +114,7 @@ class InplatClient(BaseClient):
                 'cryptogramma': cryptogramma
             },
             'params': {
-                'account': hashlib.md5(account), # fuck inplat
+                'account': self._md5(account), # fuck inplat
                 'sum': sum
                 },
             # only for test
@@ -135,7 +135,7 @@ class InplatClient(BaseClient):
     def links(self, client_id):
         self.data = {
             'method': 'links',
-            'client_id': hashlib.md5(client_id), # fuck inplat [2]
+            'client_id': self._md5(client_id), # fuck inplat [2]
         }
         return self._post()
 
@@ -152,4 +152,7 @@ class InplatClient(BaseClient):
             print(e)
             return False
 
+    @staticmethod
+    def _md5(s):
+        return hashlib.md5(s.encode('utf-8')).hexdigest()
 
