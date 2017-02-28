@@ -4,7 +4,7 @@ from model.base import *
 
 
 class Car(BaseModel):
-    CAR_STATUSES = {
+    CAR_STATUS = {
         '0': 'Недоступна',
         '1': 'Доступна',
         '2': 'Забронирована',
@@ -15,7 +15,7 @@ class Car(BaseModel):
     car_model = TextField()
     lat = FloatField(default=0)
     long = FloatField(default=0)
-    status = IntegerField(choices=CAR_STATUSES)
+    status = IntegerField(choices=CAR_STATUS)
 
     def get_fuel(self):
         # request to external API

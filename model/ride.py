@@ -1,6 +1,6 @@
 from peewee import *
 
-from model.base import *
+from model.base import database, BaseModel
 from model.car import Car
 from model.invoice import Invoice
 from model.problem import Problem
@@ -8,7 +8,7 @@ from model.user import User
 
 
 class Ride(BaseModel):
-    RIDE_STATUSES = {
+    RIDE_STATUS = {
         '0': 'Завершена',
         '1': 'Происходит',
     }
