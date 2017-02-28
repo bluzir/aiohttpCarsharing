@@ -17,6 +17,7 @@ class BaseClient:
     async def _decode(resp):
         try:
             decoded = await resp.json()
+            return decoded
         except Exception as e:
             print(resp.text())
 
