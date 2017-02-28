@@ -16,11 +16,12 @@ class BaseClient:
     @staticmethod
     async def _decode(resp):
         try:
+            logging.DEBUG(await resp.text())
+            logging.DEBUG(resp.headers)
             decoded = await resp.json()
             return decoded
         except Exception as e:
-            logging.DEBUG(resp.text())
-            logging.DEBUG(resp.headers)
+           pass
 
 
     async def get(self):
