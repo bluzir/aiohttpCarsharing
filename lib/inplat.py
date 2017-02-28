@@ -23,17 +23,19 @@ class Inplat():
                                                        account=payment.get_id(),
                                                        sum=payment.sum)
 
+        print (result)
+
         if result['code'] == 0:
             payment.inplat_id = result['id']
             payment.error_code = 0
             payment.status = payment.PAYMENT_STATUS['wait_for_redirect']
-            payment.update()
+            payment.save()
             return {'error_code': 0, 'url': result['url']}
 
         else:
             payment.status = payment.PAYMENT_STATUS['error']
             payment.error_code = result['code']
-            payment.update()
+            payment.save()
             return {'error_code': result['code'], 'message': result['message']}
 
     def _hold(self):

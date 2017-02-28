@@ -14,7 +14,7 @@ class Payment(BaseModel):
 
     status = IntegerField(default=0)
     error_code = IntegerField(default=0)
-    inplat_id = IntegerField(null=True, unique=True)
+    inplat_id = TextField(null=True, unique=True)
     order_id = TextField(null=True, unique=True)
     sum = IntegerField()
     # 0 - links, 1 - checkout

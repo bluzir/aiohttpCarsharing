@@ -217,11 +217,12 @@ async def do_card_link(request):
 
 async def api_inplat_redirect(request):
     # проверить валидность?
-    logging.debug(request.match_info)
-    order_id = request.match_info['orderId']
-    inplat_id = request.match_info['pid']
+    query = request.rel_url.query
+    logging.debug(query)
+    order_id = query['orderId']
+    inplat_id = query['pid']
 
-    # блокировки!!!
+    # блокировки!!! (или транзакции)
     payment = Payment.get(inplat_id=inplat_id)
 
     if payment.status == payment.PAYMENT_STATUS['wait_for_redirect']:
@@ -231,7 +232,7 @@ async def api_inplat_redirect(request):
         # ТУДУ: передавать сюда сериализованный пеймент
         logging.debug('ACHTUNG!!! api_inplat_redirect: %s %s') % (order_id, inplat_id)
 
-    payment.update()
+    payment.save()
 
     url = request.app.router['card'].url()
     return web.HTTPFound(url)
@@ -241,7 +242,9 @@ async def api_inplat_redirect(request):
 
 async def api_inplat_callback(request):
     # захардкожено что это привязка
-    logging.debug(request.match_info)
+    # использовать транзакции
+    query = request.rel_url.query
+    logging.debug(query)
 
 
 
