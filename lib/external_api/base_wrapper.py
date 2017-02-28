@@ -20,6 +20,7 @@ class BaseClient:
             return decoded
         except Exception as e:
             logging.DEBUG(resp.text())
+            logging.DEBUG(resp.headers)
 
 
     async def get(self):
