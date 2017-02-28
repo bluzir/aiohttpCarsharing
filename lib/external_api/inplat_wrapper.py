@@ -104,7 +104,7 @@ class InplatClient(BaseClient):
         self.data = {
             'method': 'init',
             'pay_type': 'card',
-            'client_id': str(client_id),
+            'client_id': self._md5(client_id),
             #'case': 'link',
             'recurrent': {
                 'checked': 'true',
@@ -114,7 +114,7 @@ class InplatClient(BaseClient):
                 'cryptogramma': cryptogramma
             },
             'params': {
-                'account': self._md5(account), # fuck inplat
+                'account': account, # fuck inplat
                 'sum': sum
                 },
             # only for test
