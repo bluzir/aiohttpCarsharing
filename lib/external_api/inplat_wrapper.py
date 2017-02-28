@@ -154,5 +154,5 @@ class InplatClient(BaseClient):
 
     @staticmethod
     def _md5(s):
-        return hashlib.md5(s.encode('utf-8')).hexdigest()
+        return hashlib.md5(str(s).encode('utf-8')).hexdigest()
 
