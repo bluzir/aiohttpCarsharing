@@ -77,11 +77,10 @@ class InplatClient(BaseClient):
 
     # Link a card
     def link(self, client_id, cryptogramma):
-        self.data = {            'client_id': str(client_id),
-
+        self.data = {
             'method': 'link',
             'pay_type': 'card',
-            'client_id': client_id,
+            'client_id': self._md5(client_id),
             'pay_params': {
                 'cryptogramma': cryptogramma
             },
@@ -105,11 +104,11 @@ class InplatClient(BaseClient):
             'method': 'init',
             'pay_type': 'card',
             'client_id': self._md5(client_id),
-            #'case': 'link',
-            'recurrent': {
-                'checked': 'true',
-                'editable': 'false'
-            },
+            'case': 'link',
+            #'recurrent': {
+            #    'checked': 'true',
+            #    'editable': 'false'
+            #},
             'pay_params': {
                 'cryptogramma': cryptogramma
             },
