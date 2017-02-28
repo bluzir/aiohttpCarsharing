@@ -108,6 +108,7 @@ class InplatClient(BaseClient):
             #    'checked': 'true',
             #    'editable': 'false'
             #},
+            'redirect_url': 'https://stage.2car.spb.ru/api/inplat/redirect/',
             'pay_params': {
                 'cryptogramma': cryptogramma
             },
