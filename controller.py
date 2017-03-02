@@ -9,6 +9,7 @@ from decorator import session_decorator, token_required, check_token
 from error import _error
 from model.car import Car
 from model.invoice import Invoice
+from model.ride import Ride
 from model.user import User
 from model.payment import Payment
 from serializer import CarSerializer, UserSerializer, TariffSerializer, InvoiceSerializer, RideSerializer
@@ -127,8 +128,9 @@ def payments_list(request, user):
 
 @check_token()
 def current_ride(request, user):
-    ride = user.get_current_ride()
-    if ride:
+    current_rides = user.rides.where(Ride.status == 1)
+    if current_rides.__len__() == 1:
+        ride = current_rides.get()
         rides_json = RideSerializer(ride).get_serialized_json()
         return web.json_response(rides_json)
     else:
