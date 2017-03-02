@@ -4,14 +4,20 @@ import logging
 import aiohttp
 import requests
 
+from model.external_request import ExternalRequest
+
 
 class BaseClient:
 
     def __init__(self):
+        self.external_system = 0
         self.data = {}
         self.params = {}
         self.cookies = None
         self.url = None
+        self.response = None
+        self.decoded = None
+        self.text = None
 
     @staticmethod
     async def _decode(resp):
@@ -24,12 +30,10 @@ class BaseClient:
         except Exception as e:
            pass
 
-
     async def get(self):
         async with aiohttp.ClientSession(cookies=self.cookies) as session:
             async with session.get(self.url, params=self.params) as resp:
                 decoded = await self._decode(resp)
-
 
         logging.debug(self.params)
         logging.debug(decoded)
@@ -39,13 +43,21 @@ class BaseClient:
         async with aiohttp.ClientSession(cookies=self.cookies) as session:
             async with session.post(self.url, data=json.dumps(self.data).encode("utf-8"),
                                     params=self.params) as resp:
-                decoded = await self._decode(resp)
+                self.response = resp
+                self.text = await resp.text()
+                self.decoded = await self._decode(resp)
 
         logging.debug(self.params)
         logging.debug(self.data)
-        logging.debug(decoded)
-        return decoded
+        logging.debug(self.decoded)
 
-    @staticmethod
-    def log_to_database():
-        pass
+        log = self.log_to_database()
+
+        return self.decoded
+
+    def log_to_database(self):
+        ExternalRequest.create(request_url=self.url, external_system=self.external_system,
+                               response_headers=self.response.raw_headers, response_body=self.text)
+
+
+

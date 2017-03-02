@@ -1,3 +1,4 @@
+from model.external_request import ExternalRequest
 from model.payment import Payment
 from model.tariff import Tariff
 from model.car import Car
@@ -28,20 +29,25 @@ def main():
 
     User.create_table()
 
-    if Invoice.table_exists():
-        Invoice.drop_table(cascade=True)
-
-    Invoice.create_table()
-
     if Payment.table_exists():
         Payment.drop_table(cascade=True)
 
     Payment.create_table()
 
+    if Invoice.table_exists():
+        Invoice.drop_table(cascade=True)
+
+    Invoice.create_table()
+
     if Ride.table_exists():
         Ride.drop_table(cascade=True)
 
     Ride.create_table()
+
+    if ExternalRequest.table_exists():
+        ExternalRequest.drop_table(cascade=True)
+
+    ExternalRequest.create_table()
 
 
 if __name__ == '__main__':

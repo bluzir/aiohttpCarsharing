@@ -1,4 +1,4 @@
-from peewee import PostgresqlDatabase, Model
+from peewee import Model
 from peewee_asyncext import PostgresqlExtDatabase
 
 import base_settings as config
