@@ -87,18 +87,7 @@ class InplatClient(BaseClient):
         }
         return self._post()
 
-    # Link a card
-    async def pay_and_link(self, client_id, cryptogramma, account, sum):
-        '''
-            "params": {
-                "account": "test",
-                "sum": 1023,
-                "email": "pay@example.com",
-                "details": "Some data",
-                "address": " Some data"
-            },
-            "merc_data": "Random information"
-        '''
+    async def pay_and_link(self, client_id, cryptogramma, account):
 
         self.data = {
             'method': 'init',

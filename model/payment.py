@@ -3,6 +3,7 @@ from peewee import *
 from model.base import *
 from model.user import User
 
+
 class Payment(BaseModel):
     PAYMENT_STATUS = {
         'created': 0,
