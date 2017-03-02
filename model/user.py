@@ -11,10 +11,10 @@ from model.tariff import Tariff
 
 
 class User(BaseModel):
-    USER_STATUS = {
-        '0': 'Неподтвержденный',
-        '1': 'Администратор',
-    }
+    USER_STATUS = (
+        (0, 'Неподтвержденный'),
+        (1, 'Администратор'),
+    )
 
     first_name = TextField(null=True)
     last_name = TextField(null=True)

@@ -4,12 +4,12 @@ from model.base import *
 
 
 class Car(BaseModel):
-    CAR_STATUS = {
-        '0': 'Недоступна',
-        '1': 'Доступна',
-        '2': 'Забронирована',
-        '3': 'В поездке'
-    }
+    CAR_STATUS = (
+        (0, 'Недоступна'),
+        (1, 'Доступна'),
+        (2, 'Забронирована'),
+        (3, 'В поездке')
+    )
 
     wialon_id = IntegerField(unique=True, null=True)
     car_model = TextField()

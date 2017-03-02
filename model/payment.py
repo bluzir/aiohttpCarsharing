@@ -5,13 +5,13 @@ from model.user import User
 
 
 class Payment(BaseModel):
-    PAYMENT_STATUS = {
-        'created': 0,
-        'wait_for_redirect': 1,
-        'wait_for_callback': 2,
-        'success': 3,
-        'error': 4
-    }
+    PAYMENT_STATUS = (
+        (0, 'created'),
+        (1, 'wait_for_redirect'),
+        (2, 'wait_for_callback'),
+        (3, 'success'),
+        (4, 'error')
+    )
 
     status = IntegerField(default=0)
     error_code = IntegerField(default=0)
