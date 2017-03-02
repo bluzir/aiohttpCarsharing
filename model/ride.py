@@ -19,4 +19,4 @@ class Ride(BaseModel):
     end_date = DateTimeField(null=True)
     invoice = ForeignKeyField(Invoice, null=True)
     problem = ForeignKeyField(Problem, null=True)
-    status = IntegerField(default=0)
+    status = IntegerField(default=0, choices=RIDE_STATUS)

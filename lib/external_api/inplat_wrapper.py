@@ -23,6 +23,7 @@ class InplatClient(BaseClient):
         super(InplatClient, self).__init__()
         self.sign = None
         self.url = self.DEFAULT_HOST
+        self.external_system = 1
 
         self.params = {
             'api_key': self.API_KEY,
@@ -87,7 +88,7 @@ class InplatClient(BaseClient):
         }
         return self._post()
 
-    async def pay_and_link(self, client_id, cryptogramma, account):
+    async def pay_and_link(self, client_id, cryptogramma, account, summ):
 
         self.data = {
             'method': 'init',
@@ -100,7 +101,7 @@ class InplatClient(BaseClient):
             },
             'params': {
                 'account': account, # fuck inplat
-                'sum': sum,
+                'sum': summ,
                 'client_id': self._md5(client_id),
                 },
             # only for test
