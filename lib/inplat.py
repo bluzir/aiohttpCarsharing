@@ -22,7 +22,7 @@ class Inplat():
         result = await self.inplat_client.pay_and_link(client_id=user_id,
                                                        cryptogramma=crypto,
                                                        account=payment.get_id(),
-                                                       sum=payment.sum)
+                                                       summ=payment.sum)
 
         print (result)
 
@@ -48,19 +48,16 @@ class Inplat():
     def _checkout(self):
         pass
 
-    async def refresh_links_by_client_id(self, user_id):
-        result = await self.inplat_client.links(user_id)
+    async def refresh_links_by_client_id(self, User):
+        result = await self.inplat_client.links(User.id)
         if result['code'] == 0:
             links = result['links']
-            for link in links:
-                card_link = CardLink(
-                    inplat_link_id=link['link_id'],
-                    masked_pan=link['alias']
-                    )
-                card_link.insert(upsert=True)
+            diff = set(links) - set(User.links)
+            User.links = User.links.extend(diff)
+            User.save()
         elif result['code'] == 46:
-            # ТУДУ: выпилить все привязки пользователя из БД
-            pass
+            User.links = []
+            User.save()
         else:
             raise Exception('wtf?!')
 

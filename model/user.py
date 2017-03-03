@@ -3,7 +3,8 @@ import datetime
 import jwt
 from aiohttp import web
 from aiohttp_session import get_session
-from peewee import *
+from playhouse.postgres_ext import *
+
 
 from error import _error
 from model.base import *
@@ -23,6 +24,7 @@ class User(BaseModel):
     phone_number = TextField(unique=True)
     status = IntegerField(default=0, choices=USER_STATUS)
     tariff = ForeignKeyField(Tariff, null=True)
+    links = JSONField(null=True)
 
     def encode_auth_token(self):
         """
