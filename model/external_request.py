@@ -1,17 +1,19 @@
 import datetime
+from enum import Enum
+
 from peewee import *
 
 from model.base import BaseModel
 
 
-class ExternalRequest(BaseModel):
-    EXTERNAL_SYSTEM = (
-        (0, 'Undefined'),
-        (1, 'Inplat'),
-        (2, 'Starline'),
-    )
+class ExternalSystemName(Enum):
+    UNDEFINED = 1
+    INPLAT = 2
+    STARLINE = 3
 
-    external_system = IntegerField(choices=EXTERNAL_SYSTEM)
+
+class ExternalRequest(BaseModel):
+    external_system = IntegerField(choices=ExternalSystemName)
     request_url = TextField()
     request_params = TextField(null=True)
     request_headers = TextField(null=True)
