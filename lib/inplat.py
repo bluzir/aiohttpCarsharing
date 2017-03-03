@@ -1,6 +1,6 @@
 from .external_api.inplat_wrapper import InplatClient
 from model.payment import Payment
-from model.card_link import CardLink
+
 
 class Inplat():
 
@@ -24,7 +24,7 @@ class Inplat():
                                                        account=payment.get_id(),
                                                        summ=payment.sum)
 
-        print (result)
+        print(result)
 
         if result['code'] == 0:
             payment.inplat_id = result['id']
@@ -42,8 +42,36 @@ class Inplat():
     def _hold(self):
         pass
 
-    def _pay(self):
-        pass
+    async def pay_by_linked_card(self, User, summ):
+
+        user_id = User.get_id()
+        link_id = User.links[0]['link_id']
+
+        payment = Payment.create(user_id=user_id, sum=summ, case=1)
+
+        result = await self.inplat_client.pay_by_link(
+            client_id=user_id,
+            link_id=link_id,
+            account=payment.get_id(),
+            summ=payment.sum
+        )
+
+        print(result)
+
+        if result['code'] == 0:
+            payment.inplat_id = result['id']
+            payment.error_code = 0
+            payment.status = payment.PAYMENT_STATUS['paid']
+            payment.paid_at = result['pstamp']
+            payment.save()
+            return 0
+
+        else:
+            payment.status = payment.PAYMENT_STATUS['error']
+            payment.error_code = result['code']
+            payment.save()
+            return -1
+
 
     def _checkout(self):
         pass

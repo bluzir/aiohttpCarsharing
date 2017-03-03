@@ -67,6 +67,20 @@ class InplatClient(BaseClient):
         }
         return self._post()
 
+    async def pay_by_link(self, client_id, link_id, summ, account):
+        self.data = {
+            'method': 'pay',
+            'client_id': self._md5(client_id),
+            'link_id': link_id,
+            'params': {
+                'account': account, # fuck inplat
+                'sum': summ,
+                'client_id': self._md5(client_id),
+                },
+            'merc_data': 'Random information',
+        }
+        return await self._post()
+
     # Refund payment
     def refund(self, payment_id, amount, params):
         self.data = {
