@@ -5,7 +5,9 @@ import base_settings as config
 
 # database = PostgresqlDatabase(config.DB_NAME, user=config.DB_USER, password=config.DB_PASSWORD, host=config.DB_HOST)
 database = PostgresqlExtDatabase(config.DB_NAME, user=config.DB_USER,
-                                 password=config.DB_PASSWORD, host=config.DB_HOST, register_hstore=False)
+                                 password=config.DB_PASSWORD, host=config.DB_HOST, register_hstore=False,
+                                 autocommit=True, autorollback=True
+                                 )
 
 
 class BaseModel(Model):
