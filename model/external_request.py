@@ -20,5 +20,5 @@ class ExternalRequest(BaseModel):
     request_data = TextField(null=True)
     response_headers = TextField(null=True)
     response_body = TextField(null=True)
-    created_at = FloatField(default=datetime.datetime.now().timestamp())
+    created_at = DateTimeField(default=datetime.datetime.now)
 

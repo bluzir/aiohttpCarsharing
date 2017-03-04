@@ -1,3 +1,4 @@
+import datetime
 from peewee import *
 
 from model.base import *
@@ -11,6 +12,7 @@ class Invoice(BaseModel):
     summ = IntegerField()
     payment = ForeignKeyField(Payment, null=True)
     user = ForeignKeyField(User, related_name='invoices')
+    created_at = DateTimeField(default=datetime.datetime.now)
 
     def handle_form(self, crypto):
         return {}

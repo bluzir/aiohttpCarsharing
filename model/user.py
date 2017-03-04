@@ -27,6 +27,7 @@ class User(BaseModel):
     status = IntegerField(default=0, choices=UserStatus)
     tariff = ForeignKeyField(Tariff, null=True)
     links = JSONField(null=True)
+    created_at = DateTimeField(default=datetime.datetime.now)
 
     def encode_auth_token(self):
         """

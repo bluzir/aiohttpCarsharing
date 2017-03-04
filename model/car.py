@@ -1,5 +1,6 @@
 from enum import Enum
 
+import datetime
 from peewee import *
 
 from model.base import *
@@ -18,6 +19,7 @@ class Car(BaseModel):
     lat = FloatField(default=0)
     long = FloatField(default=0)
     status = IntegerField(choices=CarStatus)
+    created_at = DateTimeField(default=datetime.datetime.now)
 
     def get_fuel(self):
         # request to external API

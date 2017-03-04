@@ -1,5 +1,6 @@
 from enum import Enum
 
+import datetime
 from peewee import *
 
 from model.base import database, BaseModel
@@ -22,3 +23,4 @@ class Ride(BaseModel):
     invoice = ForeignKeyField(Invoice, null=True)
     problem = ForeignKeyField(Problem, null=True)
     status = IntegerField(default=0, choices=RideStatus)
+    created_at = DateTimeField(default=datetime.datetime.now)
