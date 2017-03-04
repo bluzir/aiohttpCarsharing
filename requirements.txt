@@ -5,10 +5,14 @@ aiopg==0.13.0
 async-timeout==1.1.0
 cffi==1.9.1
 chardet==2.3.0
+coverage==4.3.4
 cryptography==1.7.2
+gunicorn==19.6.0
 idna==2.2
 Jinja2==2.9.4
+LightMagic==0.1.29
 MarkupSafe==0.23
+motor==1.1
 multidict==2.1.4
 peewee==2.8.5
 peewee-async==0.5.6
@@ -17,10 +21,9 @@ pyasn1==0.1.9
 pyconvert==0.6.3
 pycrypto==2.6.1
 PyJWT==1.4.2
+pyrestful==0.4.2
 python-dateutil==2.6.0
 redis==2.10.5
 requests==2.12.5
 six==1.10.0
 yarl==0.8.1
-gunicorn
-aiohttp_session
