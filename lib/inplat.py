@@ -3,6 +3,8 @@ from model.payment import Payment
 from model.payment import PaymentStatus
 
 
+import logging
+
 class Inplat():
 
     def __init__(self):
@@ -74,7 +76,7 @@ class Inplat():
         result = await self.inplat_client.links(User.id)
         if result['code'] == 0:
             links = result['links']
-            print(links, User.links)
+            logging.debug(links, User.links)
             diff = set(links) - set(User.links)
             User.links = User.links.extend(diff)
             User.save()
