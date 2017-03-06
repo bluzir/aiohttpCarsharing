@@ -78,7 +78,10 @@ class Inplat():
             links = result['links']
             logging.debug(links)
             logging.debug(user.links)
-            diff = set(links) - set(user.links)
+            if user.links is not None:
+                diff = set(links) - set(user.links)
+            else:
+                diff = links
             user.links = user.links.extend(diff)
             user.save()
         elif result['code'] == 46:
