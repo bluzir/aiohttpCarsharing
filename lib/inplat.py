@@ -74,6 +74,7 @@ class Inplat():
         result = await self.inplat_client.links(User.id)
         if result['code'] == 0:
             links = result['links']
+            print(links, User.links)
             diff = set(links) - set(User.links)
             User.links = User.links.extend(diff)
             User.save()
