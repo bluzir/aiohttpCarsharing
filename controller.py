@@ -252,6 +252,7 @@ async def api_inplat_redirect(request):
 
 
 async def api_inplat_callback(request):
+    logging.debug(api_inplat_callback.__name__)
     # захардкожено что это привязка
     # использовать транзакции
     query = request.rel_url.query
