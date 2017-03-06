@@ -273,8 +273,11 @@ async def api_inplat_callback(request):
         if data['status'] == 'reversed':
             payment.status = PaymentStatus.REVERSED
             payment.save()
+        elif data['status'] == 'auth':
+            payment.status = PaymentStatus.PAID
+            payment.save()
         else:
-            raise Exception('wtf?!')
+            raise Exception('wtf?! ' + data['status'] )
 
     else:
         raise Exception('wtf?!')
