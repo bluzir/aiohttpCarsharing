@@ -225,7 +225,7 @@ async def api_inplat_redirect(request):
 
     # блокировки!!! (или транзакции)
     payment = Payment.get(inplat_id=inplat_id)
-    user = User.get(id=payment.get_id())
+    user = payment.user.get()
 
     if payment.status == payment.PAYMENT_STATUS['wait_for_redirect']:
         payment.order_id = order_id
