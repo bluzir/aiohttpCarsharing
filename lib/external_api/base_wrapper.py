@@ -59,7 +59,7 @@ class BaseClient:
         return self.decoded
 
     def log_to_database(self):
-        Request.create(request_direction=RequestDirection.OUTCOMING.value, request_type=RequestType.POST.value,
+        Request.create(request_direction=RequestType.OUTCOMING.value, request_type=RequestMethod.POST.value,
                        request_url=self.url, external_system=self.external_system.value, request_params=self.params,
                        request_data=self.data, response_headers=json.dumps(dict(self.response.headers)),
                        response_body=self.text)

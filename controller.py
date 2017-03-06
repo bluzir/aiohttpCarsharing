@@ -5,7 +5,7 @@ from aiohttp import web
 from aiohttp_session import get_session
 
 import setting as config
-from decorator import session_decorator, token_required, check_token
+from decorator import session_decorator, token_required, check_token, log_request
 from error import _error
 from model.car import Car
 from model.invoice import Invoice
@@ -108,6 +108,7 @@ async def cars_detail(request):
 
 # GET '/api/profile/' :
 @check_token()
+@log_request()
 def profile_detail(request, user):
     user_json = UserSerializer(user).get_serialized_json()
     return web.json_response(user_json)
@@ -115,6 +116,7 @@ def profile_detail(request, user):
 
 # GET '/api/tariff/' :
 @check_token()
+@log_request()
 def tariff_detail(request, user):
     tariff_json = TariffSerializer(user.tariff).get_serialized_json()
     return web.json_response(tariff_json)
@@ -122,12 +124,14 @@ def tariff_detail(request, user):
 
 # GET '/api/payments/' :
 @check_token()
+@log_request()
 def payments_list(request, user):
     invoices_json = InvoiceSerializer(user.invoices).get_serialized_json()
     return web.json_response(invoices_json)
 
 
 @check_token()
+@log_request()
 def current_ride(request, user):
     current_rides = user.rides.where(Ride.status == 1)
     if current_rides.__len__() == 1:

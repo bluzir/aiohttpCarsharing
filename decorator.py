@@ -1,11 +1,13 @@
 import asyncio
 
 import functools
+import json
 
 from aiohttp import web
 from aiohttp_session import get_session
 
 from error import _error
+from model.request import RequestType, RequestMethod, Request
 
 from model.user import User
 
@@ -59,5 +61,30 @@ def check_token():
                     return _error.error_response(_error, _error.INVALID_TOKEN)
 
             return _error.error_response(_error, _error.TOKEN_REQUIRED)
+        return wrapped
+    return wrapper
+
+
+def log_request():
+    def wrapper(func):
+        @asyncio.coroutine
+        @functools.wraps(func)
+        def wrapped(request, *args, **kwargs):
+            params = json.dumps(dict(request.GET))
+            headers = json.dumps(dict(request.headers))
+            if request.method == 'GET':
+                method = RequestMethod.GET.value
+                data = {}
+            elif request.method == 'POST':
+                method = RequestMethod.POST.value
+                data = json.dumps(dict(request.POST))
+            else:
+                method = RequestMethod.OTHER.value
+                data = {}
+
+            Request.create(request_type=RequestType.INCOMING.value, request_method=method,
+                           request_url=request.url, request_params=params,
+                           request_data=data, request_headers=headers)
+            return func(request, *args, **kwargs)
         return wrapped
     return wrapper
