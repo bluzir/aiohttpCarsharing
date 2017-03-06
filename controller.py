@@ -259,8 +259,8 @@ async def api_inplat_callback(request):
     query = request.rel_url.query
     logging.debug(query)
 
-    await request.post()
-    logging.debug(request.POST)
+    data = await request.multipart()
+    logging.debug(data)
 
     return Response()
 
