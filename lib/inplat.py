@@ -72,17 +72,18 @@ class Inplat():
     def _checkout(self):
         pass
 
-    async def refresh_links_by_client_id(self, User):
-        result = await self.inplat_client.links(User.id)
+    async def refresh_links_by_client_id(self, user):
+        result = await self.inplat_client.links(user.id)
         if result['code'] == 0:
             links = result['links']
-            logging.debug(links, User.links)
-            diff = set(links) - set(User.links)
-            User.links = User.links.extend(diff)
-            User.save()
+            logging.debug(links)
+            logging.debug(user.links)
+            diff = set(links) - set(user.links)
+            user.links = user.links.extend(diff)
+            user.save()
         elif result['code'] == 46:
-            User.links = []
-            User.save()
+            user.links = []
+            user.save()
         else:
             raise Exception('wtf?!')
 
