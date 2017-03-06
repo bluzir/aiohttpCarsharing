@@ -5,6 +5,8 @@ from aiohttp import web
 from aiohttp_session import get_session
 from aiohttp_swagger import swagger_path
 
+from aiohttp.web import Response
+
 import setting as config
 from decorator import session_decorator, token_required, check_token, log_request
 from error import _error
@@ -260,7 +262,7 @@ async def api_inplat_callback(request):
     await request.post()
     logging.debug(request.POST)
 
-    return {}
+    return Response()
 
 
 
