@@ -13,8 +13,13 @@ class Inplat():
     4) pay
     '''
 
+
+
+
     def __init__(self):
         self.inplat_client = InplatClient()
+        self.ps = PaymentStatus()
+
 
     async def link_card_by_cryptogramma(self, user_id, crypto):
         # пофиксить и передавать сюда юзера целиком, а не только айди
@@ -30,12 +35,12 @@ class Inplat():
         if result['code'] == 0:
             payment.inplat_id = result['id']
             payment.error_code = 0
-            payment.status = PaymentStatus.WAIT_FOR_REDIRECT
+            payment.status = self.ps.WAIT_FOR_REDIRECT
             payment.save()
             return {'error_code': 0, 'url': result['url']}
 
         else:
-            payment.status = PaymentStatus.ERROR
+            payment.status = ps.ERROR
             payment.error_code = result['code']
             payment.save()
             return {'error_code': result['code'], 'message': result['message']}
@@ -62,13 +67,13 @@ class Inplat():
         if result['code'] == 0:
             payment.inplat_id = result['id']
             payment.error_code = 0
-            payment.status = PaymentStatus.PAID
+            payment.status = self.ps.PAID
             payment.paid_at = result['pstamp']
             payment.save()
             return 0
 
         else:
-            payment.status = PaymentStatus.ERROR
+            payment.status = self.ps.ERROR
             payment.error_code = result['code']
             payment.save()
             return -1
