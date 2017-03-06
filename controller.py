@@ -4,7 +4,7 @@ import aiohttp_jinja2 as aiohttp_jinja2
 from aiohttp import web
 from aiohttp_session import get_session
 
-import base_settings as config
+import setting as config
 from decorator import session_decorator, token_required, check_token
 from error import _error
 from model.car import Car
@@ -241,8 +241,6 @@ async def api_inplat_redirect(request):
 
     url = request.app.router['card'].url()
     return web.HTTPFound(url)
-
-
 
 
 async def api_inplat_callback(request):

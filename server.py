@@ -6,7 +6,7 @@ from aiohttp import web
 from aiohttp_session import setup, get_session, session_middleware
 from aiohttp_session.cookie_storage import EncryptedCookieStorage
 
-import base_settings as config
+import setting as config
 from route import setup_routes
 
 import logging

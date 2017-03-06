@@ -1,23 +1,22 @@
+from enum import Enum
+
+import datetime
 from peewee import *
 
 from model.base import *
 from model.user import User
 
 
-import datetime
+class PaymentStatus(Enum):
+    CREATED = 1
+    WAIT_FOR_REDIRECT = 2
+    WAIT_FOR_CALLBACK = 3
+    SUCCESS = 4
+    ERROR = 5
 
 
 class Payment(BaseModel):
-    PAYMENT_STATUS = {
-        'created': 0,
-        'wait_for_redirect': 1,
-        'wait_for_callback': 2,
-        'blocked': 3,
-        'paid': 4,
-        'error': 5
-    }
-
-    status = IntegerField(default=0)
+    status = IntegerField(default=0, choices=PaymentStatus)
     error_code = IntegerField(default=0)
     inplat_id = TextField(null=True, unique=True)
     order_id = TextField(null=True, unique=True)

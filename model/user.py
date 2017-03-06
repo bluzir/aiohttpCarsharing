@@ -1,4 +1,5 @@
 import datetime
+from enum import Enum
 
 import jwt
 from aiohttp import web
@@ -11,20 +12,22 @@ from model.base import *
 from model.tariff import Tariff
 
 
-class User(BaseModel):
-    USER_STATUS = (
-        (0, 'Неподтвержденный'),
-        (1, 'Администратор'),
-    )
+class UserStatus(Enum):
+    UNCONFIRMED = 1
+    CONFIRMED = 2
+    ADMINISTRATOR = 3
 
+
+class User(BaseModel):
     first_name = TextField(null=True)
     last_name = TextField(null=True)
     email = TextField(unique=True)
     password = TextField()
     phone_number = TextField(unique=True)
-    status = IntegerField(default=0, choices=USER_STATUS)
+    status = IntegerField(default=0, choices=UserStatus)
     tariff = ForeignKeyField(Tariff, null=True)
     links = JSONField(null=True)
+    created_at = DateTimeField(default=datetime.datetime.now)
 
     def encode_auth_token(self):
         """

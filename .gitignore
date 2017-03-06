@@ -137,4 +137,4 @@ fabric.properties
 
 config/
 log/
-base_settings.py
+setting.py
