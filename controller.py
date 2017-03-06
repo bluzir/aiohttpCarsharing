@@ -201,6 +201,7 @@ async def card_link_view(request):
 
 # POST '/card/link/':
 # TODO: пофиксить
+@log_request()
 async def do_card_link(request):
     data = await request.post()
     if not 'inplat_payment_crypto_input' in data:
@@ -223,6 +224,7 @@ async def do_card_link(request):
     # 'inplat_payment_crypto_input'
     # return web.json_response(result)
 
+@log_request()
 async def api_inplat_redirect(request):
     # проверить валидность?
     query = request.rel_url.query
@@ -250,7 +252,7 @@ async def api_inplat_redirect(request):
     url = request.app.router['card'].url()
     return web.HTTPFound(url)
 
-
+@log_request()
 async def api_inplat_callback(request):
     logging.debug(api_inplat_callback.__name__)
     # захардкожено что это привязка
