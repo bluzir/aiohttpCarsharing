@@ -224,7 +224,8 @@ async def api_inplat_redirect(request):
     inplat_id = query['pid']
 
     # блокировки!!! (или транзакции)
-    payment = Payment.select().join(User).where(Payment.inplat_id == inplat_id)
+    payment = Payment.get(inplat_id=inplat_id)
+    user = User.get(id=payment.get_id())
 
     if payment.status == payment.PAYMENT_STATUS['wait_for_redirect']:
         payment.order_id = order_id
@@ -232,7 +233,7 @@ async def api_inplat_redirect(request):
         # если пеймент был для привязки, то реврешим всё
         if payment.case == 0:
             _inplat = Inplat()
-            await _inplat.refresh_links_by_client_id(payment.user)
+            await _inplat.refresh_links_by_client_id(user)
     else:
         # ТУДУ: передавать сюда сериализованный пеймент
         logging.debug('ACHTUNG!!! api_inplat_redirect: %s %s') % (order_id, inplat_id)
