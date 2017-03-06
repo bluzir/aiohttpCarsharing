@@ -5,16 +5,6 @@ from model.payment import PaymentStatus
 
 class Inplat():
 
-    '''
-    Основные бизнес-процессы:
-    1) привязка с оплатой 1 рубля, статус - reserved
-    2) checkout
-    3) hold
-    4) pay
-    '''
-
-
-
     def __init__(self):
         self.inplat_client = InplatClient()
 
@@ -65,13 +55,13 @@ class Inplat():
         if result['code'] == 0:
             payment.inplat_id = result['id']
             payment.error_code = 0
-            payment.status = self.PaymentStatus.PAID
+            payment.status = PaymentStatus.PAID
             payment.paid_at = result['pstamp']
             payment.save()
             return 0
 
         else:
-            payment.status = self.PaymentStatus.ERROR
+            payment.status = PaymentStatus.ERROR
             payment.error_code = result['code']
             payment.save()
             return -1

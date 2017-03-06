@@ -224,7 +224,7 @@ async def api_inplat_redirect(request):
     inplat_id = query['pid']
 
     # блокировки!!! (или транзакции)
-    payment = Payment.get(inplat_id=inplat_id).join(User)
+    payment = Payment.select().join(User).where(Payment.inplat_id == inplat_id)
 
     if payment.status == payment.PAYMENT_STATUS['wait_for_redirect']:
         payment.order_id = order_id
