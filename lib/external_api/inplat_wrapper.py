@@ -108,7 +108,7 @@ class InplatClient(BaseClient):
             'method': 'init',
             'pay_type': 'card',
             'case': 'link',
-
+            'client_id': self._md5(client_id),
             'redirect_url': 'https://stage.2car.spb.ru/api/inplat/redirect/',
             'pay_params': {
                 'cryptogramma': cryptogramma
@@ -116,7 +116,6 @@ class InplatClient(BaseClient):
             'params': {
                 'account': account, # fuck inplat
                 'sum': summ,
-                'client_id': self._md5(client_id),
                 },
             # only for test
             #'redirect_url': 'http://127.0.0.1:9999/api/inplat/redirect/'
