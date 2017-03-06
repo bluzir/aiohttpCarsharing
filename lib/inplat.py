@@ -1,7 +1,6 @@
 from .external_api.inplat_wrapper import InplatClient
 from model.payment import Payment
 from model.payment import PaymentStatus
-from enum import Enum
 
 
 class Inplat():
@@ -13,9 +12,6 @@ class Inplat():
     3) hold
     4) pay
     '''
-
-    PaymentStatus = PaymentStatus(Enum)
-
 
 
 
