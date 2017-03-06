@@ -83,7 +83,7 @@ class Inplat():
             logging.debug(links)
             logging.debug(user.links)
             if user.links is not None:
-                diff = set(links) - set(user.links)
+                diff = set(_tmp) - set(user.links)
                 user.links = user.links.extend(diff)
             else:
                 user.links = links
