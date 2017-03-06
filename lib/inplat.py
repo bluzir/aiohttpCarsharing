@@ -76,6 +76,10 @@ class Inplat():
         result = await self.inplat_client.links(user.id)
         if result['code'] == 0:
             links = result['links']
+            _tmp = []
+            for link in links:
+                _tmp.append([link['alias'], link['link_id']])
+
             logging.debug(links)
             logging.debug(user.links)
             if user.links is not None:
