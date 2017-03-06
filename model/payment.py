@@ -11,8 +11,11 @@ class PaymentStatus(Enum):
     CREATED = 1
     WAIT_FOR_REDIRECT = 2
     WAIT_FOR_CALLBACK = 3
-    SUCCESS = 4
-    ERROR = 5
+    BLOCKED = 4
+    PAID = 5
+    REVERSE = 6
+    REFUND = 7
+    ERROR = 10
 
 
 class Payment(BaseModel):

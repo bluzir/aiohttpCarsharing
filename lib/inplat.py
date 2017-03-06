@@ -1,5 +1,6 @@
 from .external_api.inplat_wrapper import InplatClient
 from model.payment import Payment
+from model.payment import PaymentStatus
 
 
 class Inplat():
@@ -29,12 +30,12 @@ class Inplat():
         if result['code'] == 0:
             payment.inplat_id = result['id']
             payment.error_code = 0
-            payment.status = payment.PAYMENT_STATUS['wait_for_redirect']
+            payment.status = PaymentStatus.WAIT_FOR_REDIRECT
             payment.save()
             return {'error_code': 0, 'url': result['url']}
 
         else:
-            payment.status = payment.PAYMENT_STATUS['error']
+            payment.status = PaymentStatus.ERROR
             payment.error_code = result['code']
             payment.save()
             return {'error_code': result['code'], 'message': result['message']}
@@ -61,13 +62,13 @@ class Inplat():
         if result['code'] == 0:
             payment.inplat_id = result['id']
             payment.error_code = 0
-            payment.status = payment.PAYMENT_STATUS['paid']
+            payment.status = PaymentStatus.PAID
             payment.paid_at = result['pstamp']
             payment.save()
             return 0
 
         else:
-            payment.status = payment.PAYMENT_STATUS['error']
+            payment.status = PaymentStatus.ERROR
             payment.error_code = result['code']
             payment.save()
             return -1
