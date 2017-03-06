@@ -3,6 +3,7 @@
 import aiohttp_jinja2 as aiohttp_jinja2
 from aiohttp import web
 from aiohttp_session import get_session
+from aiohttp_swagger import swagger_path
 
 import setting as config
 from decorator import session_decorator, token_required, check_token, log_request
@@ -109,6 +110,7 @@ async def cars_detail(request):
 # GET '/api/profile/' :
 @check_token()
 @log_request()
+@swagger_path("doc/profile.yaml")
 def profile_detail(request, user):
     user_json = UserSerializer(user).get_serialized_json()
     return web.json_response(user_json)
