@@ -5,6 +5,8 @@ from aiohttp import web
 from aiohttp_session import get_session
 from aiohttp_swagger import swagger_path
 
+from aiohttp.web import Response
+
 import setting as config
 from decorator import session_decorator, token_required, check_token, log_request
 from error import _error
@@ -213,7 +215,7 @@ async def do_card_link(request):
     user_id = User.decode_auth_token(session['auth_token'])
 
     _inplat = Inplat()
-    #await _inplat.get_links_by_client_id(user_id)
+
     result = await _inplat.link_card_by_cryptogramma(user_id, crypto)
 
     if result['error_code'] == 0:
@@ -251,16 +253,18 @@ async def api_inplat_redirect(request):
     url = request.app.router['card'].url()
     return web.HTTPFound(url)
 
-
 async def api_inplat_callback(request):
+    logging.debug(api_inplat_callback.__name__)
     # захардкожено что это привязка
     # использовать транзакции
     query = request.rel_url.query
     logging.debug(query)
 
-    data = await request.post()
+    data = await request.json()
     logging.debug(data)
 
+
+    return Response()
 
 
 

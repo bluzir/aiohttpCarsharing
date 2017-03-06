@@ -1,23 +1,23 @@
 import datetime
-from enum import Enum
+from enum import IntEnum
 
 from peewee import *
 
 from model.base import BaseModel
 
 
-class RequestMethod(Enum):
+class RequestMethod(IntEnum):
     GET = 1
     POST = 2
     OTHER = 3
 
 
-class RequestType(Enum):
+class RequestType(IntEnum):
     INCOMING = 1
     OUTCOMING = 2
 
 
-class SystemName(Enum):
+class SystemName(IntEnum):
     UNDEFINED = 1
     INPLAT = 2
     STARLINE = 3
@@ -27,7 +27,7 @@ class Request(BaseModel):
     external_system = IntegerField(choices=SystemName, null=True)
     # request fields
     request_type = IntegerField(choices=RequestType)
-    request_method = IntegerField(choices=RequestMethod)
+    request_method = IntegerField(choices=RequestMethod, null=True)
     request_url = TextField()
     request_params = TextField(null=True)
     request_headers = TextField(null=True)

@@ -31,6 +31,8 @@ class BaseClient:
            pass
 
     async def get(self):
+
+        self.method = RequestMethod.GET
         async with aiohttp.ClientSession(cookies=self.cookies) as session:
             async with session.get(self.url, params=self.params) as resp:
                 self.decoded = await self._decode(resp)
@@ -43,6 +45,8 @@ class BaseClient:
         return self.decoded
 
     async def post(self):
+
+        self.method = RequestMethod.POST
         async with aiohttp.ClientSession(cookies=self.cookies) as session:
             async with session.post(self.url, data=json.dumps(self.data).encode("utf-8"),
                                     params=self.params) as resp:
@@ -62,7 +66,7 @@ class BaseClient:
         Request.create(request_type=RequestType.OUTCOMING.value, request_method=method.value,
                        request_url=self.url, external_system=self.external_system.value, request_params=self.params,
                        request_data=self.data, response_headers=json.dumps(dict(self.response.headers)),
-                       response_body=self.text)
+                       response_body=self.text, requests_method=self.method)
 
 
 
