@@ -132,6 +132,7 @@ def payments_list(request, user):
     return web.json_response(invoices_json)
 
 
+# GET '/api/ride/' :
 @check_token()
 @log_request()
 def current_ride(request, user):

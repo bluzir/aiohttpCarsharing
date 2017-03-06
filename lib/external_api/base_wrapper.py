@@ -38,7 +38,7 @@ class BaseClient:
         logging.debug(self.params)
         logging.debug(self.decoded)
 
-        log = self.log_to_database()
+        self.log_to_database(RequestMethod.GET)
 
         return self.decoded
 
@@ -54,12 +54,12 @@ class BaseClient:
         logging.debug(self.data)
         logging.debug(self.decoded)
 
-        log = self.log_to_database()
+        self.log_to_database(RequestMethod.POST)
 
         return self.decoded
 
-    def log_to_database(self):
-        Request.create(request_direction=RequestType.OUTCOMING.value, request_type=RequestMethod.POST.value,
+    def log_to_database(self, method):
+        Request.create(request_type=RequestType.OUTCOMING.value, request_method=method.value,
                        request_url=self.url, external_system=self.external_system.value, request_params=self.params,
                        request_data=self.data, response_headers=json.dumps(dict(self.response.headers)),
                        response_body=self.text)
