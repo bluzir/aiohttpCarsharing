@@ -260,6 +260,7 @@ async def api_inplat_callback(request):
     await request.post()
     logging.debug(request.POST)
 
+    return {}
 
 
 
