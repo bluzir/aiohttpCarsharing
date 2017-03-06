@@ -80,9 +80,10 @@ class Inplat():
             logging.debug(user.links)
             if user.links is not None:
                 diff = set(links) - set(user.links)
+                user.links = user.links.extend(diff)
             else:
-                diff = links
-            user.links = user.links.extend(diff)
+                user.links = links
+
             user.save()
         elif result['code'] == 46:
             user.links = []
