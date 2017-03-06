@@ -33,12 +33,12 @@ class Inplat():
         if result['code'] == 0:
             payment.inplat_id = result['id']
             payment.error_code = 0
-            payment.status = PaymentStatus.WAIT_FOR_REDIRECT
+            payment.status = int(PaymentStatus.WAIT_FOR_REDIRECT)
             payment.save()
             return {'error_code': 0, 'url': result['url']}
 
         else:
-            payment.status = PaymentStatus.ERROR
+            payment.status = int(PaymentStatus.ERROR)
             payment.error_code = result['code']
             payment.save()
             return {'error_code': result['code'], 'message': result['message']}

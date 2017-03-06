@@ -11,6 +11,7 @@ from route import setup_routes
 
 import logging
 
+from model.payment import PaymentStatus
 logging.basicConfig(filename='log/main.log', level=logging.DEBUG)
 
 
