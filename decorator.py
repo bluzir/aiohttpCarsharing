@@ -69,7 +69,7 @@ def log_request():
     def wrapper(func):
         @asyncio.coroutine
         @functools.wraps(func)
-        def wrapped(request, *args, **kwargs):
+        async def wrapped(request, *args, **kwargs):
             params = json.dumps(dict(request.GET))
             headers = json.dumps(dict(request.headers))
             if request.method == 'GET':
@@ -77,6 +77,7 @@ def log_request():
                 data = {}
             elif request.method == 'POST':
                 method = RequestMethod.POST.value
+                await request.post()
                 data = json.dumps(dict(request.POST))
             else:
                 method = RequestMethod.OTHER.value
