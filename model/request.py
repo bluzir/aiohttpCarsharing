@@ -27,7 +27,7 @@ class Request(BaseModel):
     external_system = IntegerField(choices=SystemName, null=True)
     # request fields
     request_type = IntegerField(choices=RequestType)
-    request_method = IntegerField(choices=RequestMethod)
+    request_method = IntegerField(choices=RequestMethod, null=True)
     request_url = TextField()
     request_params = TextField(null=True)
     request_headers = TextField(null=True)
