@@ -4,7 +4,7 @@ import json
 
 import requests
 
-from lib.external_api.base_wrapper import BaseClient
+from lib.external_api.base_wrapper import BaseClient, SystemName
 
 
 class InplatException(BaseException):
@@ -23,7 +23,7 @@ class InplatClient(BaseClient):
         super(InplatClient, self).__init__()
         self.sign = None
         self.url = self.DEFAULT_HOST
-        self.external_system = 1
+        self.external_system = SystemName.INPLAT
 
         self.params = {
             'api_key': self.API_KEY,

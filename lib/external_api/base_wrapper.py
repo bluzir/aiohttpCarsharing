@@ -4,13 +4,13 @@ import logging
 import aiohttp
 import requests
 
-from model.external_request import ExternalRequest
+from model.request import *
 
 
 class BaseClient:
 
     def __init__(self):
-        self.external_system = 0
+        self.external_system = SystemName.UNDEFINED
         self.data = {}
         self.params = {}
         self.cookies = None
@@ -33,11 +33,14 @@ class BaseClient:
     async def get(self):
         async with aiohttp.ClientSession(cookies=self.cookies) as session:
             async with session.get(self.url, params=self.params) as resp:
-                decoded = await self._decode(resp)
+                self.decoded = await self._decode(resp)
 
         logging.debug(self.params)
-        logging.debug(decoded)
-        return decoded
+        logging.debug(self.decoded)
+
+        log = self.log_to_database()
+
+        return self.decoded
 
     async def post(self):
         async with aiohttp.ClientSession(cookies=self.cookies) as session:
@@ -56,9 +59,10 @@ class BaseClient:
         return self.decoded
 
     def log_to_database(self):
-        ExternalRequest.create(request_url=self.url, external_system=self.external_system, request_params=self.params,
-                               request_data=self.data, response_headers=json.dumps(dict(self.response.headers)),
-                               response_body=self.text)
+        Request.create(request_direction=RequestDirection.OUTCOMING.value, request_type=RequestType.POST.value,
+                       request_url=self.url, external_system=self.external_system.value, request_params=self.params,
+                       request_data=self.data, response_headers=json.dumps(dict(self.response.headers)),
+                       response_body=self.text)
 
 
 

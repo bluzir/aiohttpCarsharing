@@ -1,4 +1,5 @@
 from lib.external_api.base_wrapper import BaseClient
+from model.request import SystemName
 
 
 class StarLineClient(BaseClient):
@@ -9,6 +10,7 @@ class StarLineClient(BaseClient):
         super(StarLineClient, self).__init__()
         self.slid = None
         self.url = self.DEV_HOST
+        self.external_system = SystemName.STARLINE
 
     async def authorize(self):  # Placeholder for authorization method
         self.cookies = ''

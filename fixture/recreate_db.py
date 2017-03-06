@@ -1,4 +1,4 @@
-from model.external_request import ExternalRequest
+from model.request import Request
 from model.payment import Payment
 from model.tariff import Tariff
 from model.car import Car
@@ -44,10 +44,10 @@ def main():
 
     Ride.create_table()
 
-    if ExternalRequest.table_exists():
-        ExternalRequest.drop_table(cascade=True)
+    if Request.table_exists():
+        Request.drop_table(cascade=True)
 
-    ExternalRequest.create_table()
+    Request.create_table()
 
 
 if __name__ == '__main__':
