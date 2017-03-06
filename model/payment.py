@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import IntEnum
 
 import datetime
 from peewee import *
@@ -7,7 +7,7 @@ from model.base import *
 from model.user import User
 
 
-class PaymentStatus(Enum):
+class PaymentStatus(IntEnum):
     CREATED = 1
     WAIT_FOR_REDIRECT = 2
     WAIT_FOR_CALLBACK = 3
