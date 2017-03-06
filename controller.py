@@ -261,6 +261,7 @@ async def api_inplat_callback(request):
 
     data = await request.multipart()
     logging.debug(data)
+    logging.debug(request.POST)
 
     return Response()
 
