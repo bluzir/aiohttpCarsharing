@@ -14,6 +14,7 @@ from model.user import User
 from model.payment import Payment
 from serializer import CarSerializer, UserSerializer, TariffSerializer, InvoiceSerializer, RideSerializer
 
+from model.payment import PaymentStatus
 
 import logging
 
@@ -227,9 +228,9 @@ async def api_inplat_redirect(request):
     payment = Payment.get(inplat_id=inplat_id)
     user = payment.user.get()
 
-    if payment.status == payment.PAYMENT_STATUS['wait_for_redirect']:
+    if payment.status == PaymentStatus.WAIT_FOR_REDIRECT:
         payment.order_id = order_id
-        payment.status = payment.PAYMENT_STATUS['wait_for_callback']
+        payment.status = PaymentStatus.WAIT_FOR_CALLBACK
         # если пеймент был для привязки, то реврешим всё
         if payment.case == 0:
             _inplat = Inplat()
