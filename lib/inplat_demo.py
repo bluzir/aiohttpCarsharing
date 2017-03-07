@@ -1,5 +1,4 @@
 from lib.external_api.inplat_wrapper import InplatClient
-from utils.utils import *
 
 inplat_client = InplatClient()
 

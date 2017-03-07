@@ -47,9 +47,9 @@ async def cars_map(request):
 
 
 # GET '/payments/':
-@aiohttp_jinja2.template('payment_list.html')
+@aiohttp_jinja2.template('invoice_list.html')
 @token_required()
-async def payments_view(request):
+async def invoice_view(request):
     return {}
 
 
@@ -67,12 +67,13 @@ async def ride_view(request):
 
 
 # GET '/payments/{uuid}':
-@aiohttp_jinja2.template('payment_detail.html')
+@aiohttp_jinja2.template('invoice_detail.html')
 @token_required()
 async def payment_detail(request):
     payment_uuid = request.match_info['payment_uuid']
     invoice = Invoice.get(uuid=payment_uuid)
-    return {'invoice': invoice, 'inplat_api_key': config.INPLAT_API_KEY}
+    payment = invoice.payment
+    return {'invoice': invoice, 'payment': payment, 'inplat_api_key': config.INPLAT_API_KEY}
 
 
 # POST '/payment/{uuid}' :
@@ -141,14 +142,14 @@ def tariff_detail(request, user):
 
 @check_token()
 @log_request()
-def payments_list(request, user):
+def invoices_list(request, user):
     """
     ---
     summary: API method for getting current user invoices.
     description: This can only be done by passing token.
     tags:
     - API
-    operationId: /api/payments/
+    operationId: /api/invoices/
     """
     invoices_json = InvoiceSerializer(user.invoices).get_serialized_json()
     return web.json_response(invoices_json)

@@ -1,10 +1,11 @@
 import datetime
+
 from peewee import *
 
 from model.base import *
 from model.payment import Payment
 from model.user import User
-from utils.utils import generate_uuid
+from utils import generate_uuid
 
 
 class Invoice(BaseModel):

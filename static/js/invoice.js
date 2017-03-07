@@ -66,7 +66,7 @@ var App = React.createClass({
   }
 });
 
-fetch('/api/payments/?token=' + token)
+fetch('/api/invoices/?token=' + token)
   .then(
     function(response) {
       response.json().then(function(data) {
