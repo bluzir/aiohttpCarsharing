@@ -1,7 +1,7 @@
 from enum import IntEnum
 
 import datetime
-from peewee import *
+from playhouse.postgres_ext import *
 
 from model.base import *
 from model.user import User
@@ -13,7 +13,7 @@ class PaymentStatus(IntEnum):
     WAIT_FOR_CALLBACK = 3
     BLOCKED = 4
     PAID = 5
-    REVERSE = 6
+    REVERSED = 6
     REFUND = 7
     ERROR = 10
 
@@ -29,3 +29,8 @@ class Payment(BaseModel):
     user = ForeignKeyField(User, related_name='payments')
     created_at = DateTimeField(default=datetime.datetime.now)
     paid_at = DateTimeField(null=True)
+    credentials = JSONField(null=True)
+    pstamp = DateTimeField(null=True)
+    astamp = DateTimeField(null=True)
+    inplat_link_id = TextField(null=True)
+

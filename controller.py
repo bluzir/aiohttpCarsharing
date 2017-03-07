@@ -255,13 +255,33 @@ async def api_inplat_redirect(request):
 
 async def api_inplat_callback(request):
     logging.debug(api_inplat_callback.__name__)
-    # захардкожено что это привязка
     # использовать транзакции
     query = request.rel_url.query
     logging.debug(query)
 
     data = await request.json()
     logging.debug(data)
+
+    if data['method'] == 'result':
+        inplat_id = data['id']
+        payment = Payment.get(inplat_id=inplat_id)
+
+        payment.credentials = data['credentials']
+        payment.pstamp = data['pstamp']
+        payment.astamp = data['astamp']
+        payment.inplat_link_id = data['link_id']
+        payment.error_code = data['code']
+        if data['status'] == 'reversed':
+            payment.status = PaymentStatus.REVERSED
+            payment.save()
+        elif data['status'] == 'auth':
+            payment.status = PaymentStatus.PAID
+            payment.save()
+        else:
+            raise Exception('wtf?! ' + data['status'] )
+
+    else:
+        raise Exception('wtf?!')
 
 
     return Response()
