@@ -109,35 +109,62 @@ async def cars_detail(request):
         return web.HTTPInternalServerError(text=e.__traceback__)  # TODO: Remove after debug
 
 
-# GET '/api/profile/' :
 @check_token()
 @log_request()
-@swagger_path("doc/profile.yaml")
 def profile_detail(request, user):
+    """
+    ---
+    summary: API method for getting current user profile.
+    description: This can only be done by passing token.
+    tags:
+    - API
+    operationId: /api/profile/
+    """
     user_json = UserSerializer(user).get_serialized_json()
     return web.json_response(user_json)
 
 
-# GET '/api/tariff/' :
 @check_token()
 @log_request()
 def tariff_detail(request, user):
+    """
+    ---
+    summary: API method for getting current tariff.
+    description: This can only be done by passing token.
+    tags:
+    - API
+    operationId: /api/tariff/
+    """
     tariff_json = TariffSerializer(user.tariff).get_serialized_json()
     return web.json_response(tariff_json)
 
 
-# GET '/api/payments/' :
 @check_token()
 @log_request()
 def payments_list(request, user):
+    """
+    ---
+    summary: API method for getting current user invoices.
+    description: This can only be done by passing token.
+    tags:
+    - API
+    operationId: /api/payments/
+    """
     invoices_json = InvoiceSerializer(user.invoices).get_serialized_json()
     return web.json_response(invoices_json)
 
 
-# GET '/api/ride/' :
 @check_token()
 @log_request()
 def current_ride(request, user):
+    """
+    ---
+    summary: API method for getting current ride.
+    description: This can only be done by passing token.
+    tags:
+    - API
+    operationId: /api/ride/
+    """
     current_rides = user.rides.where(Ride.status == 1)
     if current_rides.__len__() == 1:
         ride = current_rides.get()
