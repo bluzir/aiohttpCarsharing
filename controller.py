@@ -23,21 +23,18 @@ import logging
 from lib.inplat import Inplat
 
 
-# GET '/' :
 @aiohttp_jinja2.template('index.html')
 @session_decorator()
 async def index(request):
     return {}
 
 
-# GET '/profile/':
 @aiohttp_jinja2.template('profile.html')
 @token_required()
 async def profile_view(request):
     return {}
 
 
-# GET '/map/' :
 @aiohttp_jinja2.template('maps.html')
 @token_required()
 async def cars_map(request):
@@ -45,14 +42,12 @@ async def cars_map(request):
     return {'api_key': api_key}
 
 
-# GET '/payments/':
 @aiohttp_jinja2.template('invoice_list.html')
 @token_required()
 async def invoice_view(request):
     return {}
 
 
-# GET '/tariff/':
 @aiohttp_jinja2.template('tariff.html')
 @token_required()
 async def tariff_view(request):
@@ -65,7 +60,6 @@ async def ride_view(request):
     return {}
 
 
-# GET '/payments/{uuid}':
 @aiohttp_jinja2.template('invoice_detail.html')
 @token_required()
 async def payment_detail(request):
@@ -75,18 +69,14 @@ async def payment_detail(request):
     return {'invoice': invoice, 'payment': payment, 'inplat_api_key': config.INPLAT_API_KEY}
 
 
-# POST '/payment/{uuid}' :
-async def do_payment(request):
-    data = await request.post()
+@check_token()
+@log_request()
+async def do_payment(request, user):
     invoice_uuid = request.match_info['payment_uuid']
-    if 'crypto' in data:
-        crypto = data['inplat_payment_crypto_input']
-        invoice = Invoice.get(uuid=invoice_uuid)
-        result = invoice.handle_form(crypto=crypto)
-    else:
-        result = {'error': 'No cryptograma'}
-
-    return web.json_response(result)
+    invoice = Invoice.get(uuid=invoice_uuid)
+    inplat = Inplat()
+    result = await inplat.pay_by_linked_card(user, invoice)
+    return web.json_response({'error': result})
 
 
 @check_token()
@@ -192,14 +182,12 @@ async def registration(request):
     return {}
 
 
-# POST '/registration/ :
 async def do_registration(request):
     data = await request.post()
     response = await User.handle_registration_form(data, request)
     return response
 
 
-# GET '/login/' :
 @aiohttp_jinja2.template('auth_form.html')
 async def login(request):
     session = await get_session(request)
@@ -210,14 +198,12 @@ async def login(request):
     return {'session': session}
 
 
-# POST '/login/ :
 async def do_login(request):
     data = await request.post()
     response = await User.handle_authorization_form(data, request)
     return response
 
 
-# GET '/logout/' :
 async def do_logout(request):
     session = await get_session(request)
     if 'auth_token' in session:
@@ -227,20 +213,19 @@ async def do_logout(request):
         return web.HTTPFound('/login/')
 
 
-# GET '/card/':
 @aiohttp_jinja2.template('card/list.html')
 @token_required()
 async def card_view(request):
     return {}
 
 
-# GET '/card/link/':
+
 @aiohttp_jinja2.template('card/link.html')
 @token_required()
 async def card_link_view(request):
     return {'inplat_api_key': config.INPLAT_API_KEY}
 
-# POST '/card/link/':
+
 # TODO: пофиксить
 async def do_card_link(request):
     data = await request.post()

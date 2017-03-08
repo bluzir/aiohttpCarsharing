@@ -76,9 +76,10 @@ def log_request():
                 method = RequestMethod.GET.value
                 data = {}
             elif request.method == 'POST':
-                yield from request.post()
-                method = RequestMethod.POST.value
-                data = json.dumps(dict(request.POST))
+                # yield from request.post()
+                # method = RequestMethod.POST.value
+                # TODO: find solution
+                data = {}
             else:
                 method = RequestMethod.OTHER.value
                 data = {}

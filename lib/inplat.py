@@ -38,12 +38,15 @@ class Inplat():
     def _hold(self):
         pass
 
-    async def pay_by_linked_card(self, User, summ):
+    async def pay_by_linked_card(self, user, invoice):
 
-        user_id = User.get_id()
-        link_id = User.links[0]['link_id']
+        user_id = user.get_id()
+        if user.links:
+            link_id = user.links[0]['link_id']
+        else:
+            return -1
 
-        payment = Payment.create(user_id=user_id, sum=summ, case=1)
+        payment = Payment.create(user_id=user_id, invoice=invoice, sum=invoice.summ, case=1)
 
         result = await self.inplat_client.pay_by_link(
             client_id=user_id,
