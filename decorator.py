@@ -76,6 +76,7 @@ def log_request():
                 method = RequestMethod.GET.value
                 data = {}
             elif request.method == 'POST':
+                yield from request.post()
                 method = RequestMethod.POST.value
                 data = json.dumps(dict(request.POST))
             else:
