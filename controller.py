@@ -3,7 +3,6 @@
 import aiohttp_jinja2 as aiohttp_jinja2
 from aiohttp import web
 from aiohttp_session import get_session
-from aiohttp_swagger import swagger_path
 
 from aiohttp.web import Response
 
@@ -90,15 +89,31 @@ async def do_payment(request):
     return web.json_response(result)
 
 
-# GET '/api/cars/list/' :
+@check_token()
+@log_request()
 async def cars_list(request):
+    """
+    ---
+    summary: API method for getting detail all available cars
+    tags:
+    - API
+    operationId: /api/cars/list/
+    """
     cars_query = Car.get_available_cars()
     cars_json = CarSerializer(cars_query).get_serialized_json()
     return web.json_response(cars_json)
 
 
-# GET '/api/cars/list/{id}' :
+@check_token()
+@log_request()
 async def cars_detail(request):
+    """
+    ---
+    summary: API method for getting detail info about car by id
+    tags:
+    - API
+    operationId: /api/cars/list/<id>/
+    """
     try:
         car_id = int(request.match_info['car_id'])
         cars_query = Car.get(id=car_id)
@@ -116,7 +131,6 @@ def profile_detail(request, user):
     """
     ---
     summary: API method for getting current user profile.
-    description: This can only be done by passing token.
     tags:
     - API
     operationId: /api/profile/
@@ -131,7 +145,6 @@ def tariff_detail(request, user):
     """
     ---
     summary: API method for getting current tariff.
-    description: This can only be done by passing token.
     tags:
     - API
     operationId: /api/tariff/
@@ -146,7 +159,6 @@ def invoices_list(request, user):
     """
     ---
     summary: API method for getting current user invoices.
-    description: This can only be done by passing token.
     tags:
     - API
     operationId: /api/invoices/
@@ -161,7 +173,6 @@ def current_ride(request, user):
     """
     ---
     summary: API method for getting current ride.
-    description: This can only be done by passing token.
     tags:
     - API
     operationId: /api/ride/
@@ -175,7 +186,6 @@ def current_ride(request, user):
         return web.json_response({})
 
 
-# GET '/registration/
 @aiohttp_jinja2.template('registration.html')
 @session_decorator()
 async def registration(request):
